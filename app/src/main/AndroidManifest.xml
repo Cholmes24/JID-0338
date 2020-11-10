@@ -16,6 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ActiveMatch"></activity>
+        <activity android:name=".UpcomingMatches"></activity>
     </application>
 
 </manifest>
