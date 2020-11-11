@@ -30,7 +30,7 @@ public class UpcomingMatches extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.upcomingMatch:
+            case R.id.activeMatch:
                 loadActiveMatch();
                 return true;
             case R.id.homescreen:

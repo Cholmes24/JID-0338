@@ -159,17 +159,23 @@
             android:layout_gravity="bottom|center"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/button16"
+            <TextView
+                android:id="@+id/textView13"
                 android:layout_width="295dp"
                 android:layout_height="match_parent"
-                android:text="No Action to undo" />
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="No Action To Undo"
+                android:textSize="24sp" />
 
             <Button
                 android:id="@+id/button17"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:clickable="false"
+                android:enabled="false"
                 android:text="Undo" />
+
         </LinearLayout>
 
     </LinearLayout>
