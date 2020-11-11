@@ -15,6 +15,7 @@
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.1.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/active_match_screen.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/active_match_screen.xml" afterDir="false" />
     </list>
@@ -82,7 +83,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/jdd0338/hema/RefereeTracker/HomeScreen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
+            <state relative-caret-position="72">
               <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -94,7 +95,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/jdd0338/hema/RefereeTracker/UpcomingMatches.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
+            <state relative-caret-position="468">
               <caret line="32" column="33" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -106,7 +107,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/jdd0338/hema/RefereeTracker/ActiveMatch.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
+            <state relative-caret-position="414">
               <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -158,47 +159,9 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="AndroidView">
-        <subPane>
-          <expand>
-            <path>
-              <item name="Executable Object" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-            </path>
-            <path>
-              <item name="Executable Object" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-            </path>
-            <path>
-              <item name="Executable Object" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="RefereeTracker" type="cbb59c9e:AndroidPsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Executable Object" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-            </path>
-            <path>
-              <item name="Executable Object" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
-            <path>
-              <item name="Executable Object" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="menu" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="Scope" />
       <pane id="ProjectPane" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -353,7 +316,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
       <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.32995737" />
@@ -430,34 +392,6 @@
       </provider>
       <provider editor-type-id="android-designer2" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="19" column="8" selection-start-line="19" selection-start-column="8" selection-end-line="19" selection-end-column="8" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-manifest" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/jdd0338/hema/RefereeTracker/ActiveMatch.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/jdd0338/hema/RefereeTracker/HomeScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/temp_menu.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
@@ -466,15 +400,13 @@
       </provider>
       <provider editor-type-id="android-designer2" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/jdd0338/hema/RefereeTracker/UpcomingMatches.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="32" column="33" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="342">
+          <caret line="19" column="8" selection-start-line="19" selection-start-column="8" selection-end-line="19" selection-end-column="8" />
         </state>
       </provider>
+      <provider editor-type-id="android-manifest" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/upcoming_matches.xml">
       <provider selected="true" editor-type-id="text-editor">
@@ -483,6 +415,36 @@
         </state>
       </provider>
       <provider editor-type-id="android-designer2" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/jdd0338/hema/RefereeTracker/HomeScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/jdd0338/hema/RefereeTracker/UpcomingMatches.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="32" column="33" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/jdd0338/hema/RefereeTracker/ActiveMatch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/active_match_screen.xml">
       <provider editor-type-id="text-editor" />

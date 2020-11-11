@@ -80,7 +80,7 @@
                     android:id="@+id/button11"
                     android:layout_width="match_parent"
                     android:layout_height="50.625dp"
-                    android:text="Penalty" />
+                    android:text="Penalty\n -1" />
 
             </LinearLayout>
 
@@ -144,7 +144,7 @@
                     android:id="@+id/button15"
                     android:layout_width="match_parent"
                     android:layout_height="50.625dp"
-                    android:text="Penalty" />
+                    android:text="Penalty\n -1" />
             </LinearLayout>
         </LinearLayout>
 
