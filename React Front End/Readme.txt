@@ -37,4 +37,4 @@ There are other commands for starting detailed at the top of the package.json fi
 The first time it starts will take a good while longer.
 
 Feel free to send me a message if any of the steps above seem to have resulted in catastrophic and permanent damage,
-or if they don't.
+or if they don't. :)
