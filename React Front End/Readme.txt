@@ -26,7 +26,7 @@ somewhere in the bowels of my machine.)
 There will probably be some prompts, but mostly it should go well.
 
 If you didn't do the last step you'll get warnings and probably redirected a few times,
-but you'll also get more detailed instructions that in this readme, so like it's fine to be impatient.
+but you'll also get more detailed instructions than in this readme, so like it's fine to be impatient.
 
 Anyway....
 
