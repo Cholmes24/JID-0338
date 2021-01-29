@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, ColorValue, FlatList, StyleSheet } from 'react-native'
+import { Button, ColorValue, StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
 import { MatchState } from '../store/types'
 import ScoreCounter from './ScoreCounter'
@@ -13,26 +13,43 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
   const competitor = useSelector((state: MatchState) => state[side])
   const color = competitor.color
   const name = competitor.name
-
+  const testBorders = {
+    borderColor: "yellow",
+    borderWidth: 2,
+  }
   const styles = StyleSheet.create({
     container: {
-      alignSelf: "flex-start",
+      // For testing purposes to align things
+      ...testBorders,
+
+
+
+      alignSelf: "stretch",
       flex: 1,
       paddingTop: 22,
       paddingHorizontal: 10,
-      // alignContent: "space-around"
-      // justifyContent: "center"
     },
-    item: {
-      padding: 10,
-      fontSize: 16,
+    button: {
+      // For testing purposes to align things
+      ...testBorders,
+
+      padding: 2,
+
+      fontSize: 18,
       height: 44,
+      flex: 1,
       color
     },
-    list : {
-      flex: 2
+    buttonList: {
+      // For testing purposes to align things
+      ...testBorders,
+
+      flex: 1.5,
     },
     title: {
+      // For testing purposes to align things
+      ...testBorders,
+
       flex: 1,
       alignSelf: "center",
       alignContent: "center",
@@ -43,32 +60,37 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
       color
     },
     scoreCounter: {
-      flex: 1.5,
+      // For testing purposes to align things
+      ...testBorders,
+
+      flex: 4
     }
   });
-  const button1 = () => <Button
+  const button1 = () => <View style={styles.button} >
+  <Button
     color={color}
     title="Button 1"
     onPress={() => (undefined)}
   />
-  const button2 = () => <Button
-    color={color}
-    title="Button 2"
-    onPress={() => (undefined)}
-  />
-  const buttons = [
-    { key: "button1", comp: button1 },
-    { key: "button2", comp: button2 }
-  ]
+</View>
+  const button2 = () => <View style={styles.button} >
+    <Button
+      color={color}
+      title="Button 2"
+      onPress={() => (undefined)}
+    />
+  </View>
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{name}</Text>
-      <ScoreCounter side={side} />
-      <FlatList style={styles.list}
-        data={buttons}
-        renderItem={({item}) => <View style={styles.item}>{item.comp()}</View>}
-      />
+      <View style={styles.scoreCounter}>
+        <ScoreCounter side={side} />
+      </View>
+      <View style={styles.buttonList} >
+        {button1()}
+        {button2()}
+      </View>
     </View>
   );
 }

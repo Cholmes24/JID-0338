@@ -11,7 +11,7 @@ type ScoreCounterProps = {
   fontSize?: number
 }
 
-export default function ScoreCounter({side, fontSize = 50}: ScoreCounterProps) {
+export default function ScoreCounter({side, fontSize = 60}: ScoreCounterProps) {
   const dispatch = useDispatch()
   const competitor = useSelector((state: MatchState) => state[side])
   const color = competitor.color
@@ -40,7 +40,7 @@ export default function ScoreCounter({side, fontSize = 50}: ScoreCounterProps) {
     container: {
       alignItems: "center",
       justifyContent: "center",
-      alignSelf: "center"
+
     },
   })
 
