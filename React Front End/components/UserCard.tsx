@@ -31,6 +31,8 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 25,
+    textAlign: "center",
+    marginBottom: 4
   },
   container: {
     flex: 1,
