@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button, ColorValue, StyleSheet } from 'react-native'
+import { ColorValue, StyleSheet } from 'react-native'
+import CustomButton from './Button'
 import { useSelector } from 'react-redux'
 import { MatchState } from '../store/types'
 import ScoreCounter from './ScoreCounter'
@@ -14,15 +15,13 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
   const color = competitor.color
   const name = competitor.name
   const testBorders = {
-    borderColor: "yellow",
-    borderWidth: 2,
+    // borderColor: "yellow",
+    // borderWidth: 2,
   }
   const styles = StyleSheet.create({
     container: {
       // For testing purposes to align things
       ...testBorders,
-
-
 
       alignSelf: "stretch",
       flex: 1,
@@ -34,7 +33,7 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
       ...testBorders,
 
       padding: 2,
-
+      alignItems: "center",
       fontSize: 18,
       height: 44,
       flex: 1,
@@ -67,17 +66,19 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
     }
   });
   const button1 = () => <View style={styles.button} >
-  <Button
-    color={color}
-    title="Button 1"
-    onPress={() => (undefined)}
-  />
-</View>
+    <CustomButton
+      color={color}
+      title={"Button 1"}
+      onPress={() => (undefined)}
+      fontSize={styles.button.fontSize}
+    />
+  </View>
   const button2 = () => <View style={styles.button} >
-    <Button
+    <CustomButton
       color={color}
       title="Button 2"
       onPress={() => (undefined)}
+      fontSize={styles.button.fontSize}
     />
   </View>
 
