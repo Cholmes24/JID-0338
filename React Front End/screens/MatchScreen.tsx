@@ -1,8 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, Image, ColorValue } from 'react-native';
-import CompetitorColumn, { CompetitorColumnProps } from '../components/Competitor Column'
+import { useSelector } from 'react-redux'
+import BottomDrawer from '../components/BottomDrawer'
+import CompetitorColumn, { CompetitorColumnProps } from '../components/CompetitorColumn'
 import { Text, View } from '../components/Themed';
+import UndoButton from '../components/UndoButton'
 import UserCard from '../components/UserCard'
+import { MatchState } from '../store/types'
 
 type MatchScreenProps = {
   leftColumn: CompetitorColumnProps,
@@ -10,17 +14,20 @@ type MatchScreenProps = {
 }
 
 export default function MatchScreen() {
+  const rightCompetitor = useSelector((state: MatchState) => state["right"])
+
   return (
     <View style={styles.container}>
       <View style={styles.scoreMonitor}>
-        <CompetitorColumn
-          side="left"
-        />
-        <CompetitorColumn
-          side="right"
-        />
+        <View style={styles.competitorColumn} >
+          <CompetitorColumn side="left" />
+        </View>
+        <View style={styles.competitorColumn} >
+          <CompetitorColumn side="right" />
+        </View>
       </View>
       <View style={styles.bottomTab}>
+        <UndoButton onPress={() => undefined} />
         {/* TODO: Slide up tab at the bottom for undo */}
 
       </View>
@@ -53,6 +60,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bottomTab: {
-    flex: 1
+    flex: 0.5,
+    alignSelf: "stretch",
+    alignContent: "center",
+    flexWrap: 'wrap',
+    padding: 5,
+    paddingBottom: 15
+  },
+  competitorColumn: {
+    alignSelf: "stretch",
+    alignContent: "center",
+    flex: 1,
+    padding: 5,
   }
 });

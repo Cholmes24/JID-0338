@@ -3,33 +3,31 @@ import { ColorValue, GestureResponderEvent, Pressable, StyleSheet, TextStyle, Vi
 import { Text } from './Themed'
 
 export type ButtonProps = {
-  title: string,
+  content: () => JSX.Element,
   onPress: ((event: GestureResponderEvent) => void) | null | undefined,
-  color: ColorValue,
+  color?: ColorValue,
   fontSize?: number
 }
 
-export default function Button({title, onPress, color, fontSize}: ButtonProps) {
+export default function Button({content, onPress, color, fontSize = 18}: ButtonProps) {
   const styles = StyleSheet.create({
     button: {
       backgroundColor: color,
-      borderRadius: 6,
+      borderRadius: 15,
       padding: 6,
       // height: 50,
       width: '100%',
       justifyContent: 'center',
       alignItems: 'center',
       elevation: 5,
-      flex: 1
-    },
-    text: {
-      fontSize
+      flex: 1,
+      shadowRadius: 4
     }
   })
 
   return (
     <Pressable onPress={onPress} style={styles.button} >
-      <Text style={styles.text} >{title}</Text>
+      {content()}
     </Pressable>
   )
 }

@@ -40,7 +40,7 @@ const defaultMatchRuleset: MatchRuleset = {
 
 const defaultLeftCompetitor: Competitor = {
   name: "Longname Fencermaster",
-  color: "blue",
+  color: "#376EDA",
   score: 0,
   side: "left",
   numberOfWarnings: 0,
@@ -49,7 +49,7 @@ const defaultLeftCompetitor: Competitor = {
 
 const defaultRightCompetitor: Competitor = {
   name: "Superlong Lastnameman",
-  color: "red",
+  color: "#D43737",
   score: 0,
   side: "right",
   numberOfWarnings: 0,
@@ -60,10 +60,13 @@ export const defaultMatchState: MatchState = {
   left: defaultLeftCompetitor,
   right: defaultRightCompetitor,
   ruleset: defaultMatchRuleset,
-  timeElapsed: 0
+  timeElapsed: 0,
+  callLog: []
 }
 
 export default function MatchReducer(state = defaultMatchState, action: MatchActionTypes) {
+  // TODO remove console.log
+  console.log("entered match reducer")
   switch (action.type) {
     default:
       return state

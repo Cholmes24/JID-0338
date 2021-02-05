@@ -1,4 +1,4 @@
-import { Feather } from '@expo/vector-icons'
+import { AntDesign, Feather } from '@expo/vector-icons'
 import React from 'react'
 import { ColorValue, FlatList, StyleSheet } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,50 +11,43 @@ type ScoreCounterProps = {
   fontSize?: number
 }
 
-export default function ScoreCounter({side, fontSize = 60}: ScoreCounterProps) {
+export default function ScoreCounter({side, fontSize = 70}: ScoreCounterProps) {
   const dispatch = useDispatch()
   const competitor = useSelector((state: MatchState) => state[side])
   const color = competitor.color
   const score = competitor.score
-  // const count = competitor.score
 
-
-  const [count, setCount] = React.useState(0)
   const styles = StyleSheet.create({
     arrow: {
-      color,
-      fontSize: fontSize * 2,
+      color: "white",
+      fontSize: fontSize * 1.8,
+      paddingBottom: 5
     },
     scoreBox: {
-      height: fontSize * 1.2,
-      width: fontSize * 1.2,
+      height: fontSize * 1.3,
+      width: fontSize * 1.3,
       fontSize,
-      color: color === "white" ? "black" : "white",
-      borderColor: "black",
-      borderWidth: 1,
-      backgroundColor: color,
+      fontWeight: "bold",
+      color: "white",
+      // borderColor: "black",
+      // borderWidth: 1,
+      // backgroundColor: color,
       textAlign: "center",
       textAlignVertical: "center",
-      position: "absolute"
+      position: "absolute",
     },
     container: {
       alignItems: "center",
       justifyContent: "center",
-
+      backgroundColor: color,
     },
   })
 
-  const incrementCount = () => setCount(count + 1)
-  const decrementCount = () => count > 0 ? setCount(count - 1) : setCount(count)
-
-  // const incrementCount = () => dispatch(increaseScore)
-  // const decrementCount = () => dispatch(decreaseScore)
-
   return (
     <View style={styles.container} >
-      <Feather name="chevron-up" style={styles.arrow} onPress={() => dispatch(increaseScore(competitor))} />
+      <AntDesign name="caretup" style={styles.arrow} onPress={() => dispatch(increaseScore(competitor))} />
       <Text style={styles.scoreBox} >{score}</Text>
-      <Feather name="chevron-down" style={styles.arrow} onPress={() => dispatch(decreaseScore(competitor))} />
+      <AntDesign name="caretdown" style={styles.arrow} onPress={() => dispatch(decreaseScore(competitor))} />
     </View>
   )
 }
