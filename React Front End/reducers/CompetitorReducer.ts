@@ -121,7 +121,9 @@ export function undoParticularCall(state: Competitor, callToUndo: CompetitorActi
 export function undoLastCall(state: MatchState) {
   const makeChanges = () => {
     if (state.callLog.length != 0) {
-      const undoneAction = state.callLog.pop()
+
+      const newCallLog = state.callLog.slice(0, state.callLog.length - 1)
+      const undoneAction = state.callLog[state.callLog.length - 1]
       if (undoneAction && undoneAction?.data.side) {
         const playerToUndo = state[undoneAction.data.side]
         // TODO remove console.logs
@@ -131,11 +133,13 @@ export function undoLastCall(state: MatchState) {
         if (playerToUndo.side == "right") {
           return {
             ...state,
+            callLog: newCallLog,
             right: restoredCompetitorState
           }
         } else {
           return {
             ...state,
+            callLog: newCallLog,
             left: restoredCompetitorState
           }
         }
