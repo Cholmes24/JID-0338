@@ -30,17 +30,20 @@ export default function competitorReducer(state = defaultMatchState, action: Com
     case DECREASE_SCORE:
       if (!action.data.side) {
         return state
-      } else if (action.data.side === "left") {
-        return {
-          ...state,
-          left: action.data,
-          callLog: state.callLog.concat(action)
-        }
       } else {
-        return {
-          ...state,
-          right: action.data,
-          callLog: state.callLog.concat(action)
+        const callLog = state[action.data.side].score !== action.data.score ? state.callLog.concat(action) : state.callLog
+        if (action.data.side === "left") {
+          return {
+            ...state,
+            left: action.data,
+            callLog
+          }
+        } else {
+          return {
+            ...state,
+            right: action.data,
+            callLog
+          }
         }
       }
     case UNDO_CALL: {
@@ -66,6 +69,8 @@ export function increaseScore(state: Competitor): IncreaseScoreAction {
 }
 
 export const decreaseScore = (state: Competitor) => (
+  // TODO: check for when decrease amount != increase amount, if after decreasing a score to 0,
+  // undo will result in giving too much back
   {
     type: DECREASE_SCORE,
     data: {
