@@ -12,8 +12,6 @@ export type CompetitorColumnProps = {
 
 export default function CompetitorColumn({side}: CompetitorColumnProps) {
   const competitor = useSelector((state: MatchState) => state[side])
-  // console.log("competitor var: ", competitor)
-
 
   const color = competitor.color
   const name = competitor.name
@@ -24,6 +22,10 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
   }
   const styles = StyleSheet.create({
     container: {
+      // For testing purposes to align things
+      ...testBorders,
+
+
       alignSelf: "center",
       flex: 1,
       paddingTop: 22,
@@ -34,11 +36,14 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
       width: '100%',
       justifyContent: 'center',
       alignItems: 'center',
+      alignContent: "center",
       elevation: 5,
       shadowRadius: 2,
-      flexWrap: 'wrap',
     },
     playerName: {
+      // For testing purposes to align things
+      ...testBorders,
+
       color: "white",
       fontSize,
       backgroundColor: color,
@@ -46,42 +51,34 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
       textAlign: "center",
       alignSelf: "center",
       alignContent: "center",
-      flex: 0.7
-    },
-    pointArrow: {
-      color: "white",
-      fontSize: fontSize * 6,
-      flex: 3,
-      alignSelf: "center"
-      // position: 'absolute'
+      flex: 1
     },
     button: {
       // For testing purposes to align things
-      ...testBorders,
+      // ...testBorders,
 
-      // padding: 6,
-      // alignItems: "center",
-      // fontSize: 18,
-      // height: 44,
-      // flex: 0.3,
       backgroundColor: color,
       flex: 1,
       padding: 5,
-      width: "95%"
+      paddingBottom: 8,
+      width: "100%"
     },
     buttonList: {
       // For testing purposes to align things
       ...testBorders,
 
       backgroundColor: color,
-      flex: 1,
+      flex: 1.5,
       alignSelf: "stretch",
       alignItems: "center",
       paddingBottom: 20
     },
     scoreCounter: {
+      // For testing purposes to align things
+      ...testBorders,
+
       backgroundColor: color,
-      flex: 4
+      flex: 4.5
     },
     buttonText: {
       color: color,
@@ -100,14 +97,12 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
 
         <View style={styles.button} >
           <CustomButton
-            color="white"
             content={() => <Text style={styles.buttonText} >Warning</Text> }
             onPress={() => (undefined)}
             />
         </View>
         <View style={styles.button} >
           <CustomButton
-            color="white"
             content={() => <Text style={styles.buttonText} >Penalty</Text> }
             onPress={() => (undefined)}
             />

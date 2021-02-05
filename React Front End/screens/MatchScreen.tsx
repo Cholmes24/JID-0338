@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { StyleSheet, Image, ColorValue } from 'react-native';
 import { useSelector } from 'react-redux'
-import BottomDrawer from '../components/BottomDrawer'
 import CompetitorColumn, { CompetitorColumnProps } from '../components/CompetitorColumn'
 import { Text, View } from '../components/Themed';
 import UndoButton from '../components/UndoButton'
-import UserCard from '../components/UserCard'
 import { MatchState } from '../store/types'
 
 type MatchScreenProps = {
@@ -27,12 +25,16 @@ export default function MatchScreen() {
         </View>
       </View>
       <View style={styles.bottomTab}>
-        <UndoButton onPress={() => undefined} />
+        <UndoButton />
         {/* TODO: Slide up tab at the bottom for undo */}
 
       </View>
     </View>
   );
+}
+const testBorders = {
+  // borderColor: "yellow",
+  // borderWidth: 2,
 }
 
 const styles = StyleSheet.create({
@@ -68,6 +70,9 @@ const styles = StyleSheet.create({
     paddingBottom: 15
   },
   competitorColumn: {
+    // For testing purposes to align things
+    ...testBorders,
+
     alignSelf: "stretch",
     alignContent: "center",
     flex: 1,

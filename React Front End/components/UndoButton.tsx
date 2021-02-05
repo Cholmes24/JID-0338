@@ -1,55 +1,46 @@
-import React from "react"
-import { Feather } from "@expo/vector-icons"
+import React, { useState } from "react"
 import { EvilIcons } from "@expo/vector-icons"
-import { ColorValue, GestureResponderEvent, Pressable, StyleSheet, TextStyle, ViewStyle } from "react-native"
+import { GestureResponderEvent, Pressable, StyleProp, StyleSheet } from "react-native"
 import { Text, useThemeColor } from './Themed'
-import Button from "./Button"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector, useStore } from "react-redux"
 import { MatchState } from "../store/types"
 import { undoLastCall } from "../reducers/CompetitorReducer"
 
-export type UndoButtonProps = {
-  onPress: ((event: GestureResponderEvent) => void) | null | undefined,
-  fontSize?: number
-}
-
-export default function UndoButton({onPress, fontSize = 35}: UndoButtonProps) {
-  const color = useThemeColor({ light: "black", dark: "white"}, "tabIconDefault")
-
+export default function UndoButton() {
+  // const color = useThemeColor({ light: "black", dark: "white"}, "tabIconDefault")
+  const fontSize = 35
   const dispatch = useDispatch()
   const matchState = useSelector((state: MatchState) => state)
+  const pressedColor = "grey"
+  const [ buttonColor, setButtonColor ] = useState<"white" | typeof pressedColor>("white")
 
   const styles = StyleSheet.create({
-    buttonArea: {
-      backgroundColor: "white",
-      borderRadius: 6,
-      padding: 5,
-      paddingBottom: 15,
+    buttonIcon: {
+      color: "black",
+      alignSelf: "center",
+      fontSize
+    },
+    pressable: {
+      backgroundColor: buttonColor,
+      borderRadius: 15,
+      padding: 6,
       width: '100%',
       justifyContent: 'center',
       alignItems: 'center',
       elevation: 5,
       flex: 1,
-      // shadowOffset: {
-      //   width: 3,
-      //   height: 5
-      // },
-      // shadowColor: "grey",
-      shadowRadius: 1,
-      color,
+      shadowRadius: 4
     },
-    button: {
-      color: "black",
-      alignSelf: "center",
-      fontSize
-    }
   })
 
   return (
-    <Button
-      content={() => <EvilIcons name="undo" style={styles.button} />}
+    <Pressable style={styles.pressable}
       onPress={() => dispatch(undoLastCall(matchState))}
-      color="white"
-    />
+      onPressIn={() => setButtonColor("grey")}
+      onPressOut={() => setButtonColor("white")}
+    >
+      <EvilIcons name="undo" style={styles.buttonIcon} />
+
+    </Pressable>
   )
 }

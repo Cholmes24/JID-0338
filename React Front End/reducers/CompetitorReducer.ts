@@ -131,10 +131,7 @@ export function undoLastCall(state: MatchState) {
       const undoneAction = state.callLog[state.callLog.length - 1]
       if (undoneAction && undoneAction?.data.side) {
         const playerToUndo = state[undoneAction.data.side]
-        // TODO remove console.logs
-        console.log("attempting to undo a call on " + playerToUndo.name)
         const restoredCompetitorState = undoParticularCall(playerToUndo, undoneAction)
-        console.log("player score: " + restoredCompetitorState.score )
         if (playerToUndo.side == "right") {
           return {
             ...state,

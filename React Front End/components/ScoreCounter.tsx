@@ -1,9 +1,10 @@
 import { AntDesign, Feather } from '@expo/vector-icons'
-import React from 'react'
-import { ColorValue, FlatList, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { ColorValue, FlatList, GestureResponderEvent, Pressable, StyleProp, StyleSheet, TextStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import competitorReducer, { decreaseScore, increaseScore } from '../reducers/CompetitorReducer'
 import { MatchState } from '../store/types'
+import Button from './Button'
 import { Text, View } from './Themed'
 
 type ScoreCounterProps = {
@@ -43,12 +44,54 @@ export default function ScoreCounter({side, fontSize = 70}: ScoreCounterProps) {
     },
   })
 
+  const caretupFunction = () => <AntDesign name="caretup" style={styles.arrow}/>
+
   return (
     <View style={styles.container} >
-      <AntDesign name="caretup" style={styles.arrow} onPress={() => dispatch(increaseScore(competitor))} />
+      <ArrowButton
+        iconName="caretup"
+        onPress={() => dispatch(increaseScore(competitor))}
+        fontSize={fontSize}
+      />
       <Text style={styles.scoreBox} >{score}</Text>
-      <AntDesign name="caretdown" style={styles.arrow} onPress={() => dispatch(decreaseScore(competitor))} />
+      <ArrowButton
+        iconName="caretdown"
+        onPress={() => dispatch(decreaseScore(competitor))}
+        fontSize={fontSize}
+      />
     </View>
   )
 }
 
+function ArrowButton({iconName, onPress, fontSize}: {
+  iconName: "caretdown" | "caretup",
+  onPress: ((event: GestureResponderEvent) => void) | undefined,
+  fontSize: number
+}){
+  const pressedColor = "grey"
+  const [ arrowColor, setArrowColor ] = useState<"white" | typeof pressedColor>("white")
+
+  const styles = StyleSheet.create({
+    buttonSurrounding: {
+      // borderRadius: 15,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      elevation: 5,
+    },
+    buttonIcon: {
+      color: arrowColor,
+      fontSize: fontSize * 1.8,
+      paddingBottom: 5
+    }
+  })
+
+  return (
+    <Pressable onPress={onPress} style={styles.buttonSurrounding}
+      onPressIn={() => setArrowColor("grey")}
+      onPressOut={() => setArrowColor("white")}
+    >
+      <AntDesign name={iconName} style={styles.buttonIcon}/>
+    </Pressable>
+  )
+}

@@ -65,8 +65,6 @@ export const defaultMatchState: MatchState = {
 }
 
 export default function MatchReducer(state = defaultMatchState, action: MatchActionTypes) {
-  // TODO remove console.log
-  console.log("entered match reducer")
   switch (action.type) {
     default:
       return state
