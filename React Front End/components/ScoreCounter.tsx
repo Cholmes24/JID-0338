@@ -1,9 +1,10 @@
-import { Feather } from '@expo/vector-icons'
-import React from 'react'
-import { ColorValue, FlatList, StyleSheet } from 'react-native'
+import { AntDesign, Feather } from '@expo/vector-icons'
+import React, { useState } from 'react'
+import { ColorValue, FlatList, GestureResponderEvent, Pressable, StyleProp, StyleSheet, TextStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import competitorReducer, { decreaseScore, increaseScore } from '../reducers/CompetitorReducer'
 import { MatchState } from '../store/types'
+import Button from './Button'
 import { Text, View } from './Themed'
 
 type ScoreCounterProps = {
@@ -11,51 +12,86 @@ type ScoreCounterProps = {
   fontSize?: number
 }
 
-export default function ScoreCounter({side, fontSize = 50}: ScoreCounterProps) {
+export default function ScoreCounter({side, fontSize = 70}: ScoreCounterProps) {
   const dispatch = useDispatch()
   const competitor = useSelector((state: MatchState) => state[side])
   const color = competitor.color
   const score = competitor.score
-  // const count = competitor.score
 
-
-  const [count, setCount] = React.useState(0)
   const styles = StyleSheet.create({
     arrow: {
-      color,
-      fontSize: fontSize * 2,
+      color: "white",
+      fontSize: fontSize * 1.8,
+      paddingBottom: 5
     },
     scoreBox: {
-      height: fontSize * 1.2,
-      width: fontSize * 1.2,
+      height: fontSize * 1.3,
+      width: fontSize * 1.3,
       fontSize,
-      color: color === "white" ? "black" : "white",
-      borderColor: "black",
-      borderWidth: 1,
-      backgroundColor: color,
+      fontWeight: "bold",
+      color: "white",
+      // borderColor: "black",
+      // borderWidth: 1,
+      // backgroundColor: color,
       textAlign: "center",
       textAlignVertical: "center",
-      position: "absolute"
+      position: "absolute",
     },
     container: {
       alignItems: "center",
       justifyContent: "center",
-      alignSelf: "center"
+      backgroundColor: color,
     },
   })
 
-  const incrementCount = () => setCount(count + 1)
-  const decrementCount = () => count > 0 ? setCount(count - 1) : setCount(count)
-
-  // const incrementCount = () => dispatch(increaseScore)
-  // const decrementCount = () => dispatch(decreaseScore)
+  const caretupFunction = () => <AntDesign name="caretup" style={styles.arrow}/>
 
   return (
     <View style={styles.container} >
-      <Feather name="chevron-up" style={styles.arrow} onPress={() => dispatch(increaseScore(competitor))} />
+      <ArrowButton
+        iconName="caretup"
+        onPress={() => dispatch(increaseScore(competitor))}
+        fontSize={fontSize}
+      />
       <Text style={styles.scoreBox} >{score}</Text>
-      <Feather name="chevron-down" style={styles.arrow} onPress={() => dispatch(decreaseScore(competitor))} />
+      <ArrowButton
+        iconName="caretdown"
+        onPress={() => dispatch(decreaseScore(competitor))}
+        fontSize={fontSize}
+      />
     </View>
   )
 }
 
+function ArrowButton({iconName, onPress, fontSize}: {
+  iconName: "caretdown" | "caretup",
+  onPress: ((event: GestureResponderEvent) => void) | undefined,
+  fontSize: number
+}){
+  const pressedColor = "grey"
+  const [ arrowColor, setArrowColor ] = useState<"white" | typeof pressedColor>("white")
+
+  const styles = StyleSheet.create({
+    buttonSurrounding: {
+      // borderRadius: 15,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      elevation: 5,
+    },
+    buttonIcon: {
+      color: arrowColor,
+      fontSize: fontSize * 1.8,
+      paddingBottom: 5
+    }
+  })
+
+  return (
+    <Pressable onPress={onPress} style={styles.buttonSurrounding}
+      onPressIn={() => setArrowColor("grey")}
+      onPressOut={() => setArrowColor("white")}
+    >
+      <AntDesign name={iconName} style={styles.buttonIcon}/>
+    </Pressable>
+  )
+}

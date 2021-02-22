@@ -17,44 +17,48 @@ import MatchScreen from '../screens/MatchScreen'
 const SideMenu = createDrawerNavigator<SideMenuParamList>()
 
 export default function SideMenuNavigator() {
+  const colorScheme = useColorScheme()
+
   return (
     <SideMenu.Navigator initialRouteName="Home" screenOptions={{ headerShown: true }}>
       <SideMenu.Screen
         name="Home"
         component={HomeScreen}
-        options={headerOptions("Home")}
+        options={headerOptions(colorScheme, "Home")}
       />
       <SideMenu.Screen
         name="Tournaments"
         component={TournamentsScreen}
-        options={headerOptions("Tournaments")}
+        options={headerOptions(colorScheme, "Tournaments")}
       />
       <SideMenu.Screen
         name="Rings"
         component={RingsScreen}
-        options={headerOptions("Rings")}
+        options={headerOptions(colorScheme, "Rings")}
       />
       <SideMenu.Screen
         name="Match"
         component={MatchScreen}
-        options={headerOptions("Match 1")}
+        options={headerOptions(colorScheme, "Match 1")}
       />
     </SideMenu.Navigator>
   );
 }
 
 function headerOptions(
+  colorScheme: "light" | "dark",
   title: string | JSX.Element,
   leftButtonType: "back" | "hamburger" | "none" = "hamburger",
   right?: string
 ): DrawerHeaderOptions {
   const navigation = useNavigation()
+  const iconColor = colorScheme === "dark" ? "white" : "black"
 
   const headerLeft = () => {
     switch (leftButtonType) {
-      case "hamburger": return <Feather name="menu" style={styles.featherButton} onPress={
+      case "hamburger": return <Feather name="menu" color={iconColor} style={styles.featherButton} onPress={
         () => navigation.dispatch(DrawerActions.toggleDrawer)} />
-      case "back": return <Feather name="arrow-left-circle" style={styles.featherButton} onPress={
+      case "back": return <Feather name="arrow-left-circle" color={iconColor} style={styles.featherButton} onPress={
         () => navigation.goBack()} />
       case "none": return <></>
     }

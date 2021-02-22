@@ -10,6 +10,11 @@ import Navigation from './navigation';
 import competitorReducer from './reducers/CompetitorReducer'
 import matchReducer from './reducers/MatchReducer'
 
+const combinedReducers = combineReducers({
+  competitorReducer,
+  matchReducer
+})
+
 const store = createStore(
   competitorReducer,
   composeWithDevTools()

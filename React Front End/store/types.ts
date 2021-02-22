@@ -26,25 +26,20 @@ export interface DecreaseScoreAction {
 
 export interface IssueWarningAction {
   type: typeof ISSUE_WARNING,
-  data: {
-    numberOfWarnings: number,
-    score: number
-  }
+  data: Competitor
 }
 
 export interface IssuePenaltyAction {
   type: typeof ISSUE_PENALTY,
-  data: {
-    numberOfPenalties: number,
-    score: number
-  }
+  data: Competitor
 }
 
 export interface MatchState {
   left: Competitor,
   right: Competitor,
   ruleset: MatchRuleset,
-  timeElapsed: number
+  timeElapsed: number,
+  callLog: LongtermCompetitorActionTypes[]
 }
 
 export const TOGGLE_TIMER = "TOGGLE_TIMER"
@@ -57,6 +52,13 @@ export interface ToggleTimerAction {
   }
 }
 
+export const UNDO_CALL = "UNDO_CALL"
+
+export interface UndoCallAction {
+  type: typeof UNDO_CALL,
+  data: MatchState
+}
+
 export type MatchRuleset = {
   increaseAmount: number,
   decreaseAmount: number,
@@ -66,6 +68,8 @@ export type MatchRuleset = {
   endCondition: (left: Competitor, right: Competitor) => Competitor | undefined
 }
 
-export type CompetitorActionTypes = IncreaseScoreAction | DecreaseScoreAction | IssueWarningAction | IssuePenaltyAction
+export type LongtermCompetitorActionTypes = IncreaseScoreAction | DecreaseScoreAction | IssueWarningAction | IssuePenaltyAction
+
+export type CompetitorActionTypes = LongtermCompetitorActionTypes | UndoCallAction
 
 export type MatchActionTypes = ToggleTimerAction

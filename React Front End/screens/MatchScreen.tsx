@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, Image, ColorValue } from 'react-native';
-import CompetitorColumn, { CompetitorColumnProps } from '../components/Competitor Column'
+import { useSelector } from 'react-redux'
+import CompetitorColumn, { CompetitorColumnProps } from '../components/CompetitorColumn'
 import { Text, View } from '../components/Themed';
-import UserCard from '../components/UserCard'
+import UndoButton from '../components/UndoButton'
+import { MatchState } from '../store/types'
 
 type MatchScreenProps = {
   leftColumn: CompetitorColumnProps,
@@ -10,22 +12,35 @@ type MatchScreenProps = {
 }
 
 export default function MatchScreen() {
+  const rightCompetitor = useSelector((state: MatchState) => state["right"])
+
   return (
     <View style={styles.container}>
-      <CompetitorColumn
-        side="left"
-      />
-      <CompetitorColumn
-        side="right"
-      />
+      <View style={styles.scoreMonitor}>
+        <View style={styles.competitorColumn} >
+          <CompetitorColumn side="left" />
+        </View>
+        <View style={styles.competitorColumn} >
+          <CompetitorColumn side="right" />
+        </View>
+      </View>
+      <View style={styles.bottomTab}>
+        <UndoButton />
+        {/* TODO: Slide up tab at the bottom for undo */}
+
+      </View>
     </View>
   );
+}
+const testBorders = {
+  // borderColor: "yellow",
+  // borderWidth: 2,
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: 'row',
+    flex: 3,
+    // flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
@@ -39,4 +54,28 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
+  scoreMonitor: {
+    flex: 5,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bottomTab: {
+    flex: 0.5,
+    alignSelf: "stretch",
+    alignContent: "center",
+    flexWrap: 'wrap',
+    padding: 5,
+    paddingBottom: 15
+  },
+  competitorColumn: {
+    // For testing purposes to align things
+    ...testBorders,
+
+    alignSelf: "stretch",
+    alignContent: "center",
+    flex: 1,
+    padding: 5,
+  }
 });
