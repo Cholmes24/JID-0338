@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import Timer from '../components/Timer'
 import UserCard from '../components/UserCard'
 
 export default function RingsScreen() {
@@ -13,6 +14,7 @@ export default function RingsScreen() {
         firstName="This is technically a User's First Name"
         lastName="But it's cool that it works!"
       />
+      <Timer/>
     </View>
   );
 }

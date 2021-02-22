@@ -1,6 +1,7 @@
 import { ColorValue } from "react-native"
 
 export interface Competitor {
+  id: string,
   name: string,
   score: number,
   numberOfWarnings: number,
