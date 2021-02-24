@@ -39,6 +39,9 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
       alignContent: "center",
       elevation: 5,
       shadowRadius: 2,
+      shadowOffset: { width: 1, height: 2 },
+      shadowColor: 'black',
+      shadowOpacity: 1,
     },
     playerName: {
       // For testing purposes to align things
@@ -71,7 +74,7 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
       flex: 1.5,
       alignSelf: "stretch",
       alignItems: "center",
-      paddingBottom: 20
+      marginBottom: 15
     },
     scoreCounter: {
       // For testing purposes to align things
