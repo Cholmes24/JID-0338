@@ -20,9 +20,9 @@ export default function ScoreCounter({side, fontSize = 70}: ScoreCounterProps) {
 
   const styles = StyleSheet.create({
     arrow: {
-      color: "white",
+      color: "black",
       fontSize: fontSize * 1.8,
-      paddingBottom: 5
+      paddingBottom: 5,
     },
     scoreBox: {
       height: fontSize * 1.3,
@@ -68,7 +68,7 @@ function ArrowButton({iconName, onPress, fontSize}: {
   onPress: ((event: GestureResponderEvent) => void) | undefined,
   fontSize: number
 }){
-  const pressedColor = "grey"
+  const pressedColor = "#BEBEBE"
   const [ arrowColor, setArrowColor ] = useState<"white" | typeof pressedColor>("white")
 
   const styles = StyleSheet.create({
@@ -88,7 +88,7 @@ function ArrowButton({iconName, onPress, fontSize}: {
 
   return (
     <Pressable onPress={onPress} style={styles.buttonSurrounding}
-      onPressIn={() => setArrowColor("grey")}
+      onPressIn={() => setArrowColor("#BEBEBE")}
       onPressOut={() => setArrowColor("white")}
     >
       <AntDesign name={iconName} style={styles.buttonIcon}/>

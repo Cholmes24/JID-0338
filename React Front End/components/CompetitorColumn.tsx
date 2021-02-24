@@ -38,10 +38,10 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
       alignItems: 'center',
       alignContent: "center",
       elevation: 5,
-      shadowRadius: 2,
-      shadowOffset: { width: 1, height: 2 },
-      shadowColor: 'black',
-      shadowOpacity: 1,
+      // shadowRadius: 2,
+      // shadowOffset: { width: 1, height: 2 },
+      // shadowColor: 'black',
+      // shadowOpacity: 0.4,
     },
     playerName: {
       // For testing purposes to align things

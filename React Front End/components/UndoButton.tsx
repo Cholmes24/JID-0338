@@ -11,7 +11,7 @@ export default function UndoButton() {
   const fontSize = 35
   const dispatch = useDispatch()
   const matchState = useSelector((state: MatchState) => state)
-  const pressedColor = "grey"
+  const pressedColor = "#BEBEBE"
   const [ buttonColor, setButtonColor ] = useState<"white" | typeof pressedColor>("white")
 
   const styles = StyleSheet.create({
@@ -32,14 +32,14 @@ export default function UndoButton() {
       shadowRadius: 4,
       shadowOffset: { width: 1, height: 3 },
       shadowColor: 'black',
-      shadowOpacity: 1,
+      shadowOpacity: 0.4,
     },
   })
 
   return (
     <Pressable style={styles.pressable}
       onPress={() => dispatch(undoLastCall(matchState))}
-      onPressIn={() => setButtonColor("grey")}
+      onPressIn={() => setButtonColor("#BEBEBE")}
       onPressOut={() => setButtonColor("white")}
     >
       <EvilIcons name="undo" style={styles.buttonIcon} />

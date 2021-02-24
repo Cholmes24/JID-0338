@@ -102,7 +102,7 @@ const testBorder = {
 }
 
 const buttonDefaults = {
-  backgroundColor: '#9C9C9C',
+  backgroundColor: '#C0C0C0',
   width: 55,
   marginHorizontal: 25,
   borderRadius: 13,
@@ -124,6 +124,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     alignItems: 'center',
+    // shadowRadius: 4,
+    // shadowOffset: { width: 1, height: 3 },
+    // shadowColor: 'black',
+    // shadowOpacity: 0.4,
   },
   timerBox: {
     width: '100%',
@@ -145,5 +149,9 @@ const styles = StyleSheet.create({
     ...buttonDefaults,
     justifyContent: 'center',
     alignSelf: 'center',
+    // shadowRadius: 4,
+    // shadowOffset: { width: 1, height: 3 },
+    // shadowColor: 'black',
+    // shadowOpacity: 0.4,
   }
 });
