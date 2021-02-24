@@ -14,7 +14,6 @@ export default function RingsScreen() {
         firstName="This is technically a User's First Name"
         lastName="But it's cool that it works!"
       />
-      <Timer/>
     </View>
   );
 }
