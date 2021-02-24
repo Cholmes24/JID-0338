@@ -29,7 +29,10 @@ export default function UndoButton() {
       alignItems: 'center',
       elevation: 5,
       flex: 1,
-      shadowRadius: 4
+      shadowRadius: 4,
+      shadowOffset: { width: 1, height: 3 },
+      shadowColor: 'black',
+      shadowOpacity: 1,
     },
   })
 

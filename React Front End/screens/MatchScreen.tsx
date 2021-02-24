@@ -84,11 +84,15 @@ const styles = StyleSheet.create({
   timer: {
     alignSelf: "stretch",
     alignContent: "center",
+    justifyContent: 'center',
     backgroundColor: 'white',
     borderRadius: 10,
+    marginTop: 5,
     marginLeft: 5,
     marginRight: 5,
+    shadowRadius: 3,
+    elevation: 3,
     height: '10%',
-    marginBottom: 5,
+    marginBottom: 3,
   }
 });

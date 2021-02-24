@@ -1,17 +1,14 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Button, Text } from 'react-native-elements'
-import { View, StyleSheet, Image, ColorValue } from 'react-native'
-// import { View } from '../components/Themed';
+import { View, StyleSheet, Image, ColorValue, Platform } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default function Timer({maxTime = 300000}: {maxTime?: number}) {
+export default function Timer({maxTime = 3000}: {maxTime?: number}) {
   const [ timeLeft, setTimeLeft ] = useState<number>(maxTime)
-  const [ timeLeftAtLastStop, setTimeLeftAtLastStop ] = useState<number>(maxTime)
+  const [ timeLeftAtLastStop, setTimeLeftAtLastStop ] = useState<number>(timeLeft)
   const [ lastStart, setLastStart ] = useState<number>(Date.now())
-  // const [ lastStop, setLastStop ] = useState<number>(0)
   const [ timerRunning, setTimerRunning ] = useState(false)
-
 
   const refreshRate = 85 // in ms
   useEffect(() => {
@@ -22,18 +19,27 @@ export default function Timer({maxTime = 300000}: {maxTime?: number}) {
   })
 
   const calculateTimeRemaining = (currentTime: number = Date.now()) => {
-    return timeLeftAtLastStop - (timerRunning ? (currentTime - lastStart) : 0)
+    return Math.max(0, timeLeftAtLastStop - (timerRunning ? (currentTime - lastStart) : 0))
   }
 
   const toggle = () => {
-    const currentTime = Date.now()
-    setTimeLeft(calculateTimeRemaining(currentTime))
-    if (timerRunning) {
-      setTimeLeftAtLastStop(calculateTimeRemaining(currentTime))
-    } else {
-      setLastStart(currentTime)
+    if (timeLeft > 0) {
+      const currentTime = Date.now()
+      const pausePlay = timerRunning ? pause : play
+      pausePlay(currentTime)
     }
-    setTimerRunning(!timerRunning)
+  }
+
+  const pause = (currentTime: number) => {
+    const exactTimeLeft = calculateTimeRemaining(currentTime)
+    setTimeLeft(exactTimeLeft)
+    setTimeLeftAtLastStop(exactTimeLeft)
+    setTimerRunning(false)
+  }
+
+  const play = (currentTime: number) => {
+    setLastStart(currentTime)
+    setTimerRunning(true)
   }
 
   const formattedTimeLeft = () => {
@@ -44,56 +50,78 @@ export default function Timer({maxTime = 300000}: {maxTime?: number}) {
     return `${minutes}:${seconds < 10 ? "0" :""}${seconds}.${points}`
   }
 
+  const addTime = () => {
+    const amountToAdd = 10000
+    if (timeLeft === 0) {
+      setTimerRunning(false)
+      setTimeLeftAtLastStop(amountToAdd)
+    } else {
+      setTimeLeftAtLastStop(timeLeftAtLastStop + amountToAdd)
+      setTimeLeft(timeLeft + amountToAdd)
+    }
+  }
+
   //TODO: handle timer going into negative range
   return (
-    <>
       <View style={styles.container}>
-      {/* <View> */}
-        <View>
-          <Button buttonStyle={styles.add_time} icon={
+        <Button
+          buttonStyle={styles.add_time}
+          icon={
             <Icon
                 name="plus"
                 size={40}
                 color="white"
-              />}
-            />
-        </View>
-        <View>
-          <Text style={styles.text}>{formattedTimeLeft()} </Text>
-        </View>
-        <View>
-          <Button
-            buttonStyle={styles.play_pause}
-            icon={timerRunning ?
-              <Icon
-                name="pause"
-                size={40}
-                color="white"
-              />
-              :
-              <Icon
-                name="play"
-                size={40}
-                color="white"
               />
             }
-            onPress={toggle}
-          />
-        </View>
+          onPress={addTime}
+        />
+        <Text style={styles.text}>{formattedTimeLeft()} </Text>
+        <Button
+          buttonStyle={styles.play_pause}
+          icon={timerRunning && timeLeft > 0 ?
+            <Icon
+              name="pause"
+              size={40}
+              color="white"
+            />
+            :
+            <Icon
+              name="play"
+              size={40}
+              color="white"
+            />
+          }
+          onPress={timeLeft > 0 ? toggle : (() => null)}
+        />
       </View>
-    </>
   )
+}
+const testBorder = {
+  // borderColor: "yellow",
+  // borderWidth: 4
+}
+
+const buttonDefaults = {
+  backgroundColor: '#9C9C9C',
+  width: 55,
+  marginHorizontal: 25,
+  borderRadius: 13,
+  ...testBorder
 }
 
 const styles = StyleSheet.create({
   text: {
     fontSize: 30,
+    textAlign: 'center',
+    // fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace'
+    fontVariant: ['tabular-nums'],
     alignSelf: 'center',
+    marginHorizontal: 5,
+    ...testBorder
   },
   play_pause: {
+    ...buttonDefaults,
     justifyContent: 'center',
-    backgroundColor: '#9C9C9C',
-    width: '50%',
     alignSelf: 'center',
     alignItems: 'center',
   },
@@ -104,18 +132,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
-    width: '100%',
+    // width: '100%',
+    marginVertical: 3,
     alignSelf: 'center',
     flexDirection:'row',
     alignContent: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10,
+    ...testBorder
   },
   add_time: {
+    ...buttonDefaults,
     justifyContent: 'center',
-    backgroundColor: '#9C9C9C',
-    width: '50%',
     alignSelf: 'center',
   }
 });
