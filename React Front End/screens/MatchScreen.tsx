@@ -5,6 +5,7 @@ import CompetitorColumn, { CompetitorColumnProps } from '../components/Competito
 import { Text, View } from '../components/Themed';
 import UndoButton from '../components/UndoButton'
 import { MatchState } from '../store/types'
+import Timer from '../components/Timer'
 
 type MatchScreenProps = {
   leftColumn: CompetitorColumnProps,
@@ -12,22 +13,27 @@ type MatchScreenProps = {
 }
 
 export default function MatchScreen() {
-  const rightCompetitor = useSelector((state: MatchState) => state["right"])
+
+  const leftId = useSelector((state: MatchState) => state.leftId)
+  const rightId = useSelector((state: MatchState) => state.rightId)
+
 
   return (
     <View style={styles.container}>
+      <View style={styles.timer}>
+        <Timer/>
+      </View>
       <View style={styles.scoreMonitor}>
         <View style={styles.competitorColumn} >
-          <CompetitorColumn side="left" />
+          <CompetitorColumn id={leftId} />
         </View>
         <View style={styles.competitorColumn} >
-          <CompetitorColumn side="right" />
+          <CompetitorColumn id={rightId} />
         </View>
       </View>
       <View style={styles.bottomTab}>
         <UndoButton />
         {/* TODO: Slide up tab at the bottom for undo */}
-
       </View>
     </View>
   );
@@ -77,5 +83,19 @@ const styles = StyleSheet.create({
     alignContent: "center",
     flex: 1,
     padding: 5,
+  },
+  timer: {
+    alignSelf: "stretch",
+    alignContent: "center",
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    marginTop: 5,
+    marginLeft: 5,
+    marginRight: 5,
+    shadowRadius: 3,
+    elevation: 3,
+    height: '10%',
+    marginBottom: 3,
   }
 });

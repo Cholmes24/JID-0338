@@ -1,6 +1,7 @@
 import { ColorValue } from "react-native"
 
 export interface Competitor {
+  id: string,
   name: string,
   score: number,
   numberOfWarnings: number,
@@ -16,30 +17,36 @@ export const ISSUE_PENALTY = "ISSUE_PENALTY"
 
 export interface IncreaseScoreAction {
   type: typeof INCREASE_SCORE,
-  data: Competitor
+  competitorId: "string"
 }
 
 export interface DecreaseScoreAction {
   type: typeof DECREASE_SCORE,
-  data: Competitor
+  competitorId: "string"
 }
 
 export interface IssueWarningAction {
   type: typeof ISSUE_WARNING,
-  data: Competitor
+  competitorId: "string"
 }
 
 export interface IssuePenaltyAction {
   type: typeof ISSUE_PENALTY,
-  data: Competitor
+  competitorId: "string"
 }
 
 export interface MatchState {
-  left: Competitor,
-  right: Competitor,
+  competitors: Competitor[],
+  leftId: string,
+  rightId: string,
   ruleset: MatchRuleset,
   timeElapsed: number,
-  callLog: LongtermCompetitorActionTypes[]
+  callLog: (LongtermCompetitorActionTypes & TimeStamp)[]
+}
+
+export type TimeStamp = {
+  timeOfStamp: number,
+  timeRemainingAtStamp: number
 }
 
 export const TOGGLE_TIMER = "TOGGLE_TIMER"
@@ -56,7 +63,7 @@ export const UNDO_CALL = "UNDO_CALL"
 
 export interface UndoCallAction {
   type: typeof UNDO_CALL,
-  data: MatchState
+  data: LongtermCompetitorActionTypes
 }
 
 export type MatchRuleset = {
@@ -68,7 +75,7 @@ export type MatchRuleset = {
   endCondition: (left: Competitor, right: Competitor) => Competitor | undefined
 }
 
-export type LongtermCompetitorActionTypes = IncreaseScoreAction | DecreaseScoreAction | IssueWarningAction | IssuePenaltyAction
+export type LongtermCompetitorActionTypes = TimeStamp & (IncreaseScoreAction | DecreaseScoreAction | IssueWarningAction | IssuePenaltyAction)
 
 export type CompetitorActionTypes = LongtermCompetitorActionTypes | UndoCallAction
 
