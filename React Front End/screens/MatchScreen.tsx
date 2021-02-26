@@ -13,7 +13,10 @@ type MatchScreenProps = {
 }
 
 export default function MatchScreen() {
-  const rightCompetitor = useSelector((state: MatchState) => state["right"])
+
+  const leftId = useSelector((state: MatchState) => state.leftId)
+  const rightId = useSelector((state: MatchState) => state.rightId)
+
 
   return (
     <View style={styles.container}>
@@ -22,10 +25,10 @@ export default function MatchScreen() {
       </View>
       <View style={styles.scoreMonitor}>
         <View style={styles.competitorColumn} >
-          <CompetitorColumn side="left" />
+          <CompetitorColumn id={leftId} />
         </View>
         <View style={styles.competitorColumn} >
-          <CompetitorColumn side="right" />
+          <CompetitorColumn id={rightId} />
         </View>
       </View>
       <View style={styles.bottomTab}>

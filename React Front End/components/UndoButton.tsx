@@ -4,13 +4,14 @@ import { GestureResponderEvent, Pressable, StyleProp, StyleSheet } from "react-n
 import { Text, useThemeColor } from './Themed'
 import { useDispatch, useSelector, useStore } from "react-redux"
 import { MatchState } from "../store/types"
-import { undoLastCall } from "../reducers/CompetitorReducer"
+import { call } from "react-native-reanimated"
 
 export default function UndoButton() {
   // const color = useThemeColor({ light: "black", dark: "white"}, "tabIconDefault")
   const fontSize = 35
   const dispatch = useDispatch()
-  const matchState = useSelector((state: MatchState) => state)
+  const callLog = useSelector((state: MatchState) => state.callLog)
+  const mostRecentCall = callLog.length > 0 && callLog[callLog.length - 1]
   const pressedColor = "#BEBEBE"
   const [ buttonColor, setButtonColor ] = useState<"white" | typeof pressedColor>("white")
 
@@ -38,7 +39,7 @@ export default function UndoButton() {
 
   return (
     <Pressable style={styles.pressable}
-      onPress={() => dispatch(undoLastCall(matchState))}
+      onPress={() => callLog ? dispatch({ type: "UNDO_CALL", data: mostRecentCall }) : undefined}
       onPressIn={() => setButtonColor("#BEBEBE")}
       onPressOut={() => setButtonColor("white")}
     >
