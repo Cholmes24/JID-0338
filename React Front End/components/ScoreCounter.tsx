@@ -2,19 +2,21 @@ import { AntDesign, Feather } from '@expo/vector-icons'
 import React, { useState } from 'react'
 import { ColorValue, FlatList, GestureResponderEvent, Pressable, StyleProp, StyleSheet, TextStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import competitorReducer, { decreaseScore, increaseScore } from '../reducers/CompetitorReducer'
 import { MatchState } from '../store/types'
 import Button from './Button'
 import { Text, View } from './Themed'
 
 type ScoreCounterProps = {
-  side: "left" | "right",
+  id: string,
   fontSize?: number
 }
 
-export default function ScoreCounter({side, fontSize = 70}: ScoreCounterProps) {
+export default function ScoreCounter({id, fontSize = 70}: ScoreCounterProps) {
   const dispatch = useDispatch()
-  const competitor = useSelector((state: MatchState) => state[side])
+  const competitor = useSelector((state: MatchState) => state.competitors.find(c => c.id === id))
+  if (!competitor) {
+    throw Error("INVALID ID")
+  }
   const color = competitor.color
   const score = competitor.score
 
@@ -50,13 +52,13 @@ export default function ScoreCounter({side, fontSize = 70}: ScoreCounterProps) {
     <View style={styles.container} >
       <ArrowButton
         iconName="caretup"
-        onPress={() => dispatch(increaseScore(competitor))}
+        onPress={() => dispatch({ type: "INCREASE_SCORE", competitorId: id })}
         fontSize={fontSize}
       />
       <Text style={styles.scoreBox} >{score}</Text>
       <ArrowButton
         iconName="caretdown"
-        onPress={() => dispatch(decreaseScore(competitor))}
+        onPress={() => score > 0 ? dispatch({ type: "DECREASE_SCORE", competitorId: id }) : undefined}
         fontSize={fontSize}
       />
     </View>

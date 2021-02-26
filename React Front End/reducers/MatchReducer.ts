@@ -38,7 +38,9 @@ const defaultMatchRuleset: MatchRuleset = {
     endCondition: (left: Competitor, right: Competitor) => endConditions(5, 8, 2)(left, right)
 }
 
+
 const defaultLeftCompetitor: Competitor = {
+  id: "defaultLeftCompetitorId",
   name: "Longname Fencermaster",
   color: "#376EDA",
   score: 0,
@@ -48,6 +50,7 @@ const defaultLeftCompetitor: Competitor = {
 }
 
 const defaultRightCompetitor: Competitor = {
+  id: "defaultRightCompetitorId",
   name: "Superlong Lastnameman",
   color: "#D43737",
   score: 0,
@@ -56,9 +59,12 @@ const defaultRightCompetitor: Competitor = {
   numberOfPenalties: 0,
 }
 
+export const defaultCompetitorList = [defaultLeftCompetitor, defaultRightCompetitor]
+
 export const defaultMatchState: MatchState = {
-  left: defaultLeftCompetitor,
-  right: defaultRightCompetitor,
+  competitors: defaultCompetitorList,
+  leftId: defaultLeftCompetitor.id,
+  rightId: defaultRightCompetitor.id,
   ruleset: defaultMatchRuleset,
   timeElapsed: 0,
   callLog: []
