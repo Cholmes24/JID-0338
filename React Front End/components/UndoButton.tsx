@@ -1,10 +1,9 @@
 import React, { useState } from "react"
-import { EvilIcons } from "@expo/vector-icons"
+import EvilIcons from "react-evil-icons"
 import { GestureResponderEvent, Pressable, StyleProp, StyleSheet } from "react-native"
 import { Text, useThemeColor } from './Themed'
 import { useDispatch, useSelector, useStore } from "react-redux"
 import { MatchState } from "../store/types"
-import { call } from "react-native-reanimated"
 
 export default function UndoButton() {
   // const color = useThemeColor({ light: "black", dark: "white"}, "tabIconDefault")

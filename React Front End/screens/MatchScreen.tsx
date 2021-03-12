@@ -7,10 +7,10 @@ import UndoButton from '../components/UndoButton'
 import { MatchState } from '../store/types'
 import Timer from '../components/Timer'
 
-type MatchScreenProps = {
-  leftColumn: CompetitorColumnProps,
-  rightColumn: CompetitorColumnProps
-}
+// type MatchScreenProps = {
+//   leftColumn: CompetitorColumnProps,
+//   rightColumn: CompetitorColumnProps
+// }
 
 export default function MatchScreen() {
 
