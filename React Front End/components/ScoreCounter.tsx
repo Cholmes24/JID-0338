@@ -5,7 +5,6 @@ import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { MatchState } from '../store/types'
 import Button from './Button'
 import { Text, View } from './Themed'
-import db from "../SQLiteTransactions"
 import { Dispatch } from 'redux'
 
 type ScoreCounterProps = {
@@ -16,21 +15,6 @@ type ScoreCounterProps = {
 export default function ScoreCounter({id, fontSize = 70}: ScoreCounterProps) {
   const dispatch = useDispatch()
   const competitor = useSelector((state: MatchState) => state.competitors.find(c => c.id === id))
-
-  // const competitor = useSelector((state: RootStateOrAny) => state)
-  // throw Error(competitor.toString())
-
-
-  async function increaseScore(id: string) {
-    return async (dispatch: Dispatch<any>) => {
-      await dispatch({ type: "INCREASE_SCORE", competitorId: id })
-      db.transaction(tx => {
-        tx.executeSql(
-          'update competitors set score = score + 1 where id = ?', [id]
-        )
-      })
-    }
-  }
 
   if (!competitor) {
     throw Error("INVALID ID")
