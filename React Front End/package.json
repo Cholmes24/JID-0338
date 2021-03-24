@@ -1,9 +1,8 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll"
@@ -13,6 +12,8 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
+    "@react-native-async-storage/async-storage": "^1.14.1",
+    "@react-native-community/cli": "^4.14.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.8.0",
     "@react-navigation/drawer": "^5.11.3",
@@ -27,26 +28,38 @@
     "expo-linking": "^1.0.1",
     "expo-splash-screen": "~0.6.2",
     "expo-status-bar": "~1.0.2",
+    "expo-updates": "~0.3.2",
     "expo-web-browser": "~8.5.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
-    "react-native-elements": "^3.0.0-alpha.1",
+    "react-evil-icons": "^0.5.0",
+    "react-native": "~0.63.3",
+    "react-native-eject": "^0.1.2",
+    "react-native-elements": "^3.2.0",
     "react-native-gesture-handler": "~1.7.0",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
+    "react-native-unimodules": "~0.11.0",
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
-    "redux-devtools-extension": "^2.13.8"
+    "redux-devtools-extension": "^2.13.8",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
+    "@types/react-native-elements": "^0.18.0",
+    "babel-jest": "~25.2.6",
+    "jest": "~25.2.6",
     "jest-expo": "~39.0.0",
+    "react-test-renderer": "~16.13.1",
     "typescript": "~3.9.5"
   },
-  "private": true
+  "private": true,
+  "name": "scorecut",
+  "version": "1.0.0"
 }

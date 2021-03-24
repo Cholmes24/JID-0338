@@ -1,18 +1,25 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import CustomButton from './Button'
-import { useSelector } from 'react-redux'
+import { RootStateOrAny, useSelector } from 'react-redux'
 import { MatchState } from '../store/types'
 import ScoreCounter from './ScoreCounter'
 import { View, Text } from './Themed'
 
 export type CompetitorColumnProps = {
-  side: "left" | "right"
+  id: string
 }
 
-export default function CompetitorColumn({side}: CompetitorColumnProps) {
-  const competitor = useSelector((state: MatchState) => state[side])
+export default function CompetitorColumn({id}: CompetitorColumnProps) {
 
+  const competitor = useSelector((state: MatchState) => state.competitors.find(c => c.id === id))
+  // const competitor = useSelector((state: RootStateOrAny) => state)
+  // throw Error(JSON.stringify(competitor))
+
+
+  if (!competitor) {
+    throw Error("INVALID ID")
+  }
   const color = competitor.color
   const name = competitor.name
   const fontSize = 20
@@ -38,7 +45,10 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
       alignItems: 'center',
       alignContent: "center",
       elevation: 5,
-      shadowRadius: 2,
+      // shadowRadius: 2,
+      // shadowOffset: { width: 1, height: 2 },
+      // shadowColor: 'black',
+      // shadowOpacity: 0.4,
     },
     playerName: {
       // For testing purposes to align things
@@ -71,7 +81,7 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
       flex: 1.5,
       alignSelf: "stretch",
       alignItems: "center",
-      paddingBottom: 20
+      marginBottom: 15
     },
     scoreCounter: {
       // For testing purposes to align things
@@ -90,7 +100,7 @@ export default function CompetitorColumn({side}: CompetitorColumnProps) {
     <View style={styles.container} >
       <Text style={styles.playerName} >{name}</Text>
       <View style={styles.scoreCounter}>
-        <ScoreCounter side={side} />
+        <ScoreCounter id={id} />
       </View>
 
       <View style={styles.buttonList} >

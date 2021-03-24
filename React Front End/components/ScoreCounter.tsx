@@ -1,28 +1,48 @@
 import { AntDesign, Feather } from '@expo/vector-icons'
 import React, { useState } from 'react'
 import { ColorValue, FlatList, GestureResponderEvent, Pressable, StyleProp, StyleSheet, TextStyle } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import competitorReducer, { decreaseScore, increaseScore } from '../reducers/CompetitorReducer'
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { MatchState } from '../store/types'
 import Button from './Button'
 import { Text, View } from './Themed'
+import db from "../SQLiteTransactions"
+import { Dispatch } from 'redux'
 
 type ScoreCounterProps = {
-  side: "left" | "right",
+  id: string,
   fontSize?: number
 }
 
-export default function ScoreCounter({side, fontSize = 70}: ScoreCounterProps) {
+export default function ScoreCounter({id, fontSize = 70}: ScoreCounterProps) {
   const dispatch = useDispatch()
-  const competitor = useSelector((state: MatchState) => state[side])
+  const competitor = useSelector((state: MatchState) => state.competitors.find(c => c.id === id))
+
+  // const competitor = useSelector((state: RootStateOrAny) => state)
+  // throw Error(competitor.toString())
+
+
+  async function increaseScore(id: string) {
+    return async (dispatch: Dispatch<any>) => {
+      await dispatch({ type: "INCREASE_SCORE", competitorId: id })
+      db.transaction(tx => {
+        tx.executeSql(
+          'update competitors set score = score + 1 where id = ?', [id]
+        )
+      })
+    }
+  }
+
+  if (!competitor) {
+    throw Error("INVALID ID")
+  }
   const color = competitor.color
   const score = competitor.score
 
   const styles = StyleSheet.create({
     arrow: {
-      color: "white",
+      color: "black",
       fontSize: fontSize * 1.8,
-      paddingBottom: 5
+      paddingBottom: 5,
     },
     scoreBox: {
       height: fontSize * 1.3,
@@ -50,13 +70,13 @@ export default function ScoreCounter({side, fontSize = 70}: ScoreCounterProps) {
     <View style={styles.container} >
       <ArrowButton
         iconName="caretup"
-        onPress={() => dispatch(increaseScore(competitor))}
+        onPress={() => dispatch({ type: "INCREASE_SCORE", competitorId: id })}
         fontSize={fontSize}
       />
       <Text style={styles.scoreBox} >{score}</Text>
       <ArrowButton
         iconName="caretdown"
-        onPress={() => dispatch(decreaseScore(competitor))}
+        onPress={() => score > 0 ? dispatch({ type: "DECREASE_SCORE", competitorId: id }) : undefined}
         fontSize={fontSize}
       />
     </View>
@@ -68,7 +88,7 @@ function ArrowButton({iconName, onPress, fontSize}: {
   onPress: ((event: GestureResponderEvent) => void) | undefined,
   fontSize: number
 }){
-  const pressedColor = "grey"
+  const pressedColor = "#BEBEBE"
   const [ arrowColor, setArrowColor ] = useState<"white" | typeof pressedColor>("white")
 
   const styles = StyleSheet.create({
@@ -88,7 +108,7 @@ function ArrowButton({iconName, onPress, fontSize}: {
 
   return (
     <Pressable onPress={onPress} style={styles.buttonSurrounding}
-      onPressIn={() => setArrowColor("grey")}
+      onPressIn={() => setArrowColor("#BEBEBE")}
       onPressOut={() => setArrowColor("white")}
     >
       <AntDesign name={iconName} style={styles.buttonIcon}/>
