@@ -1,7 +1,9 @@
 {
+  "name": "scorecut",
+  "displayName": "Scorecut",
   "expo": {
-    "name": "scoring",
-    "slug": "scoring",
+    "name": "scorecut",
+    "slug": "scorecut",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

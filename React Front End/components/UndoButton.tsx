@@ -1,15 +1,20 @@
 import React, { useState } from "react"
-import EvilIcons from "react-evil-icons"
+import Icon from "react-native-vector-icons/EvilIcons"
 import { GestureResponderEvent, Pressable, StyleProp, StyleSheet } from "react-native"
 import { Text, useThemeColor } from './Themed'
-import { useDispatch, useSelector, useStore } from "react-redux"
+import { RootStateOrAny, useDispatch, useSelector, useStore } from "react-redux"
 import { MatchState } from "../store/types"
+// import { Icon } from "react-native-elements"
 
 export default function UndoButton() {
   // const color = useThemeColor({ light: "black", dark: "white"}, "tabIconDefault")
   const fontSize = 35
   const dispatch = useDispatch()
   const callLog = useSelector((state: MatchState) => state.callLog)
+
+  // const callLog = useSelector((state: RootStateOrAny) => state)
+  // throw Error(callLog.toString())
+
   const mostRecentCall = callLog.length > 0 && callLog[callLog.length - 1]
   const pressedColor = "#BEBEBE"
   const [ buttonColor, setButtonColor ] = useState<"white" | typeof pressedColor>("white")
@@ -42,8 +47,11 @@ export default function UndoButton() {
       onPressIn={() => setButtonColor("#BEBEBE")}
       onPressOut={() => setButtonColor("white")}
     >
-      <EvilIcons name="undo" style={styles.buttonIcon} />
-
+      <Icon
+        name="undo"
+        size={40}
+        color="black"
+      />
     </Pressable>
   )
 }

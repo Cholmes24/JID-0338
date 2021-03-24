@@ -1,4 +1,5 @@
 import { ColorValue } from "react-native"
+import { Action } from "redux"
 
 export interface Competitor {
   id: string,
@@ -77,6 +78,6 @@ export type MatchRuleset = {
 
 export type LongtermCompetitorActionTypes = TimeStamp & (IncreaseScoreAction | DecreaseScoreAction | IssueWarningAction | IssuePenaltyAction)
 
-export type CompetitorActionTypes = LongtermCompetitorActionTypes | UndoCallAction
+export type CompetitorActionTypes = Action & (LongtermCompetitorActionTypes | UndoCallAction)
 
-export type MatchActionTypes = ToggleTimerAction
+export type MatchActionTypes = Action & ToggleTimerAction

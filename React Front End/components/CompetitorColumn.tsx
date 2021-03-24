@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import CustomButton from './Button'
-import { useSelector } from 'react-redux'
+import { RootStateOrAny, useSelector } from 'react-redux'
 import { MatchState } from '../store/types'
 import ScoreCounter from './ScoreCounter'
 import { View, Text } from './Themed'
@@ -11,7 +11,12 @@ export type CompetitorColumnProps = {
 }
 
 export default function CompetitorColumn({id}: CompetitorColumnProps) {
+
   const competitor = useSelector((state: MatchState) => state.competitors.find(c => c.id === id))
+  // const competitor = useSelector((state: RootStateOrAny) => state)
+  // throw Error(JSON.stringify(competitor))
+
+
   if (!competitor) {
     throw Error("INVALID ID")
   }
