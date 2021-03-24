@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { StyleSheet, Image } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import UserCard from '../components/UserCard'
+import Tournament from '../components/Tournament'
+import TournamentList from '../components/TournamentList'
+
 
 export default function TournamentsScreen() {
   return (
     <View style={styles.container}>
-      <UserCard
-        uri="https://daily.jstor.org/wp-content/uploads/2020/06/why_you_should_learn_the_names_of_trees_1050x700.jpg"
-        firstName="This is weird to be a name"
-        lastName="But it's cool that it works!"
-      />
+      <TournamentList/>
     </View>
   );
 }
