@@ -1,19 +1,18 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
-import Timer from '../components/Timer'
 import UserCard from '../components/UserCard'
+import Ring from '../components/Ring'
+import RingList from '../components/RingList'
 
-export default function RingsScreen() {
+
+export default function TournamentsScreen() {
   return (
     <View style={styles.container}>
-      <UserCard
-        uri="http://www.grandvoyageitaly.com/uploads/3/7/2/7/37277491/sheep-nanny_orig.jpg"
-        firstName="This is technically a User's First Name"
-        lastName="But it's cool that it works!"
-      />
+      <RingList/>
     </View>
   );
 }
