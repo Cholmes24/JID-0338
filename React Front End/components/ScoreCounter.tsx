@@ -2,25 +2,50 @@ import { AntDesign, Feather } from '@expo/vector-icons'
 import React, { useState } from 'react'
 import { ColorValue, FlatList, GestureResponderEvent, Pressable, StyleProp, StyleSheet, TextStyle } from 'react-native'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
-import { MatchState } from '../store/types'
 import Button from './Button'
 import { Text, View } from './Themed'
-import { Dispatch } from 'redux'
+import { Match, RootType, Scoring } from '../redux-types/storeTypes'
+import { DecreaseScoreAction, IncreaseScoreAction, MatchesAction, MatchScoringAction, ScoringActionType } from '../redux-types/actionTypes'
 
 type ScoreCounterProps = {
-  id: string,
+  matchId: number,
+  fighterScoringKey: "fighter1Scoring" | "fighter2Scoring",
   fontSize?: number
 }
 
-export default function ScoreCounter({id, fontSize = 70}: ScoreCounterProps) {
+export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70}: ScoreCounterProps) {
   const dispatch = useDispatch()
-  const competitor = useSelector((state: MatchState) => state.competitors.find(c => c.id === id))
-
-  if (!competitor) {
+  const match = useSelector((state: RootType) => state.matches.find(c => c.id === matchId))
+  // const fighter = useSelector((state: RootType) => state.fighters.find(c => c.id === fighterId))
+  if (!match) {
     throw Error("INVALID ID")
   }
-  const color = competitor.color
-  const score = competitor.score
+
+  const scoring = match.present[fighterScoringKey]
+  const score = scoring.points
+
+  const increase: IncreaseScoreAction = {
+    type: "INCREASE_SCORE"
+  }
+  const decrease: DecreaseScoreAction = {
+    type: "DECREASE_SCORE"
+  }
+
+  const middle: (innerActionType: ScoringActionType) => MatchScoringAction = (inner) => ({
+    type: "MATCH_SCORING",
+    payload: {
+      scoringAction: inner,
+      fighter: fighterScoringKey
+    }
+  })
+
+  const outer: ((middle: MatchScoringAction) => MatchesAction) = (middle) => ({
+    type: "MATCHES",
+    matchAction: middle,
+    matchId
+  })
+
+  const affectScore = (inner: ScoringActionType) => outer(middle(inner))
 
   const styles = StyleSheet.create({
     arrow: {
@@ -44,7 +69,7 @@ export default function ScoreCounter({id, fontSize = 70}: ScoreCounterProps) {
     container: {
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: color,
+      // backgroundColor: color,
     },
   })
 
@@ -54,13 +79,13 @@ export default function ScoreCounter({id, fontSize = 70}: ScoreCounterProps) {
     <View style={styles.container} >
       <ArrowButton
         iconName="caretup"
-        onPress={() => dispatch({ type: "INCREASE_SCORE", competitorId: id })}
+        onPress={() => dispatch(affectScore(increase))}
         fontSize={fontSize}
       />
       <Text style={styles.scoreBox} >{score}</Text>
       <ArrowButton
         iconName="caretdown"
-        onPress={() => score > 0 ? dispatch({ type: "DECREASE_SCORE", competitorId: id }) : undefined}
+        onPress={() => score > 0 ? dispatch(affectScore(decrease)) : undefined}
         fontSize={fontSize}
       />
     </View>

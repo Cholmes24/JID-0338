@@ -81,4 +81,11 @@ export interface MatchRedoAction extends Action {
 
 export type MatchActionType = MatchScoringAction | MatchTimingAction | MatchUndoAction | MatchRedoAction
 
+export const MATCHES = "MATCHES"
+
+export interface MatchesAction extends Action {
+  type: typeof MATCHES,
+  matchAction: MatchActionType,
+  matchId: number
+}
 

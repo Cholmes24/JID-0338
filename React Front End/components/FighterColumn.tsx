@@ -5,23 +5,49 @@ import { RootStateOrAny, useSelector } from 'react-redux'
 import { MatchState } from '../store/types'
 import ScoreCounter from './ScoreCounter'
 import { View, Text } from './Themed'
+import { Fighter, Match, RootType } from '../redux-types/storeTypes'
 
-export type CompetitorColumnProps = {
-  id: string
-}
+export type FighterColumnProps = {
+  matchId: number
+} & ({
+  fighter: "fighter1" | "fighter2"
+} | {
+  fighterId: number
+})
 
-export default function CompetitorColumn({id}: CompetitorColumnProps) {
+export default function FighterColumn(props: FighterColumnProps) {
+  const match = useSelector((state: RootType) => state.matches.find((m: Match) => m.id === props.matchId))
 
-  const competitor = useSelector((state: MatchState) => state.competitors.find(c => c.id === id))
-  // const competitor = useSelector((state: RootStateOrAny) => state)
-  // throw Error(JSON.stringify(competitor))
-
-
-  if (!competitor) {
-    throw Error("INVALID ID")
+  if (!match) {
+    throw Error("INVALID MATCH ID")
   }
-  const color = competitor.color
-  const name = competitor.name
+
+  function getFighterIdAndScoringKey(match: Match): [number, "fighter1Scoring" | "fighter2Scoring"] {
+    if (props.hasOwnProperty("fighterId")) {
+      const p = props as { matchId: number, fighterId: number}
+      const id = p.fighterId
+      if (match.fighter1Id !== id && match.fighter2Id !== id) {
+        throw Error("FIGHTER NOT IN MATCH")
+      }
+      const scoringKey = match.fighter1Id === id ? "fighter1Scoring" : "fighter2Scoring"
+      return [id, scoringKey]
+    } else {
+      const p = props as { matchId: number, fighter: "fighter1" | "fighter2" }
+      const id = match[p.fighter === "fighter1" ? "fighter1Id" : "fighter2Id"]
+      const scoringKey = `${p.fighter}Scoring` as "fighter1Scoring" | "fighter2Scoring"
+      return [id, scoringKey]
+    }
+  }
+
+  const [ fighterId, fighterScoringKey ] = getFighterIdAndScoringKey(match)
+  const fighter = useSelector((state: RootType) => state.fighters.find((f: Fighter) => f.id === fighterId))
+
+  if (!fighter) {
+    throw Error("INVALID FIGHTER ID")
+  }
+
+  const color = fighter.color
+  const name = `${fighter.firstName} ${fighter.lastName}`
   const fontSize = 20
   const testBorders = {
     // borderColor: "yellow",
@@ -100,7 +126,7 @@ export default function CompetitorColumn({id}: CompetitorColumnProps) {
     <View style={styles.container} >
       <Text style={styles.playerName} >{name}</Text>
       <View style={styles.scoreCounter}>
-        <ScoreCounter id={id} />
+        <ScoreCounter matchId={props.matchId} fighterScoringKey={fighterScoringKey} />
       </View>
 
       <View style={styles.buttonList} >

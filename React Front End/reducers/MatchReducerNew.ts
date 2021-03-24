@@ -1,11 +1,41 @@
 import { MatchScoringAction, MatchTimingAction } from './../redux-types/actionTypes';
 import { MatchActionType, MatchRedoAction, MatchUndoAction } from "../redux-types/actionTypes"
-import { Match, MatchScore } from "../redux-types/storeTypes"
+import { Match, MatchScore, Scoring, Timer } from "../redux-types/storeTypes"
 import timerReducer from './features/TimerSlice'
 import scoringReducer from './features/ScoringSlice'
+import { AnyAction, Reducer } from 'redux'
 
+const defaultScoring: Scoring = {
+  points: 0,
+  numWarnings: 0,
+  numPenalties: 0,
+}
 
-export default function matchReducer(state: Match, action: MatchActionType): Match {
+const defaultTimer: Timer = {
+  maxTime: 180000,
+  timeRemaining: 180000,
+  timeRemainingAtLastStop: 180000,
+  timeOfLastStart: 0,
+  isRunning: false
+}
+
+export const defaultMatch: Match = {
+  id: 0,
+  poolId: 0,
+  tournamentId: 0,
+  fighter1Id: 1,
+  fighter2Id: 2,
+  ringNumber: 0,
+  past: [],
+  present: {
+    fighter1Scoring: defaultScoring,
+    fighter2Scoring: defaultScoring,
+  },
+  future: [],
+  timer: defaultTimer
+}
+
+const matchReducer: Reducer<Match, AnyAction> = (state: Match = defaultMatch, action: MatchActionType) => {
   switch (action.type) {
     case "MATCH_TIMING":
       return matchTiming(state, action)
@@ -19,6 +49,7 @@ export default function matchReducer(state: Match, action: MatchActionType): Mat
       return state
   }
 }
+export default matchReducer
 
 function matchTiming(state: Match, action: MatchTimingAction): Match {
   return {

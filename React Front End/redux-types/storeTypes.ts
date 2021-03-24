@@ -3,7 +3,7 @@ import { ColorValue } from "react-native"
 export interface Fighter {
   id: number,
   firstName: string,
-  middleName: string,
+  middleName?: string,
   lastName: string,
 
   color: ColorValue,
@@ -58,7 +58,8 @@ export interface Tournament {
   weaponType?: string,
   // ruleset: MatchRuleset
   fighterIds: number[],
-  poolIds: number[]
+  poolIds: number[],
+  matchIds: number[]
 }
 
 export interface Pool {
@@ -68,11 +69,11 @@ export interface Pool {
   tournamentId: number,
 }
 
-
 export interface RootType {
-  tournamnents: Tournament[],
   fighters: Fighter[],
-  pools: Pool[]
+  tournamnents: Tournament[],
+  pools: Pool[],
+  matches: Match[]
 }
 
 

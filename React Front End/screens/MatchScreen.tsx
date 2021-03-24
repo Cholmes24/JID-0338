@@ -1,34 +1,37 @@
 import * as React from 'react';
 import { StyleSheet, Image, ColorValue } from 'react-native';
 import { useSelector } from 'react-redux'
-import CompetitorColumn, { CompetitorColumnProps } from '../components/CompetitorColumn'
+import FighterColumn from '../components/FighterColumn'
 import { Text, View } from '../components/Themed';
 import UndoButton from '../components/UndoButton'
 import { MatchState } from '../store/types'
 import Timer from '../components/Timer'
+import { Match, RootType } from '../redux-types/storeTypes'
 
-// type MatchScreenProps = {
-//   leftColumn: CompetitorColumnProps,
-//   rightColumn: CompetitorColumnProps
-// }
+type MatchScreenProps = {
+  matchId: number
+}
 
-export default function MatchScreen() {
-
-  const leftId = useSelector((state: MatchState) => state.leftId)
-  const rightId = useSelector((state: MatchState) => state.rightId)
+export default function MatchScreen({matchId}: MatchScreenProps) {
+  const match = useSelector((state: RootType) => state.matches.find((m: Match) => m.id === matchId))
+  if (!match) {
+    throw Error("MATCH ID INVALID AT MATCH SCREEN")
+  }
+  const fighter1Id = match.fighter1Id
+  const fighter2Id = match.fighter2Id
 
 
   return (
     <View style={styles.container}>
       <View style={styles.timer}>
-        <Timer/>
+        <Timer matchId={matchId} />
       </View>
       <View style={styles.scoreMonitor}>
-        <View style={styles.competitorColumn} >
-          <CompetitorColumn id={leftId} />
+        <View style={styles.FighterColumn} >
+          <FighterColumn matchId={matchId} fighterId={fighter1Id} />
         </View>
-        <View style={styles.competitorColumn} >
-          <CompetitorColumn id={rightId} />
+        <View style={styles.FighterColumn} >
+          <FighterColumn matchId={matchId} fighterId={fighter2Id} />
         </View>
       </View>
       <View style={styles.bottomTab}>
@@ -75,7 +78,7 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingBottom: 15
   },
-  competitorColumn: {
+  FighterColumn: {
     // For testing purposes to align things
     ...testBorders,
 
