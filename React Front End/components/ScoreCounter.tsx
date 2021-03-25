@@ -4,7 +4,7 @@ import { ColorValue, GestureResponderEvent, Pressable, StyleSheet } from 'react-
 import { useDispatch, useSelector } from 'react-redux'
 import { Text, View } from './Themed'
 import { RootType } from '../redux-types/storeTypes'
-import { DecreaseScoreAction, IncreaseScoreAction, MatchesAction, MatchScoringAction, ScoringActionType } from '../redux-types/actionTypes'
+import asMatchesAction from '../util/reduxActionWrapper'
 
 type ScoreCounterProps = {
   matchId: number,
@@ -37,28 +37,13 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
   const scoring = match.present[fighterScoringKey]
   const score = scoring.points
 
-  const increase: IncreaseScoreAction = {
+  const increase = asMatchesAction({
     type: "INCREASE_SCORE"
-  }
-  const decrease: DecreaseScoreAction = {
+  }, matchId, fighterScoringKey)
+
+  const decrease = asMatchesAction({
     type: "DECREASE_SCORE"
-  }
-
-  const middle: (innerActionType: ScoringActionType) => MatchScoringAction = (inner) => ({
-    type: "MATCH_SCORING",
-    payload: {
-      scoringAction: inner,
-      fighter: fighterScoringKey
-    }
-  })
-
-  const outer: ((middle: MatchScoringAction) => MatchesAction) = (middle) => ({
-    type: "MATCHES",
-    matchAction: middle,
-    matchId
-  })
-
-  const affectStore = (inner: ScoringActionType) => outer(middle(inner))
+  }, matchId, fighterScoringKey)
 
   const styles = StyleSheet.create({
     arrow: {
@@ -91,13 +76,13 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
     <View style={styles.container} >
       <ArrowButton
         iconName="caretup"
-        onPress={() => dispatch(affectStore(increase))}
+        onPress={() => dispatch(increase)}
         fontSize={fontSize}
       />
       <Text style={styles.scoreBox} >{score}</Text>
       <ArrowButton
         iconName="caretdown"
-        onPress={() => score > 0 ? dispatch(affectStore(decrease)) : undefined}
+        onPress={() => score > 0 ? dispatch(decrease) : undefined}
         fontSize={fontSize}
       />
     </View>

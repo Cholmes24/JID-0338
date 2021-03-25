@@ -4,6 +4,7 @@ import { Pressable, StyleSheet } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import { RootType, Match } from "../redux-types/storeTypes"
 import { MatchesAction } from "../redux-types/actionTypes"
+import asMatchesAction from "../util/reduxActionWrapper"
 // import { Icon } from "react-native-elements"
 
 export type UndoButtonProps = {
@@ -19,11 +20,7 @@ export default function UndoButton({matchId}: UndoButtonProps) {
   const fontSize = 35
   const dispatch = useDispatch()
 
-  const undo: MatchesAction = {
-    type: "MATCHES",
-    matchAction: { type: "MATCH_UNDO" },
-    matchId
-  }
+  const undo: MatchesAction = asMatchesAction({ type: "MATCH_UNDO" }, matchId)
 
   const pressedColor = "#BEBEBE"
   const [ buttonColor, setButtonColor ] = useState<"white" | typeof pressedColor>("white")

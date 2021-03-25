@@ -50,10 +50,10 @@ export interface IssuePenaltyAction extends Action {
 export type ScoringActionType = IncreaseScoreAction | DecreaseScoreAction | IssueWarningAction | IssuePenaltyAction
 
 
-const MATCH_SCORING = "MATCH_SCORING"
-const MATCH_TIMING = "MATCH_TIMING"
-const MATCH_UNDO = "MATCH_UNDO"
-const MATCH_REDO = "MATCH_REDO"
+export const MATCH_SCORING = "MATCH_SCORING"
+export const MATCH_TIMING = "MATCH_TIMING"
+export const MATCH_UNDO = "MATCH_UNDO"
+export const MATCH_REDO = "MATCH_REDO"
 
 
 export interface MatchScoringAction extends Action {

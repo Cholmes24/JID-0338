@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux'
 import { Match, RootType } from '../redux-types/storeTypes'
-import { MatchesAction, MatchTimingAction, TimerActionType } from '../redux-types/actionTypes'
+import asMatchesAction from '../util/reduxActionWrapper'
 
 type TimerProps = {
   matchId: number
@@ -40,37 +40,24 @@ export default function Timer({matchId}: TimerProps) {
   const update = () => {
     const timeRemaining = calculateTimeRemaining()
     if (timeRemaining === 0 || timerStore.timeRemaining - timeRemaining > 200) {
-      dispatch(affectStore({
+      dispatch(asMatchesAction({
         type: "UPDATE_TIMER",
         payload: {
           currentTime: Date.now()
         }
-      }))
+      }, matchId))
     }
     setTimeLeft(timeRemaining)
   }
 
-  const toggle = () => dispatch(affectStore({
-    type: "TOGGLE_TIMER",
-    payload: {
-      currentTime: Date.now()
-    }
-  }))
-
-  const middle: (inner: TimerActionType) => MatchTimingAction = (inner) => ({
-    type: "MATCH_TIMING",
-    payload: {
-      timingAction: inner
-    }
-  })
-
-  const outer: (middle: MatchTimingAction) => MatchesAction = (middle) => ({
-    type: "MATCHES",
-    matchAction: middle,
-    matchId
-  })
-
-  const affectStore: (inner: TimerActionType) => MatchesAction = (inner) => outer(middle(inner))
+  const toggle = () => dispatch(
+    asMatchesAction({
+      type: "TOGGLE_TIMER",
+      payload: {
+        currentTime: Date.now()
+      }
+    }, matchId)
+  )
 
   const formattedTimeLeft = () => {
     // const ms: number = timerStore.timeRemaining
@@ -82,13 +69,13 @@ export default function Timer({matchId}: TimerProps) {
   }
 
   const addTime = () => dispatch(
-    affectStore({
+    asMatchesAction({
       type: "ADD_TO_TIMER",
       payload: {
         currentTime: Date.now(),
         amountToAdd: 10000
       }
-    })
+    }, matchId)
   )
 
   const hasTimeLeft: () => boolean = () => timerStore.timeRemaining > 0
