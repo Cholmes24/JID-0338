@@ -29,8 +29,8 @@ const defaultFighter2: Fighter = {
 }
 
 const defaultTournament: Tournament = {
-  name: "Dummy Tournament",
   id: 0,
+  name: "Dummy Tournament",
   fighterIds: [1, 2],
   poolIds: [0],
   matchIds: [0]
@@ -63,7 +63,7 @@ const defaultData: RootType = {
   fighters: [defaultFighter1, defaultFighter2],
   tournaments: [defaultTournament],
   pools: [defaultPool],
-  matches: [defaultMatch]
+  matches: [defaultMatch],
 }
 
 export default defaultData

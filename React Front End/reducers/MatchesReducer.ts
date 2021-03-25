@@ -12,11 +12,18 @@ function isMatchesActionType(action: AnyAction): action is MatchesAction {
   return a.type === "MATCHES" && a.matchAction !== undefined && a.matchId !== undefined
 }
 
-const matchesReducer: Reducer<Match[], AnyAction> = (state: Match[] = defaultData.matches, action: AnyAction) => {
-  if (isMatchesActionType(action)) {
-    return forwardMatchesAction(state, action)
-  } else {
-    return state
+const matchesReducer: Reducer<Match[], AnyAction> = (state = defaultData.matches, action) => {
+  switch (action.type) {
+    case "MATCHES":
+      if (isMatchesActionType(action)) {
+        return forwardMatchesAction(state, action)
+      } else {
+        return state
+      }
+    case "SET_MATCHES":
+      return action.payload
+    default:
+      return state
   }
 }
 
@@ -31,4 +38,3 @@ function forwardMatchesAction(state: Match[], action: MatchesAction): Match[] {
     }
   })
 }
-

@@ -15,7 +15,9 @@ type ScoreCounterProps = {
 
 export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70, color}: ScoreCounterProps) {
   const dispatch = useDispatch()
-  const match = useSelector((state: RootType) => state.matches.find(m => m.id === matchId))
+  const fighters = useSelector((state: RootType) => state.fighters)
+  const matches = useSelector((state: RootType) => state.matches)
+  const match = matches.find(m => m.id === matchId)
   // const fighter = useSelector((state: RootType) => state.fighters.find(c => c.id === fighterId))
   if (!match) {
     throw Error("INVALID ID")
@@ -23,7 +25,7 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
   const getColorToUse = () => {
     if (!color) {
       const fighterNumber = fighterScoringKey === "fighter1Scoring" ? "fighter1Id" : "fighter2Id"
-      const fighter = useSelector((state: RootType) => state.fighters.find((f) => f.id === match[fighterNumber]))
+      const fighter = fighters.find((f) => f.id === match[fighterNumber])
       if (!fighter) {
         throw Error("MATCH WITH INVALID FIGHTER ID")
       }

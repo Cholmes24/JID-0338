@@ -1,5 +1,5 @@
-import { ColorValue } from "react-native"
 import { Action } from "redux"
+import { Match, Pool, Tournament } from "./storeTypes"
 
 export const TOGGLE_TIMER = "TOGGLE_TIMER"
 export const ADD_TO_TIMER = "ADD_TO_TIMER"
@@ -81,11 +81,42 @@ export interface MatchRedoAction extends Action {
 
 export type MatchActionType = MatchScoringAction | MatchTimingAction | MatchUndoAction | MatchRedoAction
 
+
+
 export const MATCHES = "MATCHES"
+export const SET_MATCHES = "SET_MATCHES"
 
 export interface MatchesAction extends Action {
   type: typeof MATCHES,
   matchAction: MatchActionType,
   matchId: number
 }
+
+export interface SetMatchesAction extends Action {
+  type: typeof SET_MATCHES,
+  payload: Match[]
+}
+
+export type MatchesActionType = MatchesAction | SetMatchesAction
+
+
+export const SET_TOURNAMENTS = "SET_TOURNAMENTS"
+
+export interface SetTournamentsAction extends Action {
+  type: typeof SET_TOURNAMENTS,
+  payload: Tournament[]
+}
+
+export type TournamentsActionType = SetTournamentsAction
+
+
+export const SET_POOLS = "SET_POOLS"
+
+export interface SetPoolsAction extends Action {
+  type: typeof SET_POOLS,
+  payload: Pool[]
+}
+
+export type PoolsActionType = SetPoolsAction
+
 

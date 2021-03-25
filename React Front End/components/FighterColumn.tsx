@@ -18,14 +18,16 @@ export type FighterColumnProps = {
 export default function FighterColumn(props: FighterColumnProps) {
   const dispatch = useDispatch()
   const matchId = props.matchId
-  const match = useSelector((state: RootType) => state.matches.find((m: Match) => m.id === matchId))
+  const matches = useSelector((state: RootType) => state.matches)
+  const fighters = useSelector((state: RootType) => state.fighters)
 
+  const match = matches.find(m => m.id === matchId)
   if (!match) {
     throw Error("INVALID MATCH ID")
   }
 
   const [ fighterId, fighterScoringKey ] = getFighterIdAndScoringKey(match, props)
-  const fighter = useSelector((state: RootType) => state.fighters.find((f: Fighter) => f.id === fighterId))
+  const fighter = fighters.find((f: Fighter) => f.id === fighterId)
 
   if (!fighter) {
     throw Error("INVALID FIGHTER ID")

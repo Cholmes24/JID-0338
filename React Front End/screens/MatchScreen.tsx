@@ -13,7 +13,8 @@ type MatchScreenProps = {
 
 //TODO Don't hardcode matchId
 export default function MatchScreen({matchId = 0}: MatchScreenProps) {
-  const match = useSelector((state: RootType) => state.matches.find((m: Match) => m.id === matchId))
+  const matches = useSelector((state: RootType) => state.matches)
+  const match = matches.find((m: Match) => m.id === matchId)
   if (!match) {
     throw Error("MATCH ID INVALID AT MATCH SCREEN")
   }

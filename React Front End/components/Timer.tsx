@@ -4,7 +4,7 @@ import { Button, Text } from 'react-native-elements'
 import { View, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux'
-import { Match, RootType } from '../redux-types/storeTypes'
+import { RootType } from '../redux-types/storeTypes'
 import asMatchesAction from '../util/reduxActionWrapper'
 
 type TimerProps = {
@@ -13,7 +13,8 @@ type TimerProps = {
 
 export default function Timer({matchId}: TimerProps) {
   const dispatch = useDispatch()
-  const timerStore = useSelector((state: RootType) => state.matches.find((m: Match) => m.id === matchId)?.timer)
+  const matches = useSelector((state: RootType) => state.matches)
+  const timerStore = matches.find(m => m.id === matchId)?.timer
 
   if (!timerStore) {
     throw Error("INVALID MATCH ID - TIMER NOT FOUND")
@@ -39,25 +40,23 @@ export default function Timer({matchId}: TimerProps) {
 
   const update = () => {
     const timeRemaining = calculateTimeRemaining()
-    if (timeRemaining === 0 || timerStore.timeRemaining - timeRemaining > 200) {
+    if (timeRemaining === 0 || timerStore.timeRemaining - timeRemaining > 400) {
       dispatch(asMatchesAction({
         type: "UPDATE_TIMER",
-        payload: {
-          currentTime: Date.now()
-        }
+        payload: { currentTime: Date.now() }
       }, matchId))
     }
     setTimeLeft(timeRemaining)
   }
 
-  const toggle = () => dispatch(
-    asMatchesAction({
-      type: "TOGGLE_TIMER",
-      payload: {
-        currentTime: Date.now()
-      }
-    }, matchId)
-  )
+  const toggle = () => {
+      dispatch(
+      asMatchesAction({
+        type: "TOGGLE_TIMER",
+        payload: { currentTime: Date.now() }
+      }, matchId)
+    )
+  }
 
   const formattedTimeLeft = () => {
     // const ms: number = timerStore.timeRemaining
@@ -68,20 +67,20 @@ export default function Timer({matchId}: TimerProps) {
     return `${minutes}:${seconds < 10 ? "0" :""}${seconds}.${points}`
   }
 
-  const addTime = () => dispatch(
-    asMatchesAction({
-      type: "ADD_TO_TIMER",
-      payload: {
-        currentTime: Date.now(),
-        amountToAdd: 10000
-      }
-    }, matchId)
-  )
-
+  const addTime = () => {
+    const currentTime = Date.now()
+    const amountToAdd = 10000
+    setTimeLeft(timeLeft + amountToAdd)
+    dispatch(
+      asMatchesAction({
+        type: "ADD_TO_TIMER",
+        payload: { currentTime, amountToAdd }
+      }, matchId)
+    )
+  }
   const hasTimeLeft: () => boolean = () => timerStore.timeRemaining > 0
   const timerRunning: () => boolean = () => timerStore.isRunning
 
-  //TODO: handle timer going into negative range
   return (
       <View style={styles.container}>
         <Button
