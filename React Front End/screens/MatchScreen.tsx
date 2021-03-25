@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { StyleSheet, Image, ColorValue } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux'
 import FighterColumn from '../components/FighterColumn'
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 import UndoButton from '../components/UndoButton'
-import { MatchState } from '../store/types'
 import Timer from '../components/Timer'
 import { Match, RootType } from '../redux-types/storeTypes'
 
