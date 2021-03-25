@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import { ColorValue, GestureResponderEvent, Pressable, StyleProp, StyleSheet, TextStyle, ViewStyle } from "react-native"
-import { Text } from './Themed'
+import { GestureResponderEvent, Pressable, StyleSheet } from "react-native"
 
 export type ButtonProps = {
   content: () => JSX.Element,

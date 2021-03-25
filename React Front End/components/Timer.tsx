@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux'
 import { Match, RootType } from '../redux-types/storeTypes'
-import { MatchesAction, MatchTimingAction, TimerActionType, ToggleTimerAction, UpdateTimerAction } from '../redux-types/actionTypes'
+import { MatchesAction, MatchTimingAction, TimerActionType } from '../redux-types/actionTypes'
 
 type TimerProps = {
   matchId: number
@@ -48,7 +48,7 @@ export default function Timer({matchId}: TimerProps) {
       }))
     }
     setTimeLeft(timeRemaining)
-}
+  }
 
   const toggle = () => dispatch(affectStore({
     type: "TOGGLE_TIMER",

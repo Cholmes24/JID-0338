@@ -1,10 +1,9 @@
-import { AntDesign, Feather } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
 import React, { useState } from 'react'
-import { ColorValue, FlatList, GestureResponderEvent, Pressable, StyleProp, StyleSheet, TextStyle } from 'react-native'
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
-import Button from './Button'
+import { ColorValue, GestureResponderEvent, Pressable, StyleSheet } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import { Text, View } from './Themed'
-import { Match, RootType, Scoring } from '../redux-types/storeTypes'
+import { RootType } from '../redux-types/storeTypes'
 import { DecreaseScoreAction, IncreaseScoreAction, MatchesAction, MatchScoringAction, ScoringActionType } from '../redux-types/actionTypes'
 
 type ScoreCounterProps = {
@@ -34,7 +33,7 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
     }
   }
 
-  const colorToUse = getColorToUse()
+  // const colorToUse = getColorToUse()
   const scoring = match.present[fighterScoringKey]
   const score = scoring.points
 
@@ -87,8 +86,6 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
       backgroundColor: color,
     },
   })
-
-  const caretupFunction = () => <AntDesign name="caretup" style={styles.arrow}/>
 
   return (
     <View style={styles.container} >

@@ -71,7 +71,7 @@ export interface Pool {
 
 export interface RootType {
   fighters: Fighter[],
-  tournamnents: Tournament[],
+  tournaments: Tournament[],
   pools: Pool[],
   matches: Match[]
 }

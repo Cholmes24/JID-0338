@@ -1,0 +1,65 @@
+{
+  "fighters": [
+    {
+      "id": 1,
+      "firstName": "Longname",
+      "lastName": "Fencermaster",
+      "color": "#376EDA"
+    },
+    {
+      "id": 2,
+      "firstName": "Superlong",
+      "lastName": "Lastnameman",
+      "color": "#D43737"
+    }
+  ],
+  "tournaments": [
+    {
+      "name": "Dummy Tournament",
+      "id": 0,
+      "fighterIds": [1, 2],
+      "poolIds": [0],
+      "matchIds": [0]
+    }
+  ],
+  "pools": [
+    {
+      "id": 0,
+      "name": "Pool Party",
+      "fighterIds": [1, 2],
+      "tournamentId": 0
+    }
+  ],
+  "matches": [
+    {
+      "id": 0,
+      "poolId": 0,
+      "tournamentId": 0,
+      "fighter1Id": 1,
+      "fighter2Id": 2,
+      "ringNumber": 0,
+      "past": [
+      ],
+      "present": {
+        "fighter1Scoring": {
+          "points": 0,
+          "numWarnings": 0,
+          "numPenalties": 0
+        },
+        "fighter2Scoring": {
+          "points": 0,
+          "numWarnings": 0,
+          "numPenalties": 0
+        }
+      },
+      "future": [],
+      "timer": {
+        "maxTime": 180000,
+        "timeRemaining": 180000,
+        "timeRemainingAtLastStop": 180000,
+        "timeOfLastStart": 0,
+        "isRunning": false
+      }
+    }
+  ]
+}
