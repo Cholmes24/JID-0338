@@ -12,7 +12,8 @@ type MatchScreenProps = {
   matchId: number
 }
 
-export default function MatchScreen({matchId}: MatchScreenProps) {
+//TODO Don't hardcode matchId
+export default function MatchScreen({matchId = 0}: MatchScreenProps) {
   const match = useSelector((state: RootType) => state.matches.find((m: Match) => m.id === matchId))
   if (!match) {
     throw Error("MATCH ID INVALID AT MATCH SCREEN")
@@ -35,7 +36,7 @@ export default function MatchScreen({matchId}: MatchScreenProps) {
         </View>
       </View>
       <View style={styles.bottomTab}>
-        <UndoButton />
+        <UndoButton matchId={matchId} />
         {/* TODO: Slide up tab at the bottom for undo */}
       </View>
     </View>

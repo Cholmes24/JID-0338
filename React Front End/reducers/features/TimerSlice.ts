@@ -34,13 +34,13 @@ function toggleTimer(state: Timer, action: ToggleTimerAction): Timer {
       ...state,
       timeRemaining,
       timeRemainingAtLastStop: timeRemaining,
-      isRunning: !state.isRunning
+      isRunning: false
     }
   } else {
     return {
       ...state,
       timeOfLastStart: action.payload.currentTime,
-      isRunning: !state.isRunning
+      isRunning: true
     }
   }
 }

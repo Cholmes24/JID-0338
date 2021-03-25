@@ -2,15 +2,15 @@ import { Fighter, RootType, Tournament, Pool } from './redux-types/storeTypes';
 import thunk from 'redux-thunk';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { persistStore, persistReducer } from 'redux-persist'
-import { AnyAction, applyMiddleware, combineReducers, createStore } from 'redux'
+import { AnyAction, applyMiddleware, combineReducers, createStore, Reducer } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import matchReducer, { defaultMatch } from './reducers/MatchReducerNew'
+import matchReducer, { defaultMatch } from './reducers/MatchReducer'
+import matchesReducer from './reducers/MatchesReducer'
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
 }
-
 
 const defaultFighter1: Fighter = {
   id: 1,
@@ -41,6 +41,8 @@ const defaultPool: Pool = {
   tournamentId: 0
 }
 
+const defaultFighters = [defaultFighter1, defaultFighter2]
+
 const dummyData: RootType = {
   pools: [defaultPool],
   tournamnents: [defaultTournament],
@@ -48,15 +50,21 @@ const dummyData: RootType = {
   matches: [defaultMatch]
 }
 
-// const rootReducer = combineReducers({
-//   competitorReducer: persistReducer(persistConfig, matchReducer)
-// })
+const poolsReducer: Reducer<Pool[], AnyAction> = (state: Pool[] = [defaultPool], action: AnyAction) => state
+const tournamentsReducer: Reducer<Tournament[], AnyAction> = (state: Tournament[] = [defaultTournament], action: AnyAction) => state
+const fightersReducer: Reducer<Fighter[], AnyAction> = (state: Fighter[] = defaultFighters, action: AnyAction) => state
+
+
+const rootReducer = combineReducers({
+  matches: persistReducer(persistConfig, matchesReducer),
+  pools: persistReducer(persistConfig, poolsReducer),
+  tournaments: persistReducer(persistConfig, tournamentsReducer),
+  fighters: persistReducer(persistConfig, fightersReducer),
+})
 const composedEnhancer = composeWithDevTools(applyMiddleware(thunk))
 
 export const store = createStore(
-  // persistReducer(persistConfig, matchReducer),
-  matchReducer,
-  defaultMatch,
+  rootReducer,
   composedEnhancer,
 )
 

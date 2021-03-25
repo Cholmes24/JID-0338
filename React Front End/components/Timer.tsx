@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Button, Text } from 'react-native-elements'
-import { View, StyleSheet, Image, ColorValue, Platform } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux'
 import { Match, RootType } from '../redux-types/storeTypes'
-import { AddToTimerAction, MatchActionType, MatchesAction, MatchTimingAction, TimerActionType, ToggleTimerAction, UpdateTimerAction } from '../redux-types/actionTypes'
+import { MatchesAction, MatchTimingAction, TimerActionType, ToggleTimerAction, UpdateTimerAction } from '../redux-types/actionTypes'
 
 type TimerProps = {
   matchId: number
@@ -19,25 +19,36 @@ export default function Timer({matchId}: TimerProps) {
     throw Error("INVALID MATCH ID - TIMER NOT FOUND")
   }
 
-  // const [ timeLeft, setTimeLeft ] = useState<number>(maxTime)
-  // const [ timeLeftAtLastStop, setTimeLeftAtLastStop ] = useState<number>(timeLeft)
-  // const [ lastStart, setLastStart ] = useState<number>(Date.now())
-  // const [ timerRunning, setTimerRunning ] = useState(false)
+  const [ timeLeft, setTimeLeft ] = useState<number>(timerStore.timeRemaining)
 
   const refreshRate = 85 // in ms
   useEffect(() => {
     const timer = setTimeout(() => {
-      dispatch(update())
+      if (timerStore.isRunning) {
+        update()
+      }
     }, refreshRate)
     return () => clearTimeout(timer)
   })
 
-  const update = () => dispatch(affectStore({
-    type: "UPDATE_TIMER",
-    payload: {
-      currentTime: Date.now()
+  const calculateTimeRemaining = (
+    currentTime: number = Date.now()
+  ) => (
+    Math.max(0, timerStore.timeRemainingAtLastStop - (timerStore.isRunning ? (currentTime - timerStore.timeOfLastStart) : 0))
+  )
+
+  const update = () => {
+    const timeRemaining = calculateTimeRemaining()
+    if (timeRemaining === 0 || timerStore.timeRemaining - timeRemaining > 200) {
+      dispatch(affectStore({
+        type: "UPDATE_TIMER",
+        payload: {
+          currentTime: Date.now()
+        }
+      }))
     }
-  }))
+    setTimeLeft(timeRemaining)
+}
 
   const toggle = () => dispatch(affectStore({
     type: "TOGGLE_TIMER",
@@ -62,7 +73,8 @@ export default function Timer({matchId}: TimerProps) {
   const affectStore: (inner: TimerActionType) => MatchesAction = (inner) => outer(middle(inner))
 
   const formattedTimeLeft = () => {
-    const ms: number = timerStore.timeRemaining
+    // const ms: number = timerStore.timeRemaining
+    const ms: number = timeLeft
     const points = Math.floor(ms / 100) % 10
     const seconds = Math.floor((ms / 1000)) % 60
     const minutes = Math.floor(ms / (1000 * 60)) % 60
@@ -112,7 +124,7 @@ export default function Timer({matchId}: TimerProps) {
               color="white"
             />
           }
-          onPress={() => (hasTimeLeft() ? dispatch(toggle()) : null)}
+          onPress={() => (hasTimeLeft() ? toggle() : null)}
         />
       </View>
   )

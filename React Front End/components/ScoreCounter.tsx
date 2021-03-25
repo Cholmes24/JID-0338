@@ -10,17 +10,31 @@ import { DecreaseScoreAction, IncreaseScoreAction, MatchesAction, MatchScoringAc
 type ScoreCounterProps = {
   matchId: number,
   fighterScoringKey: "fighter1Scoring" | "fighter2Scoring",
-  fontSize?: number
+  fontSize?: number,
+  color?: ColorValue
 }
 
-export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70}: ScoreCounterProps) {
+export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70, color}: ScoreCounterProps) {
   const dispatch = useDispatch()
-  const match = useSelector((state: RootType) => state.matches.find(c => c.id === matchId))
+  const match = useSelector((state: RootType) => state.matches.find(m => m.id === matchId))
   // const fighter = useSelector((state: RootType) => state.fighters.find(c => c.id === fighterId))
   if (!match) {
     throw Error("INVALID ID")
   }
+  const getColorToUse = () => {
+    if (!color) {
+      const fighterNumber = fighterScoringKey === "fighter1Scoring" ? "fighter1Id" : "fighter2Id"
+      const fighter = useSelector((state: RootType) => state.fighters.find((f) => f.id === match[fighterNumber]))
+      if (!fighter) {
+        throw Error("MATCH WITH INVALID FIGHTER ID")
+      }
+      return fighter.color
+    } else {
+      return color
+    }
+  }
 
+  const colorToUse = getColorToUse()
   const scoring = match.present[fighterScoringKey]
   const score = scoring.points
 
@@ -45,7 +59,7 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70}
     matchId
   })
 
-  const affectScore = (inner: ScoringActionType) => outer(middle(inner))
+  const affectStore = (inner: ScoringActionType) => outer(middle(inner))
 
   const styles = StyleSheet.create({
     arrow: {
@@ -61,7 +75,8 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70}
       color: "white",
       // borderColor: "black",
       // borderWidth: 1,
-      // backgroundColor: color,
+      backgroundColor: color,
+      backfaceVisibility: "hidden",
       textAlign: "center",
       textAlignVertical: "center",
       position: "absolute",
@@ -69,7 +84,7 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70}
     container: {
       alignItems: "center",
       justifyContent: "center",
-      // backgroundColor: color,
+      backgroundColor: color,
     },
   })
 
@@ -79,13 +94,13 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70}
     <View style={styles.container} >
       <ArrowButton
         iconName="caretup"
-        onPress={() => dispatch(affectScore(increase))}
+        onPress={() => dispatch(affectStore(increase))}
         fontSize={fontSize}
       />
       <Text style={styles.scoreBox} >{score}</Text>
       <ArrowButton
         iconName="caretdown"
-        onPress={() => score > 0 ? dispatch(affectScore(decrease)) : undefined}
+        onPress={() => score > 0 ? dispatch(affectStore(decrease)) : undefined}
         fontSize={fontSize}
       />
     </View>

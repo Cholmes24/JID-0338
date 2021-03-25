@@ -1,9 +1,9 @@
-import { AnyAction } from "redux"
+import { AnyAction, Reducer } from "redux"
 import { MatchesAction } from "../redux-types/actionTypes"
 import { Match } from "../redux-types/storeTypes"
-import matchReducer from "./MatchReducerNew"
+import matchReducer, { defaultMatch } from "./MatchReducer"
 
-export function matchesReducer(state: Match[], action: MatchesAction) {
+const matchesReducer: Reducer<Match[], AnyAction> = (state: Match[] = [defaultMatch], action: AnyAction) => {
   switch (action.type) {
     case "MATCHES":
       return state.map((match) => {
@@ -17,3 +17,5 @@ export function matchesReducer(state: Match[], action: MatchesAction) {
       return state
   }
 }
+
+export default matchesReducer
