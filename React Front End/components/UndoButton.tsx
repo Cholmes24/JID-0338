@@ -1,10 +1,10 @@
 import React, { useState } from "react"
 import Icon from "react-native-vector-icons/EvilIcons"
 import { Pressable, StyleSheet } from "react-native"
-import { useDispatch, useSelector } from "react-redux"
 import { RootType } from "../redux-types/storeTypes"
 import { MatchesAction } from "../redux-types/actionTypes"
 import asMatchesAction from "../util/reduxActionWrapper"
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks"
 // import { Icon } from "react-native-elements"
 
 export type UndoButtonProps = {
@@ -12,14 +12,14 @@ export type UndoButtonProps = {
 }
 
 export default function UndoButton({matchId}: UndoButtonProps) {
+  const dispatch = useAppDispatch()
   // const color = useThemeColor({ light: "black", dark: "white"}, "tabIconDefault")
-  const matches = useSelector((state: RootType) => state.matches)
+  const matches = useAppSelector((state: RootType) => state.matches)
   const match = matches.find(m => m.id === matchId)
   if (!match) {
     throw Error("MATCH ID INVALID")
   }
   const fontSize = 35
-  const dispatch = useDispatch()
 
   const undo: MatchesAction = asMatchesAction({ type: "MATCH_UNDO" }, matchId)
 

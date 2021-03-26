@@ -1,10 +1,10 @@
 import { AntDesign } from '@expo/vector-icons'
 import React, { useState } from 'react'
 import { ColorValue, GestureResponderEvent, Pressable, StyleSheet } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import { Text, View } from './Themed'
 import { RootType } from '../redux-types/storeTypes'
 import asMatchesAction from '../util/reduxActionWrapper'
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 
 type ScoreCounterProps = {
   matchId: number,
@@ -14,9 +14,9 @@ type ScoreCounterProps = {
 }
 
 export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70, color}: ScoreCounterProps) {
-  const dispatch = useDispatch()
-  const fighters = useSelector((state: RootType) => state.fighters)
-  const matches = useSelector((state: RootType) => state.matches)
+  const dispatch = useAppDispatch()
+  const fighters = useAppSelector((state: RootType) => state.fighters)
+  const matches = useAppSelector((state: RootType) => state.matches)
   const match = matches.find(m => m.id === matchId)
   // const fighter = useSelector((state: RootType) => state.fighters.find(c => c.id === fighterId))
   if (!match) {

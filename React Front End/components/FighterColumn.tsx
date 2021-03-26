@@ -1,11 +1,11 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import CustomButton from './Button'
-import { useDispatch, useSelector } from 'react-redux'
 import ScoreCounter from './ScoreCounter'
 import { View, Text } from './Themed'
 import { Fighter, Match, RootType } from '../redux-types/storeTypes'
 import asMatchesAction from '../util/reduxActionWrapper'
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 
 export type FighterColumnProps = {
   matchId: number
@@ -16,10 +16,10 @@ export type FighterColumnProps = {
 })
 
 export default function FighterColumn(props: FighterColumnProps) {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const matchId = props.matchId
-  const matches = useSelector((state: RootType) => state.matches)
-  const fighters = useSelector((state: RootType) => state.fighters)
+  const matches = useAppSelector((state: RootType) => state.matches)
+  const fighters = useAppSelector((state: RootType) => state.fighters)
 
   const match = matches.find(m => m.id === matchId)
   if (!match) {

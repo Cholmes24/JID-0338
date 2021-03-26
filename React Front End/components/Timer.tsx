@@ -3,17 +3,17 @@ import { useState } from 'react'
 import { Button, Text } from 'react-native-elements'
 import { View, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useDispatch, useSelector } from 'react-redux'
 import { RootType } from '../redux-types/storeTypes'
 import asMatchesAction from '../util/reduxActionWrapper'
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 
 type TimerProps = {
   matchId: number
 }
 
 export default function Timer({matchId}: TimerProps) {
-  const dispatch = useDispatch()
-  const matches = useSelector((state: RootType) => state.matches)
+  const dispatch = useAppDispatch()
+  const matches = useAppSelector((state: RootType) => state.matches)
   const timerStore = matches.find(m => m.id === matchId)?.timer
 
   if (!timerStore) {
