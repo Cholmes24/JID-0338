@@ -43,7 +43,7 @@ function matchScoring(state: Match, action: MatchScoringAction): Match {
   }
 }
 
-function matchUndo(state: Match, action: MatchUndoAction): Match {
+function matchUndo(state: Match, _: MatchUndoAction): Match {
   if (state.past.length === 0) {
     return state
   } else {
@@ -56,7 +56,7 @@ function matchUndo(state: Match, action: MatchUndoAction): Match {
   }
 }
 
-function matchRedo(state: Match, action: MatchRedoAction): Match {
+function matchRedo(state: Match, _: MatchRedoAction): Match {
   if (state.future.length === 0) {
     return state
   } else {

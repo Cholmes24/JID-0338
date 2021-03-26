@@ -1,13 +1,30 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
-import ScoreCounter from "../components/ScoreCounter"
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 import { Button } from 'react-native-elements'
 import UserCard from "../components/UserCard"
+import { Tournament } from "../redux-types/storeTypes"
+import { TournamentsActionType } from "../redux-types/actionTypes"
+
+import tournamentServices from '../services/tournaments'
+import { useAppDispatch } from "../hooks/reduxHooks"
+import { AppThunk } from "../store"
 
 export default function HomeScreen() {
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(thunkTournaments())
+  })
+
+  const thunkTournaments = (): AppThunk => (
+    async dispatch => {
+      const tournaments = await tournamentServices.getAll()
+      dispatch({
+        type: "SET_TOURNAMENTS",
+        payload: tournaments
+      })
+    }
+  )
   return (
     <View style={styles.userCard}>
       <UserCard
