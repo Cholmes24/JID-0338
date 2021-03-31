@@ -178,5 +178,35 @@ def matches_decrease_score_fighter2():
     return decrease_score(2, body, mydb)
 
 
+def give_penalty_to_fighter(fighter_number, body, db):
+    matchID = body['matchID']
+    receivingID = body[f'fighter{fighter_number}ID']
+    fighterNID = f"fighter{fighter_number}ID"
+
+
+    mycursor = db.cursor(dictionary=True)
+    mycursor.execute(f"INSERT INTO eventexchanges(matchID, exchangeType, receivingID) VALUES ({matchID}, 'penalty', (SELECT {fighterNID} FROM eventmatches WHERE matchID = {matchID}))")
+    mycursor.execute(f"SELECT matchID, exchangeType, receivingID FROM eventexchanges WHERE matchID = {matchID} AND exchangeType = 'penalty' AND receivingID = {receivingID}")
+    myresult = mycursor.fetchall()
+    db.commit()
+
+    mycursor.close()
+    db.close()
+    return jsonify(myresult)
+
+
+@app.route('/api/matches/penalty_fighter1', methods=['GET', 'POST'])
+def matches_give_penalty_to_fighter1():
+    body = request.get_json()
+    mydb = mysql.connector.connect(**connector_config)
+    return give_penalty_to_fighter(1, body, mydb)
+
+
+@app.route('/api/matches/penalty_fighter2', methods=['GET', 'POST'])
+def matches_give_penalty_to_fighter2():
+    body = request.get_json()
+    mydb = mysql.connector.connect(**connector_config)
+    return give_penalty_to_fighter(2, body, mydb)
+
 
 app.run(host='0.0.0.0')
