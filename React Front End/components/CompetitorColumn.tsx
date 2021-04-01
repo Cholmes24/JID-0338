@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import CustomButton from './Button'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { MatchState } from '../store/types'
 import ScoreCounter from './ScoreCounter'
 import { View, Text } from './Themed'
@@ -15,8 +15,11 @@ export default function CompetitorColumn({id}: CompetitorColumnProps) {
   if (!competitor) {
     throw Error("INVALID ID")
   }
+  const dispatch = useDispatch()
   const color = competitor.color
   const name = competitor.name
+  const warnings = competitor.numberOfWarnings
+  const penalties = competitor.numberOfPenalties
   const fontSize = 20
   const testBorders = {
     // borderColor: "yellow",
@@ -88,28 +91,36 @@ export default function CompetitorColumn({id}: CompetitorColumnProps) {
     buttonText: {
       color: color,
       fontWeight: "bold"
+    },
+    warningsAndPenalties: {
+      color: "white",
+      backgroundColor: color,
+      textAlign: "center",
+      marginBottom: 5
     }
   })
-
+  
   return (
     <View style={styles.container} >
       <Text style={styles.playerName} >{name}</Text>
+      <Text style={styles.warningsAndPenalties}>Warnings: {warnings}</Text>
+      <Text style={styles.warningsAndPenalties}>Penalties: {penalties}</Text>
       <View style={styles.scoreCounter}>
         <ScoreCounter id={id} />
       </View>
 
       <View style={styles.buttonList} >
-
         <View style={styles.button} >
           <CustomButton
             content={() => <Text style={styles.buttonText} >Warning</Text> }
-            onPress={() => (undefined)}
+            onPress={() => dispatch({ type: "ISSUE_WARNING", competitorId: id })}
             />
         </View>
+        
         <View style={styles.button} >
           <CustomButton
             content={() => <Text style={styles.buttonText} >Penalty</Text> }
-            onPress={() => (undefined)}
+            onPress={() => dispatch({ type: "ISSUE_PENALTY", competitorId: id })}
             />
         </View>
       </View>
