@@ -1,15 +1,15 @@
 import mysql.connector
-import flask
-from flask import request, jsonify
+from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
 
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 app.config["DEBUG"] = True
 
-connector_config = {        
+connector_config = {
     'host': "localhost",
     'user': "root",
-    'password': "cristina0",
+    'password': "hema123",
     'database': "ScorecardV5",
     'autocommit': True
 }
@@ -17,7 +17,8 @@ connector_config = {
 
 def get_system_events(db):
     mycursor = db.cursor(dictionary=True)
-    mycursor.execute("SELECT eventID, eventName FROM systemevents")
+    mycursor.execute("SELECT eventID, eventName "
+                     "FROM systemevents")
     myresult = mycursor.fetchall()
 
     mycursor.close()
@@ -35,7 +36,10 @@ def get_tournaments_in_event(body, db):
     eventID = body['eventID']
 
     mycursor = db.cursor(dictionary=True)
-    mycursor.execute(f"SELECT tournamentID, tournamentWeaponID FROM eventtournaments WHERE eventID = {eventID}")
+    mycursor.execute(f"SELECT tournamentID, tournamentWeaponID "
+                     f"FROM eventtournaments "
+                     f"WHERE eventID = {eventID}")
+
     myresult = mycursor.fetchall()
 
     mycursor.close()
@@ -55,7 +59,10 @@ def get_groups_in_tournament(body, db):
     tournamentID = body['tournamentID']
 
     mycursor = db.cursor(dictionary=True)
-    mycursor.execute(f"SELECT groupID FROM eventgroups WHERE tournamentID = {tournamentID}")
+    mycursor.execute(f"SELECT groupID "
+                     f"FROM eventgroups "
+                     f"WHERE tournamentID = {tournamentID}")
+
     myresult = mycursor.fetchall()
 
     mycursor.close()
@@ -72,9 +79,13 @@ def groups_in_tournament():
 
 def get_matches(body, db):
     tournamentID = body['tournamentID']
+    groupIDs = f'(SELECT groupID from eventgroups WHERE tournamentID = {tournamentID})'
 
     mycursor = db.cursor(dictionary=True)
-    mycursor.execute(f"SELECT matchID, fighter1ID, fighter2ID FROM eventmatches WHERE groupID IN (SELECT groupID from eventgroups WHERE tournamentID = {tournamentID})")
+    mycursor.execute(f"SELECT matchID, fighter1ID, fighter2ID "
+                     f"FROM eventmatches "
+                     f"WHERE groupID IN {groupIDs}")
+
     myresult = mycursor.fetchall()
 
     mycursor.close()
@@ -95,7 +106,9 @@ def get_specific_match(body, db):
 
     mycursor = db.cursor(dictionary=True)
     # mycursor.execute(f"SELECT * FROM eventmatches WHERE matchID = {matchID}")
-    mycursor.execute(f"SELECT {relevantFields} FROM eventmatches WHERE matchID = {matchID}")
+    mycursor.execute(f"SELECT {relevantFields} "
+                     f"FROM eventmatches "
+                     f"WHERE matchID = {matchID}")
 
     myresult = mycursor.fetchall()
 
@@ -122,9 +135,18 @@ def increase_score(fighter_number, body, db):
     # for debugging only; resets scores of 0 to null
     # mycursor.execute(f"UPDATE eventmatches SET {fighterNScore} = NULL WHERE {fighterNScore} = 0")
 
-    mycursor.execute(f"UPDATE eventmatches SET {fighterNScore} = 0 WHERE {fighterNScore} IS NULL")
-    mycursor.execute(f"UPDATE eventmatches SET {fighterNScore} = {fighterNScore} + 1 WHERE matchID = {matchID}")
-    mycursor.execute(f"SELECT {relevantFields} FROM eventmatches WHERE matchID = {matchID}")
+    mycursor.execute(f"UPDATE eventmatches "
+                     f"SET {fighterNScore} = 0 "
+                     f"WHERE {fighterNScore} IS NULL")
+
+    mycursor.execute(f"UPDATE eventmatches "
+                     f"SET {fighterNScore} = {fighterNScore} + 1 "
+                     f"WHERE matchID = {matchID}")
+
+    mycursor.execute(f"SELECT {relevantFields} "
+                     f"FROM eventmatches "
+                     f"WHERE matchID = {matchID}")
+
     myresult = mycursor.fetchall()
     db.commit()
 
@@ -153,9 +175,18 @@ def decrease_score(fighter_number, body, db):
     relevantFields = "fighter1ID, fighter1Score, fighter2ID, fighter2Score, groupID, matchID, matchTime"
 
     mycursor = db.cursor(dictionary=True)
-    mycursor.execute(f"UPDATE eventmatches SET {fighterNScore} = 0 WHERE {fighterNScore} IS NULL")
-    mycursor.execute(f"UPDATE eventmatches SET {fighterNScore} = {fighterNScore} - 1 WHERE matchID = {matchID} AND {fighterNScore} > 0")
-    mycursor.execute(f"SELECT {relevantFields} FROM eventmatches WHERE matchID = {matchID}")
+    mycursor.execute(f"UPDATE eventmatches "
+                     f"SET {fighterNScore} = 0 "
+                     f"WHERE {fighterNScore} IS NULL")
+
+    mycursor.execute(f"UPDATE eventmatches "
+                     f"SET {fighterNScore} = {fighterNScore} - 1 "
+                     f"WHERE matchID = {matchID} AND {fighterNScore} > 0")
+
+    mycursor.execute(f"SELECT {relevantFields} "
+                     f"FROM eventmatches "
+                     f"WHERE matchID = {matchID}")
+
     myresult = mycursor.fetchall()
     db.commit()
 
@@ -179,14 +210,18 @@ def matches_decrease_score_fighter2():
 
 
 def give_penalty_to_fighter(fighter_number, body, db):
+    fighterID_field_name = f'fighter{fighter_number}ID'
     matchID = body['matchID']
-    receivingID = body[f'fighter{fighter_number}ID']
-    fighterNID = f"fighter{fighter_number}ID"
-
+    fighterID = f'(SELECT {fighterID_field_name} FROM eventmatches WHERE matchID = {matchID})'
 
     mycursor = db.cursor(dictionary=True)
-    mycursor.execute(f"INSERT INTO eventexchanges(matchID, exchangeType, receivingID) VALUES ({matchID}, 'penalty', (SELECT {fighterNID} FROM eventmatches WHERE matchID = {matchID}))")
-    mycursor.execute(f"SELECT matchID, exchangeType, receivingID FROM eventexchanges WHERE matchID = {matchID} AND exchangeType = 'penalty' AND receivingID = {receivingID}")
+    mycursor.execute(f"INSERT INTO eventexchanges(matchID, exchangeType, receivingID) "
+                     f"VALUES ({matchID}, 'penalty', {fighterID})")
+
+    mycursor.execute(f"SELECT matchID, exchangeType, receivingID "
+                     f"FROM eventexchanges "
+                     f"WHERE matchID = {matchID} AND exchangeType = 'penalty' AND receivingID = {fighterID}")
+
     myresult = mycursor.fetchall()
     db.commit()
 
