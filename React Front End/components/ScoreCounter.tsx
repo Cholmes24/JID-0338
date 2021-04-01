@@ -5,6 +5,8 @@ import { Text, View } from './Themed'
 import { RootType } from '../redux-types/storeTypes'
 import asMatchesAction from '../util/reduxActionWrapper'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
+import { AppThunk } from '../store'
+import matchesService from "../services/matches"
 
 type ScoreCounterProps = {
   matchId: number,
@@ -39,11 +41,24 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
   const scoring = match.present[fighterScoringKey]
   const score = scoring.points
 
-  const increase = asMatchesAction({
+  const thunkIncrease = (): AppThunk => (
+    async dispatch => {
+      const updatedMatch = await matchesService.increaseScore(fighterScoringKey, matchId)
+      dispatch(increaseAction)
+    }
+  )
+  const thunkDecrease = (): AppThunk => (
+    async dispatch => {
+      const updatedMatch = await matchesService.decreaseScore(fighterScoringKey, matchId)
+      dispatch(decreaseAction)
+    }
+  )
+
+  const increaseAction = asMatchesAction({
     type: "INCREASE_SCORE"
   }, matchId, fighterScoringKey)
 
-  const decrease = asMatchesAction({
+  const decreaseAction = asMatchesAction({
     type: "DECREASE_SCORE"
   }, matchId, fighterScoringKey)
 
@@ -78,13 +93,13 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
     <View style={styles.container} >
       <ArrowButton
         iconName="caretup"
-        onPress={() => dispatch(increase)}
+        onPress={() => dispatch(thunkIncrease())}
         fontSize={fontSize}
       />
       <Text style={styles.scoreBox} >{score}</Text>
       <ArrowButton
         iconName="caretdown"
-        onPress={() => score > 0 ? dispatch(decrease) : undefined}
+        onPress={() => score > 0 ? dispatch(thunkDecrease()) : undefined}
         fontSize={fontSize}
       />
     </View>

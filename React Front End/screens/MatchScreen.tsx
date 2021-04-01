@@ -1,26 +1,26 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux'
 import FighterColumn from '../components/FighterColumn'
 import { View } from '../components/Themed';
 import UndoButton from '../components/UndoButton'
 import Timer from '../components/Timer'
 import { Match, RootType } from '../redux-types/storeTypes'
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 
 type MatchScreenProps = {
   matchId: number
 }
 
 //TODO Don't hardcode matchId
-export default function MatchScreen({matchId = 0}: MatchScreenProps) {
-  const matches = useSelector((state: RootType) => state.matches)
+export default function MatchScreen({matchId = 52598}: MatchScreenProps) {
+  const matches = useAppSelector((state: RootType) => state.matches)
   const match = matches.find((m: Match) => m.id === matchId)
   if (!match) {
     throw Error("MATCH ID INVALID AT MATCH SCREEN")
   }
+
   const fighter1Id = match.fighter1Id
   const fighter2Id = match.fighter2Id
-
 
   return (
     <View style={styles.container}>

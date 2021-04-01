@@ -3,28 +3,84 @@ import { StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import { Button } from 'react-native-elements'
 import UserCard from "../components/UserCard"
-import { Tournament } from "../redux-types/storeTypes"
+import { Match, Tournament } from "../redux-types/storeTypes"
 import { TournamentsActionType } from "../redux-types/actionTypes"
 
-import tournamentServices from '../services/tournaments'
+import tournamentsService from '../services/tournaments'
+import matchService from '../services/matches'
+import systemEventsService from '../services/systemEvents'
+
 import { useAppDispatch } from "../hooks/reduxHooks"
 import { AppThunk } from "../store"
+
+import fightersService from '../services/fighters'
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch()
   useEffect(() => {
-    dispatch(thunkTournaments())
+    dispatch(thunkSystemEvents())
+      .then((eventId) => dispatch(thunkTournaments(eventId)))
+      .then((tournamentId) => dispatch(thunkMatches(tournamentId)))
+      .then((matches) => dispatch(thunkFighters(matches.find(m => m.id === 52598) as Match)))
   })
 
-  const thunkTournaments = (): AppThunk => (
+  const thunkTournaments = (eventID: number): AppThunk<Promise<number>> => (
     async dispatch => {
-      const tournaments = await tournamentServices.getAll()
+      const tournaments = await tournamentsService.getAll(eventID)
       dispatch({
         type: "SET_TOURNAMENTS",
         payload: tournaments
       })
+      return Promise.resolve(713)
     }
   )
+
+  const thunkSystemEvents = (): AppThunk<Promise<number>> => (
+    async dispatch => {
+      const systemEvents = await systemEventsService.getAll()
+      return Promise.resolve(143)
+    }
+  )
+
+  // For skipping pools during testing
+  const thunkMatches = (tournamentId: number): AppThunk<Promise<Match[]>> => (
+    async dispatch => {
+      // const matchId = 52598
+      const matches = await matchService.getAll(tournamentId)
+      dispatch({
+        type: "SET_MATCHES",
+        payload: matches
+      })
+      return Promise.resolve(matches)
+    }
+  )
+
+  const thunkFighters = (match: Match): AppThunk<Promise<void>> => (
+    async dispatch => {
+      const fighter1 = await fightersService.getById(match.fighter1Id)
+      const fighter2 = await fightersService.getById(match.fighter2Id)
+      const fighters = [fighter1, fighter2]
+      console.log(fighters)
+      dispatch({
+        type: "ADD_FIGHTERS",
+        payload: [fighter1, fighter2]
+      })
+    }
+  )
+
+
+  // // For skipping pools and match search during testing
+  // const thunkMatch = (): AppThunk => (
+  //   async dispatch => {
+  //     const matchId = 52598
+  //     const match = await matchService.getMatch(matchId)
+  //     dispatch({
+  //       type: "SET_MATCHES",
+  //       payload: [ match ]
+  //     })
+  //   }
+  // )
+
   return (
     <View style={styles.userCard}>
       <UserCard
