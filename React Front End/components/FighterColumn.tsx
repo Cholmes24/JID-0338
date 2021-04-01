@@ -43,6 +43,10 @@ export default function FighterColumn(props: FighterColumnProps) {
 
   const color = fighter.color
   const name = `${fighter.firstName} ${fighter.lastName}`
+  const scoring = match.present[fighterScoringKey]
+  const warnings = scoring.numWarnings
+  const penalties = scoring.numPenalties
+
   const fontSize = 20
   const testBorders = {
     // borderColor: "yellow",
@@ -114,12 +118,20 @@ export default function FighterColumn(props: FighterColumnProps) {
     buttonText: {
       color: color,
       fontWeight: "bold"
+    },
+    warningsAndPenalties: {
+      color: "white",
+      backgroundColor: color,
+      textAlign: "center",
+      marginBottom: 5
     }
   })
 
   return (
     <View style={styles.container} >
       <Text style={styles.playerName} >{name}</Text>
+      <Text style={styles.warningsAndPenalties}>Warnings: {warnings}</Text>
+      <Text style={styles.warningsAndPenalties}>Penalties: {penalties}</Text>
       <View style={styles.scoreCounter}>
         <ScoreCounter matchId={matchId} fighterScoringKey={fighterScoringKey} />
       </View>
