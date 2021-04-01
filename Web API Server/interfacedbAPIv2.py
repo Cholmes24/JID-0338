@@ -1,5 +1,7 @@
 import mysql.connector
 from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -30,9 +32,7 @@ def system_events():
     return get_system_events(mydb)
 
 
-def get_tournaments_in_event(body, db):
-    eventID = body['eventID']
-
+def get_tournaments_in_event(eventID, db):
     mycursor = db.cursor(dictionary=True)
     mycursor.execute(f"SELECT tournamentID, tournamentWeaponID "
                      f"FROM eventtournaments "
@@ -47,36 +47,35 @@ def get_tournaments_in_event(body, db):
 
 @app.route('/api/tournaments', methods=['GET'])
 def tournaments_in_event():
-    body = request.get_json()
+    eventID = request.args.get('eventID')
     mydb = mysql.connector.connect(**connector_config)
-    return get_tournaments_in_event(body, mydb)
+    return get_tournaments_in_event(eventID, mydb)
 
 
 # for debugging: group retrieval - in order to get matches, you have to access groups (pools) first
-def get_groups_in_tournament(body, db):
-    tournamentID = body['tournamentID']
+# def get_groups_in_tournament(body, db):
+#     tournamentID = body['tournamentID']
+#
+#     mycursor = db.cursor(dictionary=True)
+#     mycursor.execute(f"SELECT groupID "
+#                      f"FROM eventgroups "
+#                      f"WHERE tournamentID = {tournamentID}")
+#
+#     myresult = mycursor.fetchall()
+#
+#     mycursor.close()
+#     db.close()
+#     return jsonify(myresult)
+#
+#
+# @app.route('/api/tournament_groups', methods=['GET'])
+# def groups_in_tournament():
+#     body = request.get_json()
+#     mydb = mysql.connector.connect(**connector_config)
+#     return get_groups_in_tournament(body, mydb)
 
-    mycursor = db.cursor(dictionary=True)
-    mycursor.execute(f"SELECT groupID "
-                     f"FROM eventgroups "
-                     f"WHERE tournamentID = {tournamentID}")
 
-    myresult = mycursor.fetchall()
-
-    mycursor.close()
-    db.close()
-    return jsonify(myresult)
-
-
-@app.route('/api/tournament_groups', methods=['GET'])
-def groups_in_tournament():
-    body = request.get_json()
-    mydb = mysql.connector.connect(**connector_config)
-    return get_groups_in_tournament(body, mydb)
-
-
-def get_matches(body, db):
-    tournamentID = body['tournamentID']
+def get_matches(tournamentID, db):
     groupIDs = f'(SELECT groupID from eventgroups WHERE tournamentID = {tournamentID})'
 
     mycursor = db.cursor(dictionary=True)
@@ -93,13 +92,12 @@ def get_matches(body, db):
 
 @app.route('/api/matches', methods=['GET'])
 def matches_in_tournament():
-    body = request.get_json()
+    tournamentID = request.args.get('tournamentID')
     mydb = mysql.connector.connect(**connector_config)
-    return get_matches(body, mydb)
+    return get_matches(tournamentID, mydb)
 
 
-def get_specific_match(body, db):
-    matchID = body['matchID']
+def get_specific_match(matchID, db):
     relevantFields = "fighter1ID, fighter1Score, fighter2ID, fighter2Score, groupID, matchID, matchTime"
 
     mycursor = db.cursor(dictionary=True)
@@ -117,13 +115,12 @@ def get_specific_match(body, db):
 
 @app.route('/api/match', methods=['GET'])
 def specific_match():
-    body = request.get_json()
+    matchID = request.args.get('matchID')
     mydb = mysql.connector.connect(**connector_config)
-    return get_specific_match(body, mydb)
+    return get_specific_match(matchID, mydb)
 
 
-def increase_score(fighter_number, body, db):
-    matchID = body['matchID']
+def increase_score(fighter_number, matchID, db):
     fighterNScore = f"fighter{fighter_number}Score"
     relevantFields = "fighter1ID, fighter1Score, fighter2ID, fighter2Score, groupID, matchID, matchTime"
 
@@ -155,20 +152,19 @@ def increase_score(fighter_number, body, db):
 
 @app.route('/api/matches/increase_score_fighter1', methods=['GET', 'POST'])
 def matches_increase_score_fighter1():
-    body = request.get_json()
+    matchID = request.args.get('matchID')
     mydb = mysql.connector.connect(**connector_config)
-    return increase_score(1, body, mydb)
+    return increase_score(1, matchID, mydb)
 
 
 @app.route('/api/matches/increase_score_fighter2', methods=['GET', 'POST'])
 def matches_increase_score_fighter2():
-    body = request.get_json()
+    matchID = request.args.get('matchID')
     mydb = mysql.connector.connect(**connector_config)
-    return increase_score(2, body, mydb)
+    return increase_score(2, matchID, mydb)
 
 
-def decrease_score(fighter_number, body, db):
-    matchID = body['matchID']
+def decrease_score(fighter_number, matchID, db):
     fighterNScore = f"fighter{fighter_number}Score"
     relevantFields = "fighter1ID, fighter1Score, fighter2ID, fighter2Score, groupID, matchID, matchTime"
 
@@ -195,21 +191,20 @@ def decrease_score(fighter_number, body, db):
 
 @app.route('/api/matches/decrease_score_fighter1', methods=['GET', 'POST'])
 def matches_decrease_score_fighter1():
-    body = request.get_json()
+    matchID = request.args.get('matchID')
     mydb = mysql.connector.connect(**connector_config)
-    return decrease_score(1, body, mydb)
+    return decrease_score(1, matchID, mydb)
 
 
 @app.route('/api/matches/decrease_score_fighter2', methods=['GET', 'POST'])
 def matches_decrease_score_fighter2():
-    body = request.get_json()
+    matchID = request.args.get('matchID')
     mydb = mysql.connector.connect(**connector_config)
-    return decrease_score(2, body, mydb)
+    return decrease_score(2, matchID, mydb)
 
 
-def give_penalty_to_fighter(fighter_number, body, db):
+def give_penalty_to_fighter(fighter_number, matchID, db):
     fighterID_field_name = f'fighter{fighter_number}ID'
-    matchID = body['matchID']
     fighterID = f'(SELECT {fighterID_field_name} FROM eventmatches WHERE matchID = {matchID})'
 
     mycursor = db.cursor(dictionary=True)
@@ -230,16 +225,39 @@ def give_penalty_to_fighter(fighter_number, body, db):
 
 @app.route('/api/matches/penalty_fighter1', methods=['GET', 'POST'])
 def matches_give_penalty_to_fighter1():
-    body = request.get_json()
+    matchID = request.args.get('matchID')
     mydb = mysql.connector.connect(**connector_config)
-    return give_penalty_to_fighter(1, body, mydb)
+    return give_penalty_to_fighter(1, matchID, mydb)
 
 
 @app.route('/api/matches/penalty_fighter2', methods=['GET', 'POST'])
 def matches_give_penalty_to_fighter2():
-    body = request.get_json()
+    matchID = request.args.get('matchID')
     mydb = mysql.connector.connect(**connector_config)
-    return give_penalty_to_fighter(2, body, mydb)
+    return give_penalty_to_fighter(2, matchID, mydb)
+
+
+def get_fighter_names(fighterID, db):
+    mycursor = db.cursor(dictionary=True)
+    systemRosterID = f"(SELECT systemRosterID FROM eventroster WHERE rosterID = {fighterID})"
+
+    mycursor.execute(f"SELECT firstName, lastName "
+                     f"FROM systemroster "
+                     f"WHERE systemRosterID = {systemRosterID}")
+
+    myresult = mycursor.fetchall()
+    db.commit()
+
+    mycursor.close()
+    db.close()
+    return jsonify(myresult)
+
+
+@app.route('/api/matches/fighters', methods=['GET'])
+def matches_get_fighters():
+    fighterID = request.args.get('fighterID')
+    mydb = mysql.connector.connect(**connector_config)
+    return get_fighter_names(fighterID, mydb)
 
 
 app.run(host='0.0.0.0')
