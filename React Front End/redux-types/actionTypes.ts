@@ -1,5 +1,5 @@
 import { Action } from "redux"
-import { Match, Pool, Tournament } from "./storeTypes"
+import { Fighter, Match, Pool, Tournament } from "./storeTypes"
 
 export const TOGGLE_TIMER = "TOGGLE_TIMER"
 export const ADD_TO_TIMER = "ADD_TO_TIMER"
@@ -119,4 +119,21 @@ export interface SetPoolsAction extends Action {
 
 export type PoolsActionType = SetPoolsAction
 
+
+
+export const SET_FIGHTERS = "SET_FIGHTERS"
+
+export interface SetFightersAction extends Action {
+  type: typeof SET_FIGHTERS,
+  payload: Fighter[]
+}
+
+export const ADD_FIGHTERS = "ADD_FIGHTERS"
+
+export interface AddFightersAction extends Action {
+  type: typeof ADD_FIGHTERS,
+  payload: Fighter[]
+}
+
+export type FightersActionType = SetFightersAction | AddFightersAction
 

@@ -1,11 +1,12 @@
-import thunk, { ThunkAction } from 'redux-thunk';
+import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { persistStore, persistReducer } from 'redux-persist'
-import { AnyAction, applyMiddleware, combineReducers, createStore } from 'redux'
+import { Action, AnyAction, applyMiddleware, combineReducers, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import matchesReducer from './reducers/MatchesReducer'
 import defaultData from "./defaultData"
 import tournamentsReducer from './reducers/TournamentsReducer'
+import fightersReducer from './reducers/FightersReducer'
 
 const { fighters, pools } = defaultData
 
@@ -15,7 +16,6 @@ const persistConfig = {
 }
 
 const poolsReducer = (state = pools, _: AnyAction) => state
-const fightersReducer = (state = fighters, _: AnyAction) => state
 
 const rootReducer = combineReducers({
   matches: matchesReducer,
@@ -34,7 +34,8 @@ export const store = createStore(
 export const persistor = persistStore(store)
 
 export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+// export type AppDispatch = typeof store.dispatch
+export type AppDispatch = ThunkDispatch<RootState, any, Action>
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
