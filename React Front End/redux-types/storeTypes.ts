@@ -54,7 +54,8 @@ export interface Timer {
 
 export interface SystemEvent {
   id: number,
-  tournamentIds: number[]
+  tournamentIds: number[],
+  name: string
 }
 
 export interface Tournament {
