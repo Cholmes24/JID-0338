@@ -80,14 +80,11 @@ async function getAll(tournamentId: number) {
   return mapMatches(response.data)
 }
 
-async function getMatch(matchId: number, tournamentId: number) {
+async function getMatch(matchId: number) {
   // const response = await axios.get(`${baseUrl}/${matchId}`) // Change GET endpoint to be RESTful
-  const response = await axios.get(`/api/match`, {
-    params: {
-      matchID: matchId
-    }
-  })
-  return mapMatchFields(response.data, tournamentId)
+  const response = await axios.get(`/api/match?matchID=${matchId}`)
+  const data = response.data
+  return mapMatchFields(data, data.tournamentID)
 }
 
 async function increaseScore(key: FighterScoringKey, matchId: number) {

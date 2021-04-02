@@ -2,7 +2,8 @@ import { AnyAction, Reducer } from "redux"
 import { Match } from "../redux-types/storeTypes"
 import matchReducer from "./MatchReducer"
 import defaultData from '../defaultData'
-import { MatchesAction } from "../redux-types/actionTypes"
+import { AddMatchesAction, MatchesAction } from "../redux-types/actionTypes"
+import { addItems } from "../util/utilFunctions"
 
 function isMatchesActionType(action: AnyAction): action is MatchesAction {
   if (action.type !== "MATCHES") {
@@ -22,6 +23,8 @@ const matchesReducer: Reducer<Match[], AnyAction> = (state = defaultData.matches
       }
     case "SET_MATCHES":
       return action.payload
+    case "ADD_MATCHES":
+      return addItems(state, (action as AddMatchesAction).payload)
     default:
       return state
   }

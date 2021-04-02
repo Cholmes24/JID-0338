@@ -61,7 +61,8 @@ const defaultMatch: Match = {
 
 const defaultSystemEvent: SystemEvent = {
   id: 100,
-  tournamentIds: [defaultTournament.id]
+  tournamentIds: [defaultTournament.id],
+  name: "The Big One"
 }
 
 const defaultData: RootType = {
@@ -70,7 +71,7 @@ const defaultData: RootType = {
   tournaments: [defaultTournament],
   pools: [defaultPool],
   matches: [defaultMatch],
-  // currentMatchId: defaultMatch.id
+  currentMatchId: defaultMatch.id
 }
 
 export default defaultData
