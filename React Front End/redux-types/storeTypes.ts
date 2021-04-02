@@ -52,6 +52,11 @@ export interface Timer {
   isRunning: boolean
 }
 
+export interface SystemEvent {
+  id: number,
+  tournamentIds: number[]
+}
+
 export interface Tournament {
   name: string,
   id: number,
@@ -71,9 +76,11 @@ export interface Pool {
 
 export interface RootType {
   fighters: Fighter[],
+  systemEvents: SystemEvent[],
   tournaments: Tournament[],
   pools: Pool[],
-  matches: Match[]
+  matches: Match[],
+  currentMatchId?: number
 }
 
 

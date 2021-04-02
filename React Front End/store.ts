@@ -4,24 +4,24 @@ import { persistStore, persistReducer } from 'redux-persist'
 import { Action, AnyAction, applyMiddleware, combineReducers, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import matchesReducer from './reducers/MatchesReducer'
-import defaultData from "./defaultData"
 import tournamentsReducer from './reducers/TournamentsReducer'
 import fightersReducer from './reducers/FightersReducer'
-
-const { fighters, pools } = defaultData
+import systemEventsReducer from './reducers/SystemEventsReducer';
+import currentMatchIdReducer from './reducers/CurrentMatchIdReducer';
+import poolsReducer from './reducers/PoolsReducer';
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
 }
 
-const poolsReducer = (state = pools, _: AnyAction) => state
-
 const rootReducer = combineReducers({
+  fighters: fightersReducer,
+  systemEvents: systemEventsReducer,
+  tournaments: tournamentsReducer,
   matches: matchesReducer,
   pools: poolsReducer,
-  tournaments: tournamentsReducer,
-  fighters: fightersReducer,
+  currentMatchId: currentMatchIdReducer
 })
 
 const composedEnhancer = composeWithDevTools(applyMiddleware(thunk))

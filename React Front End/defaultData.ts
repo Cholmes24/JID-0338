@@ -1,4 +1,4 @@
-import { Fighter, Match, Pool, RootType, Scoring, Timer, Tournament } from "./redux-types/storeTypes"
+import { Fighter, Match, Pool, RootType, Scoring, SystemEvent, Timer, Tournament } from "./redux-types/storeTypes"
 
 const defaultScoring: Scoring = {
   points: 0,
@@ -59,11 +59,18 @@ const defaultMatch: Match = {
   timer: defaultTimer
 }
 
+const defaultSystemEvent: SystemEvent = {
+  id: 100,
+  tournamentIds: [defaultTournament.id]
+}
+
 const defaultData: RootType = {
   fighters: [defaultFighter1, defaultFighter2],
+  systemEvents: [defaultSystemEvent],
   tournaments: [defaultTournament],
   pools: [defaultPool],
   matches: [defaultMatch],
+  // currentMatchId: defaultMatch.id
 }
 
 export default defaultData

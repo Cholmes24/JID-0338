@@ -1,5 +1,5 @@
 import { Action } from "redux"
-import { Fighter, Match, Pool, Tournament } from "./storeTypes"
+import { Fighter, Match, Pool, SystemEvent, Tournament } from "./storeTypes"
 
 export const TOGGLE_TIMER = "TOGGLE_TIMER"
 export const ADD_TO_TIMER = "ADD_TO_TIMER"
@@ -85,6 +85,7 @@ export type MatchActionType = MatchScoringAction | MatchTimingAction | MatchUndo
 
 export const MATCHES = "MATCHES"
 export const SET_MATCHES = "SET_MATCHES"
+export const ADD_MATCHES = "ADD_MATCHES"
 
 export interface MatchesAction extends Action {
   type: typeof MATCHES,
@@ -97,38 +98,71 @@ export interface SetMatchesAction extends Action {
   payload: Match[]
 }
 
-export type MatchesActionType = MatchesAction | SetMatchesAction
+export interface AddMatchesAction extends Action {
+  type: typeof ADD_MATCHES,
+  payload: Match[]
+}
+
+export type MatchesActionType = MatchesAction | SetMatchesAction | AddMatchesAction
+
+
+
+export const SET_SYSTEM_EVENTS = "SET_SYSTEM_EVENTS"
+export const ADD_SYSTEM_EVENTS = "ADD_SYSTEM_EVENTS"
+
+export interface SetSystemEvents extends Action {
+  type: typeof SET_SYSTEM_EVENTS,
+  payload: SystemEvent[]
+}
+
+export interface AddSystemEvents extends Action {
+  type: typeof ADD_SYSTEM_EVENTS,
+  payload: SystemEvent[]
+}
+
+export type SystemEventsActionType = SetSystemEvents | AddSystemEvents
 
 
 export const SET_TOURNAMENTS = "SET_TOURNAMENTS"
+export const ADD_TOURNAMENTS = "ADD_TOURNAMENTS"
 
 export interface SetTournamentsAction extends Action {
   type: typeof SET_TOURNAMENTS,
   payload: Tournament[]
 }
 
-export type TournamentsActionType = SetTournamentsAction
+export interface AddTournamentsAction extends Action {
+  type: typeof ADD_TOURNAMENTS,
+  payload: Tournament[]
+}
+
+export type TournamentsActionType = SetTournamentsAction | AddTournamentsAction
 
 
 export const SET_POOLS = "SET_POOLS"
+export const ADD_POOLS = "ADD_POOLS"
 
 export interface SetPoolsAction extends Action {
   type: typeof SET_POOLS,
   payload: Pool[]
 }
 
-export type PoolsActionType = SetPoolsAction
+export interface AddPoolsAction extends Action {
+  type: typeof ADD_POOLS,
+  payload: Pool[]
+}
+
+export type PoolsActionType = SetPoolsAction | AddPoolsAction
 
 
 
 export const SET_FIGHTERS = "SET_FIGHTERS"
+export const ADD_FIGHTERS = "ADD_FIGHTERS"
 
 export interface SetFightersAction extends Action {
   type: typeof SET_FIGHTERS,
   payload: Fighter[]
 }
-
-export const ADD_FIGHTERS = "ADD_FIGHTERS"
 
 export interface AddFightersAction extends Action {
   type: typeof ADD_FIGHTERS,
@@ -137,3 +171,12 @@ export interface AddFightersAction extends Action {
 
 export type FightersActionType = SetFightersAction | AddFightersAction
 
+
+export const SET_CURRENT_MATCH_ID = "SET_CURRENT_MATCH_ID"
+
+export interface SetCurrentMatchIdAction extends Action {
+  type: typeof SET_CURRENT_MATCH_ID,
+  payload: number
+}
+
+export type CurrentMatchIdActionType = SetCurrentMatchIdAction

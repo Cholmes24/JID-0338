@@ -1,5 +1,5 @@
 import { AnyAction, Reducer } from "redux"
-import { Fighter, Tournament } from "../redux-types/storeTypes"
+import { Fighter } from "../redux-types/storeTypes"
 import defaultData from '../defaultData'
 
 const fightersReducer: Reducer<Fighter[], AnyAction> = (state = defaultData.fighters, action) => {
