@@ -3,83 +3,78 @@ import { StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import { Button } from 'react-native-elements'
 import UserCard from "../components/UserCard"
-import { Match, Tournament } from "../redux-types/storeTypes"
-import { TournamentsActionType } from "../redux-types/actionTypes"
 
-import tournamentsService from '../services/tournaments'
-import matchService from '../services/matches'
-import systemEventsService from '../services/systemEvents'
-
-import { useAppDispatch } from "../hooks/reduxHooks"
-import { AppThunk } from "../store"
-
+import matchesService from '../services/matches'
 import fightersService from '../services/fighters'
 
-export default function HomeScreen() {
+import systemEventsService from '../services/systemEvents'
+
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks"
+import { AppThunk } from "../store"
+
+import { ScreenPropType } from "../types";
+import { Match } from "../redux-types/storeTypes";
+
+export default function HomeScreen({
+  navigation
+}: ScreenPropType<"Home">) {
+
+  const currentMatchId = useAppSelector((state) => state.currentMatchId)
+
   const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(thunkSystemEvents())
-      .then((eventId) => dispatch(thunkTournaments(eventId)))
-      .then((tournamentId) => dispatch(thunkMatches(tournamentId)))
-      .then((matches) => dispatch(thunkFighters(matches.find(m => m.id === 52598) as Match)))
+      .then(() => dispatch(thunkCurrentMatch()))
+      .then((match) => dispatch(thunkCurrentFighters(match)))
   })
-
-  const thunkTournaments = (eventID: number): AppThunk<Promise<number>> => (
-    async dispatch => {
-      const tournaments = await tournamentsService.getAll(eventID)
-      dispatch({
-        type: "SET_TOURNAMENTS",
-        payload: tournaments
-      })
-      return Promise.resolve(713)
-    }
-  )
-
-  const thunkSystemEvents = (): AppThunk<Promise<number>> => (
+  const thunkSystemEvents = (): AppThunk<Promise<void>> => (
     async dispatch => {
       const systemEvents = await systemEventsService.getAll()
-      return Promise.resolve(143)
-    }
-  )
-
-  // For skipping pools during testing
-  const thunkMatches = (tournamentId: number): AppThunk<Promise<Match[]>> => (
-    async dispatch => {
-      // const matchId = 52598
-      const matches = await matchService.getAll(tournamentId)
       dispatch({
-        type: "SET_MATCHES",
-        payload: matches
+        type: "SET_SYSTEM_EVENTS",
+        payload: systemEvents
       })
-      return Promise.resolve(matches)
+      return Promise.resolve()
     }
   )
 
-  const thunkFighters = (match: Match): AppThunk<Promise<void>> => (
+  const thunkCurrentMatch = (): AppThunk<Promise<Match | undefined>> => (
     async dispatch => {
-      const fighter1 = await fightersService.getById(match.fighter1Id)
-      const fighter2 = await fightersService.getById(match.fighter2Id)
-      const fighters = [fighter1, fighter2]
-      console.log(fighters)
-      dispatch({
-        type: "ADD_FIGHTERS",
-        payload: [fighter1, fighter2]
-      })
+      if (currentMatchId !== undefined) {
+        const currentMatch = await matchesService.getMatch(currentMatchId)
+        dispatch({
+          type: "SET_MATCHES",
+          payload: [currentMatch]
+        })
+        return Promise.resolve(currentMatch)
+      }
+      return Promise.resolve(undefined)
     }
   )
 
+  const thunkCurrentFighters = (match?: Match): AppThunk<Promise<void>> => (
+    async dispatch => {
+      if (match) {
+        const fighter1 = await fightersService.getById(match.fighter1Id)
+        const fighter2 = await fightersService.getById(match.fighter2Id)
+        dispatch({
+          type: "SET_FIGHTERS",
+          payload: [fighter1, fighter2]
+        })
+      }
+      return Promise.resolve()
+    }
+  )
 
-  // // For skipping pools and match search during testing
-  // const thunkMatch = (): AppThunk => (
-  //   async dispatch => {
-  //     const matchId = 52598
-  //     const match = await matchService.getMatch(matchId)
-  //     dispatch({
-  //       type: "SET_MATCHES",
-  //       payload: [ match ]
-  //     })
-  //   }
-  // )
+  const mostRecentMatchButton = () => (
+    currentMatchId !== undefined 
+      ? <Button
+          buttonStyle={styles.matchButton}
+          title='Most Recent Match'
+          onPress={() => navigation.navigate("Match", { matchId: currentMatchId }) }
+        />
+      : null
+  )
 
   return (
     <View style={styles.userCard}>
@@ -88,10 +83,7 @@ export default function HomeScreen() {
         lastName={"longLastName"}
       />
 
-      <Button
-        buttonStyle={styles.matchButton}
-        title='Most Recent Match'
-      />
+      {mostRecentMatchButton()}
       <View style={styles.filler}></View>
     </View>
 

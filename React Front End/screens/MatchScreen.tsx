@@ -6,13 +6,19 @@ import UndoButton from '../components/UndoButton'
 import Timer from '../components/Timer'
 import { Match, RootType } from '../redux-types/storeTypes'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
+import { ScreenPropType } from '../types';
 
-type MatchScreenProps = {
-  matchId: number
-}
+// type MatchScreenProps = {
+//   matchId: number
+// }
 
 //TODO Don't hardcode matchId
-export default function MatchScreen({matchId = 52598}: MatchScreenProps) {
+export default function MatchScreen({
+  route,
+  navigation
+}: ScreenPropType<"Match">) {
+  const matchId = route.params.matchId
+  
   const matches = useAppSelector((state: RootType) => state.matches)
   const match = matches.find((m: Match) => m.id === matchId)
   if (!match) {

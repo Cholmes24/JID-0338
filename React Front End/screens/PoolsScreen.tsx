@@ -5,8 +5,12 @@ import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import Timer from '../components/Timer'
 import UserCard from '../components/UserCard'
+import { ScreenPropType } from '../types';
 
-export default function RingsScreen() {
+export default function PoolsScreen({
+  route,
+  navigation
+}: ScreenPropType<"Pools">) {
   return (
     <View style={styles.container}>
       <UserCard

@@ -1,7 +1,7 @@
 import { Fighter } from './../redux-types/storeTypes';
 import axios from 'axios'
 
-const baseUrl = "/api/matches/fighters"
+const baseUrl = "/api/fighters"
 
 //TODO: complete/remove this function making sure relevant fields are accounted for
 function mapFighterFields(fighterInDb: any, id: number): Fighter {
@@ -23,12 +23,8 @@ function mapFighters(fromDb: any[]): Fighter[] {
 // }
 
 async function getById(fighterId: number) {
-  const response = await axios.get(baseUrl, {
-    params: {
-      fighterID: fighterId
-    }
-  })
-  return mapFighterFields(response.data, fighterId)
+  const response = await axios.get(`${baseUrl}?fighterID=${fighterId}`)
+  return mapFighterFields(response.data[0], fighterId)
 }
 
 export default {

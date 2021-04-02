@@ -19,9 +19,9 @@ type MatchInDB = {
 function mapMatchFields(matchInDb: MatchInDB, tournamentId: number): Match {
 
   const timer: Timer = {
-    maxTime: matchInDb.matchTime,
-    timeRemaining: matchInDb.matchTime,
-    timeRemainingAtLastStop: matchInDb.matchTime,
+    maxTime: 180000,
+    timeRemaining: matchInDb.matchTime * 1000,
+    timeRemainingAtLastStop: matchInDb.matchTime * 1000,
     timeOfLastStart: 0,
     isRunning: false
   }
@@ -47,7 +47,7 @@ function mapMatchFields(matchInDb: MatchInDB, tournamentId: number): Match {
     future: Array<MatchScore>(),
     present,
     timer,
-    tournamentId,        // Fix this
+    tournamentId,        
     ringNumber: 0           // Fix this
   })
 }
@@ -81,10 +81,12 @@ async function getAll(tournamentId: number) {
 }
 
 async function getMatch(matchId: number) {
-  // const response = await axios.get(`${baseUrl}/${matchId}`) // Change GET endpoint to be RESTful
-  const response = await axios.get(`/api/match?matchID=${matchId}`)
+  const response = await axios.get(`${baseUrl}/details?matchID=${matchId}`)
   const data = response.data
-  return mapMatchFields(data, data.tournamentID)
+
+  const { match, tournament } = data
+
+  return mapMatchFields(match[0], tournament[0].tournamentID)
 }
 
 async function increaseScore(key: FighterScoringKey, matchId: number) {

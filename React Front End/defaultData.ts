@@ -71,7 +71,7 @@ const defaultData: RootType = {
   tournaments: [defaultTournament],
   pools: [defaultPool],
   matches: [defaultMatch],
-  currentMatchId: defaultMatch.id
+  currentMatchId: 52598
 }
 
 export default defaultData

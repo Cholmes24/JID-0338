@@ -2,7 +2,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import * as React from 'react';
 import useColorScheme from '../hooks/useColorScheme';
 import TournamentsScreen from '../screens/TournamentsScreen';
-import RingsScreen from '../screens/RingsScreen';
+import PoolsScreen from '../screens/PoolsScreen';
 import HomeScreen from '../screens/HomeScreen'
 
 import { Text } from '../components/Themed'
@@ -20,11 +20,16 @@ export default function SideMenuNavigator() {
   const colorScheme = useColorScheme()
 
   return (
-    <SideMenu.Navigator initialRouteName="Home" screenOptions={{ headerShown: true }}>
+    <SideMenu.Navigator screenOptions={{ headerShown: true }}>
       <SideMenu.Screen
         name="Home"
         component={HomeScreen}
         options={headerOptions(colorScheme, "Home")}
+      />
+      <SideMenu.Screen
+        name="Events"
+        component={HomeScreen}
+        options={headerOptions(colorScheme, "Events")}
       />
       <SideMenu.Screen
         name="Tournaments"
@@ -32,14 +37,14 @@ export default function SideMenuNavigator() {
         options={headerOptions(colorScheme, "Tournaments")}
       />
       <SideMenu.Screen
-        name="Rings"
-        component={RingsScreen}
-        options={headerOptions(colorScheme, "Rings")}
+        name="Pools"
+        component={PoolsScreen}
+        options={headerOptions(colorScheme, "Pools")}
       />
       <SideMenu.Screen
         name="Match"
         component={MatchScreen}
-        options={headerOptions(colorScheme, "Match 1")}
+        options={headerOptions(colorScheme, "Match")}
       />
     </SideMenu.Navigator>
   );

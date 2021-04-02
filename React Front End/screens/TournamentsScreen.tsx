@@ -7,9 +7,15 @@ import { Text, View } from '../components/Themed';
 import UserCard from '../components/UserCard'
 import Tournament from '../components/Tournament'
 import TournamentList from '../components/TournamentList'
+import { ScreenPropType } from '../types';
 
 
-export default function TournamentsScreen() {
+export default function TournamentsScreen({
+  route,
+  navigation
+}: ScreenPropType<"Tournaments">) {
+  const systemEventId = route.params.systemEventId
+  
   return (
     <View style={styles.container}>
       <TournamentList/>
