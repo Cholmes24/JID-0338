@@ -33,19 +33,19 @@ def system_events():
 
 
 def get_tournaments_in_event(eventID, db):
+    select_tournamentIDs = f'SELECT tournamentID FROM eventtournaments WHERE eventID = {eventID}'
+
     mycursor = db.cursor(dictionary=True)
-    mycursor.execute(f"SELECT tournamentID, tournamentWeaponID "
-                     f"FROM eventtournaments "
-                     f"WHERE eventID = {eventID}")
 
+    mycursor.execute(select_tournamentIDs)
     myresult = mycursor.fetchall()
-
     mycursor.close()
+
     db.close()
     return jsonify(myresult)
 
 
-@app.route('/api/tournaments', methods=['GET'])
+@app.route('/api/system_events/tournaments', methods=['GET'])
 def tournaments_in_event():
     eventID = request.args.get('eventID')
     mydb = mysql.connector.connect(**connector_config)
@@ -53,35 +53,12 @@ def tournaments_in_event():
 
 
 # for debugging: group retrieval - in order to get matches, you have to access groups (pools) first
-# def get_groups_in_tournament(body, db):
-#     tournamentID = body['tournamentID']
-#
-#     mycursor = db.cursor(dictionary=True)
-#     mycursor.execute(f"SELECT groupID "
-#                      f"FROM eventgroups "
-#                      f"WHERE tournamentID = {tournamentID}")
-#
-#     myresult = mycursor.fetchall()
-#
-#     mycursor.close()
-#     db.close()
-#     return jsonify(myresult)
-#
-#
-# @app.route('/api/tournament_groups', methods=['GET'])
-# def groups_in_tournament():
-#     body = request.get_json()
-#     mydb = mysql.connector.connect(**connector_config)
-#     return get_groups_in_tournament(body, mydb)
-
-
-def get_matches(tournamentID, db):
-    groupIDs = f'(SELECT groupID from eventgroups WHERE tournamentID = {tournamentID})'
+def get_groups_in_tournament(tournamentID, db):
 
     mycursor = db.cursor(dictionary=True)
-    mycursor.execute(f"SELECT matchID, fighter1ID, fighter2ID "
-                     f"FROM eventmatches "
-                     f"WHERE groupID IN {groupIDs}")
+    mycursor.execute(f"SELECT groupID, groupName "
+                     f"FROM eventgroups "
+                     f"WHERE tournamentID = {tournamentID}")
 
     myresult = mycursor.fetchall()
 
@@ -90,34 +67,176 @@ def get_matches(tournamentID, db):
     return jsonify(myresult)
 
 
-@app.route('/api/matches', methods=['GET'])
+@app.route('/api/system_events/tournaments/groups', methods=['GET'])
+def groups_in_tournament():
+    tournamentID = request.args.get('tournamentID')
+    mydb = mysql.connector.connect(**connector_config)
+    return get_groups_in_tournament(tournamentID, mydb)
+
+
+def get_matches_in_group(groupID, db):
+    mycursor = db.cursor(dictionary=True)
+    mycursor.execute(f"SELECT matchID "
+                     f"FROM eventmatches "
+                     f"WHERE groupID = {groupID}")
+
+    myresult = mycursor.fetchall()
+
+    mycursor.close()
+    db.close()
+    return jsonify(myresult)
+
+
+@app.route('/api/system_events/tournaments/groups/matches', methods=['GET'])
+def matches_in_group():
+    groupID = request.args.get('groupID')
+    mydb = mysql.connector.connect(**connector_config)
+    return get_matches_in_group(groupID, mydb)
+
+
+def get_pools(tournamentID, db):
+    select_groupIDs = f'SELECT groupID ' \
+                      f'FROM eventgroups ' \
+                      f'WHERE tournamentID = {tournamentID}'
+
+    mycursor = db.cursor(dictionary=True)
+    mycursor.execute(select_groupIDs)
+    myresult = mycursor.fetchall()
+    mycursor.close()
+
+    return myresult
+
+
+def get_roster(tournamentID, db):
+    select_rosterIDs = f'SELECT rosterID ' \
+                       f'FROM eventtournamentroster ' \
+                       f'WHERE tournamentID = {tournamentID}'
+
+    mycursor = db.cursor(dictionary=True)
+    mycursor.execute(select_rosterIDs)
+    myresult = mycursor.fetchall()
+    mycursor.close()
+
+    return myresult
+
+
+def get_system_roster(tournamentID, db):
+    select_rosterIDs = f'(SELECT rosterID ' \
+                       f'FROM eventtournamentroster ' \
+                       f'WHERE tournamentID = {tournamentID})'
+    select_system_rosterIDs = f'SELECT rosterID, systemRosterID FROM eventroster WHERE rosterID IN {select_rosterIDs}'
+
+
+    mycursor = db.cursor(dictionary=True)
+    mycursor.execute(select_system_rosterIDs)
+    myresult = mycursor.fetchall()
+    mycursor.close()
+
+    return myresult
+
+
+def get_matches(tournamentID, db):
+    select_groupIDs = f'(SELECT groupID FROM eventgroups WHERE tournamentID = {tournamentID})'
+    select_matchIDs = f'SELECT matchID, groupID, matchNumber, fighter1ID, fighter1Score, fighter2ID, fighter2Score ' \
+                      f'FROM eventmatches ' \
+                      f'WHERE groupID IN {select_groupIDs}'
+
+    mycursor = db.cursor(dictionary=True)
+    mycursor.execute(select_matchIDs)
+    myresult = mycursor.fetchall()
+    mycursor.close()
+
+    return myresult
+
+
+def get_fighters(tournamentID, db):
+    select_eventID = f'(SELECT eventID FROM eventtournaments WHERE tournamentID = {tournamentID})'
+    select_system_rosterIDs = f'(SELECT systemrosterID FROM eventroster WHERE eventID = {select_eventID})'
+    select_fighter_names = f'SELECT firstName, lastName, systemRosterID ' \
+                           f'FROM systemroster ' \
+                           f'WHERE systemRosterID IN {select_system_rosterIDs}'
+
+    mycursor = db.cursor(dictionary=True)
+    mycursor.execute(select_fighter_names)
+    myresult = mycursor.fetchall()
+    mycursor.close()
+
+    return myresult
+
+
+@app.route('/api/system_events/tournaments/matches', methods=['GET'])
 def matches_in_tournament():
     tournamentID = request.args.get('tournamentID')
     mydb = mysql.connector.connect(**connector_config)
-    return get_matches(tournamentID, mydb)
+
+    # get all possible information for a given tournamentID
+    pools = get_pools(tournamentID, mydb)
+    system_roster = get_system_roster(tournamentID, mydb)
+    roster = get_roster(tournamentID, mydb)
+    matches = get_matches(tournamentID, mydb)
+    fighters = get_fighters(tournamentID, mydb)
+
+    ret = dict()
+    ret["pools"] = pools
+    ret["roster"] = roster
+    ret["system_roster"] = system_roster
+    ret["matches"] = matches
+    ret["fighters"] = fighters
+
+    mydb.close()
+
+    return jsonify(ret)
 
 
 def get_specific_match(matchID, db):
     relevantFields = "fighter1ID, fighter1Score, fighter2ID, fighter2Score, groupID, matchID, matchTime"
+    select_match = f'SELECT {relevantFields} FROM eventmatches WHERE matchID = {matchID}'
 
     mycursor = db.cursor(dictionary=True)
-    # mycursor.execute(f"SELECT * FROM eventmatches WHERE matchID = {matchID}")
-    mycursor.execute(f"SELECT {relevantFields} "
-                     f"FROM eventmatches "
-                     f"WHERE matchID = {matchID}")
+    mycursor.execute(select_match)
 
     myresult = mycursor.fetchall()
-
     mycursor.close()
-    db.close()
-    return jsonify(myresult)
+    return myresult
 
 
-@app.route('/api/match', methods=['GET'])
+def get_tournament_match_is_in(matchID, db):
+    select_groupID = f'(SELECT groupID FROM eventmatches WHERE matchID = {matchID})'
+    select_tournamentID = f'SELECT tournamentID FROM eventgroups WHERE groupID IN {select_groupID}'
+
+    mycursor = db.cursor(dictionary=True)
+    mycursor.execute(select_tournamentID)
+    myresult = mycursor.fetchall()
+    mycursor.close()
+
+    return myresult
+
+def get_group_match_is_in(matchID, db):
+    select_groupID = f'SELECT groupID FROM eventmatches WHERE matchID = {matchID}'
+
+    mycursor = db.cursor(dictionary=True)
+    mycursor.execute(select_groupID)
+    myresult = mycursor.fetchall()
+    mycursor.close()
+
+    return myresult
+
+
+@app.route('/api/matches', methods=['GET'])
 def specific_match():
     matchID = request.args.get('matchID')
     mydb = mysql.connector.connect(**connector_config)
-    return get_specific_match(matchID, mydb)
+
+    match = get_specific_match(matchID, mydb)
+    tournament = get_tournament_match_is_in(matchID, mydb)
+
+    ret = dict()
+    ret["match"] = match
+    ret["tournament"] = tournament
+
+    mydb.close()
+
+    return jsonify(ret)
 
 
 def increase_score(fighter_number, matchID, db):
@@ -246,14 +365,13 @@ def get_fighter_names(fighterID, db):
                      f"WHERE systemRosterID = {systemRosterID}")
 
     myresult = mycursor.fetchall()
-    db.commit()
-
     mycursor.close()
     db.close()
+
     return jsonify(myresult)
 
 
-@app.route('/api/matches/fighters', methods=['GET'])
+@app.route('/api/fighters', methods=['GET'])
 def matches_get_fighters():
     fighterID = request.args.get('fighterID')
     mydb = mysql.connector.connect(**connector_config)
