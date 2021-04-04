@@ -1,8 +1,7 @@
 import { Match, Scoring, MatchScore, Timer } from './../redux-types/storeTypes';
 import axios from 'axios'
 
-const baseUrl = "/api/matches"
-
+const baseUrl = "/api/system_events/tournaments/groups/matches"
 type MatchInDB = {
   fighter1ID: number,
   fighter2ID: number,
@@ -10,18 +9,18 @@ type MatchInDB = {
   fighter2Score: number,
   groupID: number,
   matchID: number,
-  matchTime: number
+  matchTime?: number
 }
 
-// TODO: Need to get tournamentId and ringNumber
+// TODO: Need to get ringNumber
 // TODO: Determine meaning of db field "matchTime"
-// TODO: Incorporate existing penalty/warning values
+// TODO: Incorporate existing penalty/warning values - partially addressed
 function mapMatchFields(matchInDb: MatchInDB, tournamentId: number): Match {
-
+  const time = 1000 * (matchInDb.matchTime || 180) 
   const timer: Timer = {
     maxTime: 180000,
-    timeRemaining: matchInDb.matchTime * 1000,
-    timeRemainingAtLastStop: matchInDb.matchTime * 1000,
+    timeRemaining: time,
+    timeRemainingAtLastStop: time,
     timeOfLastStart: 0,
     isRunning: false
   }
@@ -52,80 +51,21 @@ function mapMatchFields(matchInDb: MatchInDB, tournamentId: number): Match {
   })
 }
 
-function mapMatches(fromDb: any[]): Match[] {
-  return fromDb.map(mapMatchFields)
+async function getAllByTournament(tournamentId: number) {
+  const response = await axios.get(`/api/system_events/tournaments/matches?tournamentID=${tournamentId}`)
+  return response.data.matches.map((m: MatchInDB) => mapMatchFields(m, tournamentId))
 }
 
-type FighterScoringKey = 1 | 2 | "fighter1Scoring" | "fighter2Scoring"
+// async function getAll(poolId: number) {
+//   const response = await axios.get(`${baseUrl}?groupID=${poolId}`)
+//   return response.data.map(mapMatchFields)
+// }
 
-const getFighterNumber = (key: FighterScoringKey) => {
-  switch (key) {
-    case 1:
-      return 1
-    case "fighter1Scoring":
-      return 1
-    case 2:
-      return 2
-    case "fighter2Scoring":
-      return 2
-  }
-}
 
-async function getAll(tournamentId: number) {
-  const response = await axios.get(baseUrl, {
-    params: {
-      tournamentID: tournamentId
-    }
-  })
-  return mapMatches(response.data)
-}
-
-async function getMatch(matchId: number) {
-  const response = await axios.get(`${baseUrl}/details?matchID=${matchId}`)
-  const data = response.data
-
-  const { match, tournament } = data
-
-  return mapMatchFields(match[0], tournament[0].tournamentID)
-}
-
-async function increaseScore(key: FighterScoringKey, matchId: number) {
-  const fighter = getFighterNumber(key)
-  const response = await axios.post(`${baseUrl}/increase_score_fighter${fighter}?matchID=${matchId}`)
-  // return mapMatchFields(response.data)
-  return
-}
-
-async function decreaseScore(key: FighterScoringKey, matchId: number) {
-  const fighter = getFighterNumber(key)
-  const response = await axios.post(`${baseUrl}/decrease_score_fighter${fighter}?matchID=${matchId}`, {
-    params: {
-      matchID: matchId
-    }
-  })
-  // return mapMatchFields(response.data)
-  return
-}
-
-async function issuePenalty(key: FighterScoringKey, matchId: number) {
-  const fighter = getFighterNumber(key)
-  const body = {
-    matchID: matchId
-  }
-  const response = await axios.post(`${baseUrl}/penalty_fighter${fighter}`, {
-    params: {
-      matchID: matchId
-    }
-  })
-  // return mapMatchFields(response.data)
-  return
-}
-
-export default {
+const matchesService ={
   mapMatchFields,
-  getAll,
-  getMatch,
-  increaseScore,
-  decreaseScore,
-  issuePenalty
+  getAllByTournament,
+  // getAll,
 }
+
+export default matchesService

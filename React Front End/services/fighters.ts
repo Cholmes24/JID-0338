@@ -3,17 +3,22 @@ import axios from 'axios'
 
 const baseUrl = "/api/fighters"
 
+type FighterInDb = {
+  firstName: string,
+  lastName: string
+}
+
 //TODO: complete/remove this function making sure relevant fields are accounted for
-function mapFighterFields(fighterInDb: any, id: number): Fighter {
+function mapFighterFields(fighterInDb: FighterInDb, id: number): Fighter {
   return {
     firstName: fighterInDb.firstName,
     lastName: fighterInDb.lastName,
     id,
-    color: "black"
+    color: (id % 2 === 1) ? "#376EDA" : "#D43737"
   }
 }
 
-function mapFighters(fromDb: any[]): Fighter[] {
+function mapFighters(fromDb: FighterInDb[]): Fighter[] {
   return fromDb.map(mapFighterFields)
 }
 
@@ -24,9 +29,10 @@ function mapFighters(fromDb: any[]): Fighter[] {
 
 async function getById(fighterId: number) {
   const response = await axios.get(`${baseUrl}?fighterID=${fighterId}`)
-  return mapFighterFields(response.data[0], fighterId)
+  return mapFighterFields(response.data, fighterId)
 }
 
-export default {
+const fightersService = {
   getById
 }
+export default fightersService
