@@ -4,7 +4,7 @@ import defaultData from '../defaultData'
 import { addItems } from "../util/utilFunctions"
 import { AddPoolsAction } from "../redux-types/actionTypes"
 
-const poolsReducer: Reducer<Pool[], AnyAction> = (state = defaultData.pools, action) => {
+const poolsReducer: Reducer<Pool[], AnyAction> = (state = [], action) => {
   switch (action.type) {
     case "SET_POOLS":
       return action.payload

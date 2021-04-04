@@ -4,7 +4,7 @@ import defaultData from '../defaultData'
 import { AddTournamentsAction } from "../redux-types/actionTypes"
 import { addItems } from "../util/utilFunctions"
 
-const tournamentsReducer: Reducer<Tournament[], AnyAction> = (state = defaultData.tournaments, action) => {
+const tournamentsReducer: Reducer<Tournament[], AnyAction> = (state = [], action) => {
   switch (action.type) {
     case "SET_TOURNAMENTS":
       return action.payload

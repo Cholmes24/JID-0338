@@ -4,7 +4,7 @@ import { SystemEvent } from "../redux-types/storeTypes"
 import defaultData from '../defaultData'
 import { addItems } from "../util/utilFunctions"
 
-const systemEventsReducer: Reducer<SystemEvent[], AnyAction> = (state = defaultData.systemEvents, action) => {
+const systemEventsReducer: Reducer<SystemEvent[], AnyAction> = (state = [], action) => {
   switch (action.type) {
     case "SET_SYSTEM_EVENTS":
     	return action.payload

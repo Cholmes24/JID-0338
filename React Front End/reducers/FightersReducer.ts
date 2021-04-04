@@ -4,7 +4,7 @@ import { Fighter } from "../redux-types/storeTypes"
 import defaultData from '../defaultData'
 import { addItems } from '../util/utilFunctions';
 
-const fightersReducer: Reducer<Fighter[], AnyAction> = (state = defaultData.fighters, action) => {
+const fightersReducer: Reducer<Fighter[], AnyAction> = (state = [], action) => {
   switch (action.type) {
     case "SET_FIGHTERS":
       return action.payload

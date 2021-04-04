@@ -171,12 +171,29 @@ export interface AddFightersAction extends Action {
 
 export type FightersActionType = SetFightersAction | AddFightersAction
 
-
+export const SET_CURRENT_SYSTEM_EVENT_ID = "SET_CURRENT_SYSTEM_EVENT_ID"
+export const SET_CURRENT_TOURNAMENT_ID = "SET_CURRENT_TOURNAMENT_ID"
+export const SET_CURRENT_POOL_ID = "SET_CURRENT_POOL_ID"
 export const SET_CURRENT_MATCH_ID = "SET_CURRENT_MATCH_ID"
+
+export interface SetCurrentSystemEventIdAction extends Action {
+  type: typeof SET_CURRENT_SYSTEM_EVENT_ID,
+  payload: number
+}
+
+export interface SetCurrentTournamentIdAction extends Action {
+  type: typeof SET_CURRENT_TOURNAMENT_ID,
+  payload: number
+}
+
+export interface SetCurrentPoolIdAction extends Action {
+  type: typeof SET_CURRENT_POOL_ID,
+  payload: number
+}
 
 export interface SetCurrentMatchIdAction extends Action {
   type: typeof SET_CURRENT_MATCH_ID,
   payload: number
 }
 
-export type CurrentMatchIdActionType = SetCurrentMatchIdAction
+export type CurrentIdsActionType = SetCurrentSystemEventIdAction | SetCurrentTournamentIdAction | SetCurrentPoolIdAction | SetCurrentMatchIdAction 

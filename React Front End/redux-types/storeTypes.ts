@@ -54,13 +54,14 @@ export interface Timer {
 
 export interface SystemEvent {
   id: number,
-  tournamentIds: number[],
+  // tournamentIds: number[],
   name: string
 }
 
 export interface Tournament {
   name: string,
   id: number,
+  systemEventId: number,
   weaponType?: string,
   // ruleset: MatchRuleset
   fighterIds: number[],
@@ -71,8 +72,15 @@ export interface Tournament {
 export interface Pool {
   id: number,
   name: string,
-  fighterIds: number[],
+  // fighterIds: number[],
   tournamentId: number,
+}
+
+export interface CurrentIds {
+  systemEventId?: number,
+  tournamentId?: number,
+  poolId?: number,
+  matchId?: number,
 }
 
 export interface RootType {
@@ -81,7 +89,7 @@ export interface RootType {
   tournaments: Tournament[],
   pools: Pool[],
   matches: Match[],
-  currentMatchId?: number
+  currentIds: CurrentIds
 }
 
 
