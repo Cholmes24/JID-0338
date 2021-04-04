@@ -6,6 +6,8 @@ import { View, Text } from './Themed'
 import { Fighter, Match, RootType } from '../redux-types/storeTypes'
 import asMatchesAction from '../util/reduxActionWrapper'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
+import { AppThunk } from '../store'
+import matchService from '../services/match'
 
 export type FighterColumnProps = {
   matchId: number
@@ -15,6 +17,8 @@ export type FighterColumnProps = {
   fighterId: number
 })
 
+//TODO implement remote functionality for penalties
+//TODO implement remote functionality for warnings 
 export default function FighterColumn(props: FighterColumnProps) {
   const dispatch = useAppDispatch()
   const matchId = props.matchId
@@ -40,6 +44,13 @@ export default function FighterColumn(props: FighterColumnProps) {
   const issuePenalty = asMatchesAction({
     type: "ISSUE_PENALTY"
   }, matchId, fighterScoringKey)
+
+  const thunkIssuePenalty = (): AppThunk => (
+    async dispatch => {
+      const updatedMatch = await matchService.issuePenalty(fighterScoringKey, matchId)
+      dispatch(issuePenalty)
+    }
+  )
 
   const color = fighter.color
   const name = `${fighter.firstName} ${fighter.lastName}`
@@ -147,7 +158,7 @@ export default function FighterColumn(props: FighterColumnProps) {
         <View style={styles.button} >
           <CustomButton
             content={() => <Text style={styles.buttonText} >Penalty</Text> }
-            onPress={() => dispatch(issuePenalty)}
+            onPress={() => dispatch(thunkIssuePenalty())}
             />
         </View>
       </View>

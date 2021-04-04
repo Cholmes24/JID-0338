@@ -11,6 +11,7 @@ type TimerProps = {
   matchId: number
 }
 
+//TODO: implement remote functionality
 export default function Timer({matchId}: TimerProps) {
   const dispatch = useAppDispatch()
   const matches = useAppSelector((state: RootType) => state.matches)

@@ -4,9 +4,8 @@ import { View } from '../components/Themed';
 import { Button } from 'react-native-elements'
 import UserCard from "../components/UserCard"
 
-import matchesService from '../services/matches'
+import matchService from '../services/match'
 import fightersService from '../services/fighters'
-
 import systemEventsService from '../services/systemEvents'
 
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks"
@@ -19,7 +18,7 @@ export default function HomeScreen({
   navigation
 }: ScreenPropType<"Home">) {
 
-  const currentMatchId = useAppSelector((state) => state.currentMatchId)
+  const currentMatchId = useAppSelector((state) => state.currentIds.matchId)
 
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -41,7 +40,7 @@ export default function HomeScreen({
   const thunkCurrentMatch = (): AppThunk<Promise<Match | undefined>> => (
     async dispatch => {
       if (currentMatchId !== undefined) {
-        const currentMatch = await matchesService.getMatch(currentMatchId)
+        const currentMatch = await matchService.getMatch(currentMatchId)
         dispatch({
           type: "SET_MATCHES",
           payload: [currentMatch]
@@ -69,22 +68,33 @@ export default function HomeScreen({
   const mostRecentMatchButton = () => (
     currentMatchId !== undefined 
       ? <Button
-          buttonStyle={styles.matchButton}
+          buttonStyle={styles.entry}
           title='Most Recent Match'
           onPress={() => navigation.navigate("Match", { matchId: currentMatchId }) }
         />
-      : null
+      : null //<View style={styles.matchButton} > </View>
   )
 
   return (
-    <View style={styles.userCard}>
-      <UserCard
-        firstName={"longFirstName"}
-        lastName={"longLastName"}
-      />
+    <View style={styles.container} >
 
-      {mostRecentMatchButton()}
-      <View style={styles.filler}></View>
+      <View style={styles.userCard}>
+        <UserCard
+          firstName={"longFirstName"}
+          lastName={"longLastName"}
+        />
+      </View>
+      <View style={styles.buttonWrapper}>
+        <Button
+          buttonStyle={styles.entry}
+          title='Events'
+          onPress={() => navigation.navigate("Events")}
+        />
+        {mostRecentMatchButton()}
+      </View>
+      
+      {/* <View style={styles.filler}></View> */}
+      
     </View>
 
   )
@@ -101,21 +111,32 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   userCard: {
-    flex: 1,
+    flex: 4,
     paddingTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  matchButton: {
+  filler: {
+    height: '15%'
+  },
+  container: {
+    flex: 2,
+    alignSelf: "stretch",
+    textAlign: 'center',
+    paddingBottom: 5
+  },
+  buttonWrapper: {
+    textAlign: 'center',
+    // backgroundColor: 'white',
     width: '100%',
+  },
+  entry: {
+    width: '95%',
     padding: '10%',
     marginTop: '5%',
     marginBottom: '5%',
     borderRadius: 15,
-    alignSelf: 'center',
-    justifyContent: 'center',
+    alignSelf: "center",
+    paddingHorizontal: 5
   },
-  filler: {
-    height: '40%'
-  }
-});
+})

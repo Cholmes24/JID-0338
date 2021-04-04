@@ -11,6 +11,7 @@ export type UndoButtonProps = {
   matchId: number
 }
 
+//TODO: Implement Remote functionality with thunks
 export default function UndoButton({matchId}: UndoButtonProps) {
   const dispatch = useAppDispatch()
   // const color = useThemeColor({ light: "black", dark: "white"}, "tabIconDefault")

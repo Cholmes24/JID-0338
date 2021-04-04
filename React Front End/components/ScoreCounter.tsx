@@ -6,7 +6,7 @@ import { RootType } from '../redux-types/storeTypes'
 import asMatchesAction from '../util/reduxActionWrapper'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import { AppThunk } from '../store'
-import matchesService from "../services/matches"
+import matchService from "../services/match"
 
 type ScoreCounterProps = {
   matchId: number,
@@ -43,13 +43,13 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
 
   const thunkIncrease = (): AppThunk => (
     async dispatch => {
-      const updatedMatch = await matchesService.increaseScore(fighterScoringKey, matchId)
+      const updatedMatch = await matchService.increaseScore(fighterScoringKey, matchId)
       dispatch(increaseAction)
     }
   )
   const thunkDecrease = (): AppThunk => (
     async dispatch => {
-      const updatedMatch = await matchesService.decreaseScore(fighterScoringKey, matchId)
+      const updatedMatch = await matchService.decreaseScore(fighterScoringKey, matchId)
       dispatch(decreaseAction)
     }
   )

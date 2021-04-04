@@ -13,6 +13,8 @@ import { StackHeaderOptions } from '@react-navigation/stack/lib/typescript/src/t
 import { StyleProp, StyleSheet, TextStyle } from "react-native"
 import { DrawerHeaderOptions } from '@react-navigation/drawer/lib/typescript/src/types'
 import MatchScreen from '../screens/MatchScreen'
+import SystemEventsScreen from '../screens/SystemEventsScreen';
+import MatchesScreen from '../screens/MatchesScreen';
 
 const SideMenu = createDrawerNavigator<SideMenuParamList>()
 
@@ -24,11 +26,11 @@ export default function SideMenuNavigator() {
       <SideMenu.Screen
         name="Home"
         component={HomeScreen}
-        options={headerOptions(colorScheme, "Home")}
+        options={headerOptions(colorScheme, "Home", "none")}
       />
       <SideMenu.Screen
         name="Events"
-        component={HomeScreen}
+        component={SystemEventsScreen}
         options={headerOptions(colorScheme, "Events")}
       />
       <SideMenu.Screen
@@ -42,6 +44,11 @@ export default function SideMenuNavigator() {
         options={headerOptions(colorScheme, "Pools")}
       />
       <SideMenu.Screen
+        name="Matches"
+        component={MatchesScreen}
+        options={headerOptions(colorScheme, "Matches")}
+      />
+      <SideMenu.Screen
         name="Match"
         component={MatchScreen}
         options={headerOptions(colorScheme, "Match")}
@@ -53,7 +60,7 @@ export default function SideMenuNavigator() {
 function headerOptions(
   colorScheme: "light" | "dark",
   title: string | JSX.Element,
-  leftButtonType: "back" | "hamburger" | "none" = "hamburger",
+  leftButtonType: "back" | "hamburger" | "none" = "back",
   right?: string
 ): DrawerHeaderOptions {
   const navigation = useNavigation()
