@@ -1,78 +1,70 @@
-import { MatchActionTypes } from './../store/types';
-import { Competitor, MatchRuleset, MatchState } from "../store/types"
+import { MatchScoringAction, MatchTimingAction } from '../redux-types/actionTypes';
+import { MatchActionType, MatchRedoAction, MatchUndoAction } from "../redux-types/actionTypes"
+import { Match } from "../redux-types/storeTypes"
+import timerReducer from './features/TimerSlice'
+import scoringReducer from './features/ScoringSlice'
 
-const endConditions = (minimumScoreToWin: number, scoreToAutomaticallyWin?: number, leadRequiredToWinEarly: number = 0) => (
-  left: Competitor, right: Competitor
-) => {
-  if (left.score === right.score) {
-    return undefined
-  }
-
-  if (left.score < minimumScoreToWin && right.score < minimumScoreToWin) {
-    return undefined
-  }
-
-  if (scoreToAutomaticallyWin) {
-    if (left.score >= scoreToAutomaticallyWin) {
-      return left
-    } else if (right.score >= scoreToAutomaticallyWin) {
-      return right
-    }
-  }
-
-  if (left.score >= right.score + leadRequiredToWinEarly) {
-    return left
-  } else if (left.score + leadRequiredToWinEarly <= right.score) {
-    return right
-  }
-
-  return undefined
-}
-
-const defaultMatchRuleset: MatchRuleset = {
-    increaseAmount: 1,
-    decreaseAmount: 1,
-    warningAmount: (_: Competitor) => 1,
-    penaltyAmount: (_: Competitor) => 1,
-    timeLimit: 60,
-    endCondition: (left: Competitor, right: Competitor) => endConditions(5, 8, 2)(left, right)
-}
-
-
-const defaultLeftCompetitor: Competitor = {
-  id: "defaultLeftCompetitorId",
-  name: "Longname Fencermaster",
-  color: "#376EDA",
-  score: 0,
-  side: "left",
-  numberOfWarnings: 0,
-  numberOfPenalties: 0,
-}
-
-const defaultRightCompetitor: Competitor = {
-  id: "defaultRightCompetitorId",
-  name: "Superlong Lastnameman",
-  color: "#D43737",
-  score: 0,
-  side: "right",
-  numberOfWarnings: 0,
-  numberOfPenalties: 0,
-}
-
-export const defaultCompetitorList = [defaultLeftCompetitor, defaultRightCompetitor]
-
-export const defaultMatchState: MatchState = {
-  competitors: defaultCompetitorList,
-  leftId: defaultLeftCompetitor.id,
-  rightId: defaultRightCompetitor.id,
-  ruleset: defaultMatchRuleset,
-  timeElapsed: 0,
-  callLog: []
-}
-
-export default function MatchReducer(state = defaultMatchState, action: MatchActionTypes) {
+export default function matchReducer(state: Match, action: MatchActionType) {
   switch (action.type) {
+    case "MATCH_TIMING":
+      return matchTiming(state, action)
+    case "MATCH_SCORING":
+      return matchScoring(state, action)
+    case "MATCH_UNDO":
+      return matchUndo(state, action)
+    case "MATCH_REDO":
+      return matchRedo(state, action)
     default:
       return state
+  }
+}
+
+function matchTiming(state: Match, action: MatchTimingAction): Match {
+  return {
+    ...state,
+    timer: timerReducer(state.timer, action.payload.timingAction)
+  }
+}
+
+function matchScoring(state: Match, action: MatchScoringAction): Match {
+  const cleanReducer = (fighterInState: "fighter1Scoring" | "fighter2Scoring") => (
+    action.payload.fighter === fighterInState
+      ? scoringReducer(state.present[fighterInState], action.payload.scoringAction)
+      : state.present[fighterInState]
+  )
+  return {
+    ...state,
+    past: state.past.concat(state.present),
+    present: {
+      fighter1Scoring: cleanReducer("fighter1Scoring"),
+      fighter2Scoring: cleanReducer("fighter2Scoring")
+    },
+    future: []
+  }
+}
+
+function matchUndo(state: Match, _: MatchUndoAction): Match {
+  if (state.past.length === 0) {
+    return state
+  } else {
+    return {
+      ...state,
+      past: state.past.slice(0, state.past.length - 1),
+      present: state.past[state.past.length - 1],
+      future: [state.present, ...state.future]
+    }
+  }
+}
+
+function matchRedo(state: Match, _: MatchRedoAction): Match {
+  if (state.future.length === 0) {
+    return state
+  } else {
+    return {
+      ...state,
+      past: [...state.past, state.present],
+      present: state.future[0],
+      future: state.future.slice(1, state.future.length)
+    }
   }
 }

@@ -1,48 +1,66 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Button, Text } from 'react-native-elements'
-import { View, StyleSheet, Image, ColorValue, Platform } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { RootType } from '../redux-types/storeTypes'
+import asMatchesAction from '../util/reduxActionWrapper'
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 
-export default function Timer({maxTime = 3000}: {maxTime?: number}) {
-  const [ timeLeft, setTimeLeft ] = useState<number>(maxTime)
-  const [ timeLeftAtLastStop, setTimeLeftAtLastStop ] = useState<number>(timeLeft)
-  const [ lastStart, setLastStart ] = useState<number>(Date.now())
-  const [ timerRunning, setTimerRunning ] = useState(false)
+type TimerProps = {
+  matchId: number
+}
+
+//TODO: implement remote functionality
+export default function Timer({matchId}: TimerProps) {
+  const dispatch = useAppDispatch()
+  const matches = useAppSelector((state: RootType) => state.matches)
+  const timerStore = matches.find(m => m.id === matchId)?.timer
+
+  if (!timerStore) {
+    throw Error("INVALID MATCH ID - TIMER NOT FOUND")
+  }
+
+  const [ timeLeft, setTimeLeft ] = useState<number>(timerStore.timeRemaining)
 
   const refreshRate = 85 // in ms
   useEffect(() => {
     const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeRemaining())
+      if (timerStore.isRunning) {
+        update()
+      }
     }, refreshRate)
     return () => clearTimeout(timer)
   })
 
-  const calculateTimeRemaining = (currentTime: number = Date.now()) => {
-    return Math.max(0, timeLeftAtLastStop - (timerRunning ? (currentTime - lastStart) : 0))
+  const calculateTimeRemaining = (
+    currentTime: number = Date.now()
+  ) => (
+    Math.max(0, timerStore.timeRemainingAtLastStop - (timerStore.isRunning ? (currentTime - timerStore.timeOfLastStart) : 0))
+  )
+
+  const update = () => {
+    const timeRemaining = calculateTimeRemaining()
+    if (timeRemaining === 0 || timerStore.timeRemaining - timeRemaining > 400) {
+      dispatch(asMatchesAction({
+        type: "UPDATE_TIMER",
+        payload: { currentTime: Date.now() }
+      }, matchId))
+    }
+    setTimeLeft(timeRemaining)
   }
 
   const toggle = () => {
-    if (timeLeft > 0) {
-      const currentTime = Date.now()
-      const pausePlay = timerRunning ? pause : play
-      pausePlay(currentTime)
-    }
-  }
-
-  const pause = (currentTime: number) => {
-    const exactTimeLeft = calculateTimeRemaining(currentTime)
-    setTimeLeft(exactTimeLeft)
-    setTimeLeftAtLastStop(exactTimeLeft)
-    setTimerRunning(false)
-  }
-
-  const play = (currentTime: number) => {
-    setLastStart(currentTime)
-    setTimerRunning(true)
+      dispatch(
+      asMatchesAction({
+        type: "TOGGLE_TIMER",
+        payload: { currentTime: Date.now() }
+      }, matchId)
+    )
   }
 
   const formattedTimeLeft = () => {
+    // const ms: number = timerStore.timeRemaining
     const ms: number = timeLeft
     const points = Math.floor(ms / 100) % 10
     const seconds = Math.floor((ms / 1000)) % 60
@@ -51,17 +69,19 @@ export default function Timer({maxTime = 3000}: {maxTime?: number}) {
   }
 
   const addTime = () => {
+    const currentTime = Date.now()
     const amountToAdd = 10000
-    if (timeLeft === 0) {
-      setTimerRunning(false)
-      setTimeLeftAtLastStop(amountToAdd)
-    } else {
-      setTimeLeftAtLastStop(timeLeftAtLastStop + amountToAdd)
-      setTimeLeft(timeLeft + amountToAdd)
-    }
+    setTimeLeft(timeLeft + amountToAdd)
+    dispatch(
+      asMatchesAction({
+        type: "ADD_TO_TIMER",
+        payload: { currentTime, amountToAdd }
+      }, matchId)
+    )
   }
+  const hasTimeLeft: () => boolean = () => timerStore.timeRemaining > 0
+  const timerRunning: () => boolean = () => timerStore.isRunning
 
-  //TODO: handle timer going into negative range
   return (
       <View style={styles.container}>
         <Button
@@ -78,7 +98,7 @@ export default function Timer({maxTime = 3000}: {maxTime?: number}) {
         <Text style={styles.text}>{formattedTimeLeft()} </Text>
         <Button
           buttonStyle={styles.play_pause}
-          icon={timerRunning && timeLeft > 0 ?
+          icon={timerRunning() && hasTimeLeft() ?
             <Icon
               name="pause"
               size={40}
@@ -91,7 +111,7 @@ export default function Timer({maxTime = 3000}: {maxTime?: number}) {
               color="white"
             />
           }
-          onPress={timeLeft > 0 ? toggle : (() => null)}
+          onPress={() => (hasTimeLeft() ? toggle() : null)}
         />
       </View>
   )

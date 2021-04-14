@@ -1,25 +1,100 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
-import ScoreCounter from "../components/ScoreCounter"
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 import { Button } from 'react-native-elements'
 import UserCard from "../components/UserCard"
 
-export default function HomeScreen() {
-  return (
-    <View style={styles.userCard}>
-      <UserCard
-        firstName={"longFirstName"}
-        lastName={"longLastName"}
-      />
+import matchService from '../services/match'
+import fightersService from '../services/fighters'
+import systemEventsService from '../services/systemEvents'
 
-      <Button
-        buttonStyle={styles.matchButton}
-        title='Most Recent Match'
-      />
-      <View style={styles.filler}></View>
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks"
+import { AppThunk } from "../store"
+
+import { ScreenPropType } from "../types";
+import { Match } from "../redux-types/storeTypes";
+
+export default function HomeScreen({
+  navigation
+}: ScreenPropType<"Home">) {
+
+  const currentMatchId = useAppSelector((state) => state.currentIds.matchId)
+
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(thunkSystemEvents())
+      .then(() => dispatch(thunkCurrentMatch()))
+      .then((match) => dispatch(thunkCurrentFighters(match)))
+  })
+  const thunkSystemEvents = (): AppThunk<Promise<void>> => (
+    async dispatch => {
+      const systemEvents = await systemEventsService.getAll()
+      dispatch({
+        type: "SET_SYSTEM_EVENTS",
+        payload: systemEvents
+      })
+      return Promise.resolve()
+    }
+  )
+
+  const thunkCurrentMatch = (): AppThunk<Promise<Match | undefined>> => (
+    async dispatch => {
+      if (currentMatchId !== undefined) {
+        const currentMatch = await matchService.getMatch(currentMatchId)
+        dispatch({
+          type: "SET_MATCHES",
+          payload: [currentMatch]
+        })
+        return Promise.resolve(currentMatch)
+      }
+      return Promise.resolve(undefined)
+    }
+  )
+
+  const thunkCurrentFighters = (match?: Match): AppThunk<Promise<void>> => (
+    async dispatch => {
+      if (match) {
+        const fighter1 = await fightersService.getById(match.fighter1Id)
+        const fighter2 = await fightersService.getById(match.fighter2Id)
+        dispatch({
+          type: "SET_FIGHTERS",
+          payload: [fighter1, fighter2]
+        })
+      }
+      return Promise.resolve()
+    }
+  )
+
+  const mostRecentMatchButton = () => (
+    currentMatchId !== undefined 
+      ? <Button
+          buttonStyle={styles.entry}
+          title='Most Recent Match'
+          onPress={() => navigation.navigate("Match", { matchId: currentMatchId }) }
+        />
+      : null //<View style={styles.matchButton} > </View>
+  )
+
+  return (
+    <View style={styles.container} >
+
+      <View style={styles.userCard}>
+        <UserCard
+          firstName={"longFirstName"}
+          lastName={"longLastName"}
+        />
+      </View>
+      <View style={styles.buttonWrapper}>
+        <Button
+          buttonStyle={styles.entry}
+          title='Events'
+          onPress={() => navigation.navigate("Events")}
+        />
+        {mostRecentMatchButton()}
+      </View>
+      
+      {/* <View style={styles.filler}></View> */}
+      
     </View>
 
   )
@@ -36,21 +111,32 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   userCard: {
-    flex: 1,
+    flex: 4,
     paddingTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  matchButton: {
+  filler: {
+    height: '15%'
+  },
+  container: {
+    flex: 2,
+    alignSelf: "stretch",
+    textAlign: 'center',
+    paddingBottom: 5
+  },
+  buttonWrapper: {
+    textAlign: 'center',
+    // backgroundColor: 'white',
     width: '100%',
+  },
+  entry: {
+    width: '95%',
     padding: '10%',
     marginTop: '5%',
     marginBottom: '5%',
     borderRadius: 15,
-    alignSelf: 'center',
-    justifyContent: 'center',
+    alignSelf: "center",
+    paddingHorizontal: 5
   },
-  filler: {
-    height: '40%'
-  }
-});
+})

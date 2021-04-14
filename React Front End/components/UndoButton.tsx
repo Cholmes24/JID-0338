@@ -1,21 +1,29 @@
 import React, { useState } from "react"
 import Icon from "react-native-vector-icons/EvilIcons"
-import { GestureResponderEvent, Pressable, StyleProp, StyleSheet } from "react-native"
-import { Text, useThemeColor } from './Themed'
-import { RootStateOrAny, useDispatch, useSelector, useStore } from "react-redux"
-import { MatchState } from "../store/types"
+import { Pressable, StyleSheet } from "react-native"
+import { RootType } from "../redux-types/storeTypes"
+import { MatchesAction } from "../redux-types/actionTypes"
+import asMatchesAction from "../util/reduxActionWrapper"
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks"
 // import { Icon } from "react-native-elements"
 
-export default function UndoButton() {
+export type UndoButtonProps = {
+  matchId: number
+}
+
+//TODO: Implement Remote functionality with thunks
+export default function UndoButton({matchId}: UndoButtonProps) {
+  const dispatch = useAppDispatch()
   // const color = useThemeColor({ light: "black", dark: "white"}, "tabIconDefault")
+  const matches = useAppSelector((state: RootType) => state.matches)
+  const match = matches.find(m => m.id === matchId)
+  if (!match) {
+    throw Error("MATCH ID INVALID")
+  }
   const fontSize = 35
-  const dispatch = useDispatch()
-  const callLog = useSelector((state: MatchState) => state.callLog)
 
-  // const callLog = useSelector((state: RootStateOrAny) => state)
-  // throw Error(callLog.toString())
+  const undo: MatchesAction = asMatchesAction({ type: "MATCH_UNDO" }, matchId)
 
-  const mostRecentCall = callLog.length > 0 && callLog[callLog.length - 1]
   const pressedColor = "#BEBEBE"
   const [ buttonColor, setButtonColor ] = useState<"white" | typeof pressedColor>("white")
 
@@ -43,8 +51,8 @@ export default function UndoButton() {
 
   return (
     <Pressable style={styles.pressable}
-      onPress={() => callLog ? dispatch({ type: "UNDO_CALL", data: mostRecentCall }) : undefined}
-      onPressIn={() => setButtonColor("#BEBEBE")}
+      onPress={() => dispatch(undo)}
+      onPressIn={() => match.past.length !== 0 ? setButtonColor("#BEBEBE") : null}
       onPressOut={() => setButtonColor("white")}
     >
       <Icon

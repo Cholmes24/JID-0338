@@ -1,42 +1,66 @@
-import { AntDesign, Feather } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
 import React, { useState } from 'react'
-import { ColorValue, FlatList, GestureResponderEvent, Pressable, StyleProp, StyleSheet, TextStyle } from 'react-native'
-import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
-import { MatchState } from '../store/types'
-import Button from './Button'
+import { ColorValue, GestureResponderEvent, Pressable, StyleSheet } from 'react-native'
 import { Text, View } from './Themed'
-import db from "../SQLiteTransactions"
-import { Dispatch } from 'redux'
+import { RootType } from '../redux-types/storeTypes'
+import asMatchesAction from '../util/reduxActionWrapper'
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
+import { AppThunk } from '../store'
+import matchService from "../services/match"
 
 type ScoreCounterProps = {
-  id: string,
-  fontSize?: number
+  matchId: number,
+  fighterScoringKey: "fighter1Scoring" | "fighter2Scoring",
+  fontSize?: number,
+  color?: ColorValue
 }
 
-export default function ScoreCounter({id, fontSize = 70}: ScoreCounterProps) {
-  const dispatch = useDispatch()
-  const competitor = useSelector((state: MatchState) => state.competitors.find(c => c.id === id))
-
-  // const competitor = useSelector((state: RootStateOrAny) => state)
-  // throw Error(competitor.toString())
-
-
-  async function increaseScore(id: string) {
-    return async (dispatch: Dispatch<any>) => {
-      await dispatch({ type: "INCREASE_SCORE", competitorId: id })
-      db.transaction(tx => {
-        tx.executeSql(
-          'update competitors set score = score + 1 where id = ?', [id]
-        )
-      })
+export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70, color}: ScoreCounterProps) {
+  const dispatch = useAppDispatch()
+  const fighters = useAppSelector((state: RootType) => state.fighters)
+  const matches = useAppSelector((state: RootType) => state.matches)
+  const match = matches.find(m => m.id === matchId)
+  // const fighter = useSelector((state: RootType) => state.fighters.find(c => c.id === fighterId))
+  if (!match) {
+    throw Error("INVALID ID")
+  }
+  const getColorToUse = () => {
+    if (!color) {
+      const fighterNumber = fighterScoringKey === "fighter1Scoring" ? "fighter1Id" : "fighter2Id"
+      const fighter = fighters.find((f) => f.id === match[fighterNumber])
+      if (!fighter) {
+        throw Error("MATCH WITH INVALID FIGHTER ID")
+      }
+      return fighter.color
+    } else {
+      return color
     }
   }
 
-  if (!competitor) {
-    throw Error("INVALID ID")
-  }
-  const color = competitor.color
-  const score = competitor.score
+  // const colorToUse = getColorToUse()
+  const scoring = match.present[fighterScoringKey]
+  const score = scoring.points
+
+  const thunkIncrease = (): AppThunk => (
+    async dispatch => {
+      const updatedMatch = await matchService.increaseScore(fighterScoringKey, matchId)
+      dispatch(increaseAction)
+    }
+  )
+  const thunkDecrease = (): AppThunk => (
+    async dispatch => {
+      const updatedMatch = await matchService.decreaseScore(fighterScoringKey, matchId)
+      dispatch(decreaseAction)
+    }
+  )
+
+  const increaseAction = asMatchesAction({
+    type: "INCREASE_SCORE"
+  }, matchId, fighterScoringKey)
+
+  const decreaseAction = asMatchesAction({
+    type: "DECREASE_SCORE"
+  }, matchId, fighterScoringKey)
 
   const styles = StyleSheet.create({
     arrow: {
@@ -52,7 +76,8 @@ export default function ScoreCounter({id, fontSize = 70}: ScoreCounterProps) {
       color: "white",
       // borderColor: "black",
       // borderWidth: 1,
-      // backgroundColor: color,
+      backgroundColor: color,
+      backfaceVisibility: "hidden",
       textAlign: "center",
       textAlignVertical: "center",
       position: "absolute",
@@ -64,19 +89,17 @@ export default function ScoreCounter({id, fontSize = 70}: ScoreCounterProps) {
     },
   })
 
-  const caretupFunction = () => <AntDesign name="caretup" style={styles.arrow}/>
-
   return (
     <View style={styles.container} >
       <ArrowButton
         iconName="caretup"
-        onPress={() => dispatch({ type: "INCREASE_SCORE", competitorId: id })}
+        onPress={() => dispatch(thunkIncrease())}
         fontSize={fontSize}
       />
       <Text style={styles.scoreBox} >{score}</Text>
       <ArrowButton
         iconName="caretdown"
-        onPress={() => score > 0 ? dispatch({ type: "DECREASE_SCORE", competitorId: id }) : undefined}
+        onPress={() => score > 0 ? dispatch(thunkDecrease()) : undefined}
         fontSize={fontSize}
       />
     </View>
