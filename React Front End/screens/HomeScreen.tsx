@@ -19,6 +19,7 @@ export default function HomeScreen({
 }: ScreenPropType<"Home">) {
 
   const currentMatchId = useAppSelector((state) => state.currentIds.matchId)
+  const currentMatches = useAppSelector((state) => state.matches)
 
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -39,7 +40,7 @@ export default function HomeScreen({
 
   const thunkCurrentMatch = (): AppThunk<Promise<Match | undefined>> => (
     async dispatch => {
-      if (currentMatchId !== undefined) {
+      if (currentMatchId !== undefined && !currentMatches.find(m => m.id == currentMatchId)) {
         const currentMatch = await matchService.getMatch(currentMatchId)
         dispatch({
           type: "SET_MATCHES",
@@ -66,7 +67,7 @@ export default function HomeScreen({
   )
 
   const mostRecentMatchButton = () => (
-    currentMatchId !== undefined 
+    currentMatchId !== undefined
       ? <Button
           buttonStyle={styles.entry}
           title='Most Recent Match'
@@ -92,9 +93,9 @@ export default function HomeScreen({
         />
         {mostRecentMatchButton()}
       </View>
-      
+
       {/* <View style={styles.filler}></View> */}
-      
+
     </View>
 
   )
