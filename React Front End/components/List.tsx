@@ -7,18 +7,10 @@ import { CurrentIds, Fighter, Match, Pool, RootType, SystemEvent, Tournament } f
 export type ListProps<T extends RootListItem> = {
   listNameAtRoot: keyof RootType,
   onPressFactory: (t: T) => ((event: GestureResponderEvent) => void),
-  // filter: (fullList: T[]) => T[],
   getName: (listItem: T) => string,
-  // parentIdKeyName: keyof CurrentIds & keyof T,
 }
 
 type RootListItem = SystemEvent | Tournament | Pool | Match
-
-// type ListItem<T> = T & {
-//   name: string,
-//   id: number
-// }
-
 
 export default function List<T extends RootListItem>({ listNameAtRoot, onPressFactory, getName }: ListProps<T>) {
   if (listNameAtRoot === "currentIds") {
@@ -42,7 +34,7 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
         return undefined
     }
   }
-  
+
   const parentKeyName = getParentKeyName()
 
   const currentParentId = parentKeyName !== undefined ? useAppSelector(state => state.currentIds[parentKeyName]) : undefined
@@ -55,30 +47,27 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
     return idKey !== undefined
   }
 
-  // console.log("params:", listNameAtRoot, parentKeyName, currentParentId)
   const allItems = useAppSelector(state => state[listNameAtRoot]) as T[]
-  // console.log("allItems:", allItems)
   const relevantItems = parentKeyNameAllowed(parentKeyName)
     ? allItems.filter(i => checkForParentKeyName(i, parentKeyName) && i[parentKeyName] === currentParentId)
     : allItems
-  // console.log("relevantItems:", relevantItems)
-  // allItems.filter((item: T) => getParentId(item) === parentId)
-
-  // useEffect(() => {
-  //   setRelevantItems(filter(allItems))
-  // })
 
   const [searchTerm, setSearchTerm] = useState('')
   const [filtered, setFiltered] = useState(relevantItems)
 
+  useEffect(() => {
+    setSearchTerm('')
+    setFiltered(relevantItems)
+  }, [currentParentId])
+
   const updateSearch = (search: string) => {
       setSearchTerm(search)
-      setFiltered(relevantItems.filter(item => 
-          getName(item).toLocaleLowerCase().includes(search.toLocaleLowerCase().trim()) 
+      setFiltered(relevantItems.filter(item =>
+          getName(item).toLocaleLowerCase().includes(search.toLocaleLowerCase().trim())
           // || item.subTitle?.toLocaleLowerCase().includes(search.toLocaleLowerCase().trim())
       ))
   }
-  
+
   const itemMap = (item: T) => (
     <View style={styles.buttonWrapper}>
       <Button
@@ -126,7 +115,7 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
 
   return (
     <View style={styles.container}>
-      <SearchBar 
+      <SearchBar
         containerStyle={styles.searchBar}
         inputContainerStyle={styles.input}
         placeholder="Click Here to Search"
@@ -136,7 +125,7 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
         round={true}
       />
       <FlatList
-        data={relevantItems}
+        data={filtered}
         renderItem={({item}) => itemMap(item)}
         keyExtractor={(item) => item.id.toString()}
       />
