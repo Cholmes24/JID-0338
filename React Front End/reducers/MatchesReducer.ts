@@ -24,7 +24,7 @@ const matchesReducer: Reducer<Match[], AnyAction> = (state = defaultData.matches
     case "SET_MATCHES":
       return action.payload
     case "ADD_MATCHES":
-      return addItems(state, (action as AddMatchesAction).payload)
+      return addItems(state, (action as AddMatchesAction).payload, defaultData.matches[0])
     default:
       return state
   }
