@@ -26,7 +26,8 @@ export default function HomeScreen({
     dispatch(thunkSystemEvents())
       .then(() => dispatch(thunkCurrentMatch()))
       .then((match) => dispatch(thunkCurrentFighters(match)))
-  })
+  }, [])
+
   const thunkSystemEvents = (): AppThunk<Promise<void>> => (
     async dispatch => {
       const systemEvents = await systemEventsService.getAll()

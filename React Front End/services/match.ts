@@ -17,7 +17,13 @@ type MatchInDB = {
 type PenaltyInDb = {
   exchangeType: "penalty",
   matchID: number,
-  receivingID: number
+  scoringID: number
+}
+
+type WarningInDb = {
+  exchangeType: "warning",
+  matchID: number,
+  scoringID: number
 }
 
 type FighterScoringKey = 1 | 2 | "fighter1Scoring" | "fighter2Scoring"
@@ -38,42 +44,43 @@ const getFighterNumber = (key: FighterScoringKey) => {
 // TODO: Need to get ringNumber
 // TODO: Determine meaning of db field "matchTime"
 // TODO: Incorporate existing penalty/warning values - partially addressed
-function mapMatchFields(matchInDb: MatchInDB, penalties: PenaltyInDb[] = []): Match {
+export function mapMatchFields(
+  matchInDb: MatchInDB,
+  penalties?: PenaltyInDb[],
+  warnings?: WarningInDb[],
+): Match {
   const fighter1Id = matchInDb.fighter1ID
   const fighter2Id = matchInDb.fighter2ID
 
   const timer: Timer = {
-    maxTime: 180000,
-    timeRemaining: matchInDb.matchTime * 1000,
-    timeRemainingAtLastStop: matchInDb.matchTime * 1000,
-    timeOfLastStart: 0,
-    isRunning: false
-  }
+    // maxTime: 180000,
+    // timeRemaining: matchInDb.matchTime * 1000,
+    // timeRemainingAtLastStop: matchInDb.matchTime * 1000,
+  } as Timer
 
-  const present: MatchScore = {
+  const present = {
     fighter1Scoring: {
-      points: matchInDb.fighter1Score | 0,
-      numPenalties: penalties.filter(p => p.receivingID === fighter1Id).length,
-      numWarnings: 0
+      points: matchInDb.fighter1Score || undefined,
+      numPenalties: penalties?.filter(p => p.scoringID === fighter1Id).length || undefined,
+      numWarnings: warnings?.filter(w => w.scoringID === fighter1Id).length || undefined
     },
     fighter2Scoring: {
-      points: matchInDb.fighter2Score | 0,
-      numPenalties: penalties.filter(p => p.receivingID === fighter2Id).length,
-      numWarnings: 0
+      points: matchInDb.fighter2Score || undefined,
+      numPenalties: penalties?.filter(p => p.scoringID === fighter2Id).length || undefined,
+      numWarnings: warnings?.filter(w => w.scoringID === fighter2Id).length || undefined,
     }
-  }
+  } as MatchScore
+
   return ({
     fighter1Id,
     fighter2Id,
     id: matchInDb.matchID,
     poolId: matchInDb.groupID,
-    past: Array<MatchScore>(),
-    future: Array<MatchScore>(),
     present,
     timer,
     tournamentId: matchInDb.tournamentID,
-    ringNumber: 0           // Fix this
-  })
+    // ringNumber: 0           // Fix this
+  }) as Match
 }
 
 type MatchMethod = "increase_score_fighter" | "decrease_score_fighter" | "penalty_fighter" | "warning_fighter"
@@ -112,10 +119,27 @@ async function issuePenalty(key: FighterScoringKey, matchId: number) {
   return mapMatchFields(response.data)
 }
 
-// async function undo(matchId: number, stateAfterUndo: MatchScore) {
+async function updateTimer(timeInSeconds: number, matchId: number) {
+  const response = await axios.post(`${baseUrl}/set_match_time?matchID=${matchId}`, {
+    matchTime: timeInSeconds
+  })
+  return mapMatchFields(response.data)
+}
 
-//   const response = await axios.post(`${baseUrl}` )
-// }
+async function undo(matchId: number, fighter1Id: number, fighter2Id: number, stateAfterUndo: MatchScore) {
+  const dataToSend = {
+    fighter1ID: fighter1Id,
+    fighter1Score: stateAfterUndo.fighter1Scoring.points,
+    fighter1Warnings: stateAfterUndo.fighter1Scoring.numWarnings,
+    fighter1Penalties: stateAfterUndo.fighter1Scoring.numPenalties,
+    fighter2ID: fighter2Id,
+    fighter2Score: stateAfterUndo.fighter2Scoring.points,
+    fighter2Warnings: stateAfterUndo.fighter2Scoring.numWarnings,
+    fighter2Penalties: stateAfterUndo.fighter2Scoring.numPenalties,
+  }
+
+  const response = await axios.post(`${baseUrl}/undo?matchID=${matchId}`, dataToSend)
+}
 
 const matchService = {
   getMatch,
@@ -123,6 +147,8 @@ const matchService = {
   decreaseScore,
   issueWarning,
   issuePenalty,
+  updateTimer,
+  undo
 }
 
 export default matchService

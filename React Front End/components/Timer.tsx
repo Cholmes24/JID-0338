@@ -6,6 +6,7 @@ import { RootType } from '../redux-types/storeTypes'
 import asMatchesAction from '../util/reduxActionWrapper'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import Modal from 'react-native-modal'
+import matchService from '../services/match'
 
 type TimerProps = {
   matchId: number
@@ -37,6 +38,10 @@ export default function Timer({matchId}: TimerProps) {
     }, refreshRate)
     return () => clearTimeout(timer)
   })
+
+  useEffect(() => {
+    matchService.updateTimer(timeLeft / 1000, matchId)
+  }, [ timerStore.isRunning ] )
 
   const calculateTimeRemaining = (
     currentTime: number = Date.now()
