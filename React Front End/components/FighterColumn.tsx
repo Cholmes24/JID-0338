@@ -17,8 +17,6 @@ export type FighterColumnProps = {
   fighterId: number
 })
 
-//TODO implement remote functionality for penalties
-//TODO implement remote functionality for warnings 
 export default function FighterColumn(props: FighterColumnProps) {
   const dispatch = useAppDispatch()
   const matchId = props.matchId
@@ -45,10 +43,21 @@ export default function FighterColumn(props: FighterColumnProps) {
     type: "ISSUE_PENALTY"
   }, matchId, fighterScoringKey)
 
+  const thunkIssueWarning = (): AppThunk => (
+    async dispatch => {
+      const updatedMatch = await matchService.issueWarning(fighterScoringKey, matchId)
+      if (updatedMatch.present !== match.present) {
+        dispatch(issueWarning)
+      }
+    }
+  )
+
   const thunkIssuePenalty = (): AppThunk => (
     async dispatch => {
       const updatedMatch = await matchService.issuePenalty(fighterScoringKey, matchId)
-      dispatch(issuePenalty)
+      if (updatedMatch.present !== match.present) {
+        dispatch(issuePenalty)
+      }
     }
   )
 
@@ -152,7 +161,7 @@ export default function FighterColumn(props: FighterColumnProps) {
         <View style={styles.button} >
           <CustomButton
             content={() => <Text style={styles.buttonText} >Warning</Text> }
-            onPress={() => dispatch(issueWarning)}
+            onPress={() => dispatch(thunkIssueWarning())}
             />
         </View>
         <View style={styles.button} >

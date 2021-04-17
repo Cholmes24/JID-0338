@@ -71,12 +71,12 @@ function mapMatchFields(matchInDb: MatchInDB, penalties: PenaltyInDb[] = []): Ma
     future: Array<MatchScore>(),
     present,
     timer,
-    tournamentId: matchInDb.tournamentID,        
+    tournamentId: matchInDb.tournamentID,
     ringNumber: 0           // Fix this
   })
 }
 
-type MatchMethod = "increase_score_fighter" | "decrease_score_fighter" | "penalty_fighter"
+type MatchMethod = "increase_score_fighter" | "decrease_score_fighter" | "penalty_fighter" | "warning_fighter"
 
 function makeUrl(matchId: number, method?: MatchMethod, fighter?: FighterScoringKey) {
   const suffix = method && fighter ? `/${method}${getFighterNumber(fighter)}` : ''
@@ -102,16 +102,27 @@ async function decreaseScore(key: FighterScoringKey, matchId: number) {
   return mapMatchFields(response.data)
 }
 
+async function issueWarning(key: FighterScoringKey, matchId: number) {
+  const response = await axios.post(makeUrl(matchId, 'warning_fighter', key))
+  return mapMatchFields(response.data)
+}
+
 async function issuePenalty(key: FighterScoringKey, matchId: number) {
   const response = await axios.post(makeUrl(matchId, 'penalty_fighter', key))
   return mapMatchFields(response.data)
 }
 
+// async function undo(matchId: number, stateAfterUndo: MatchScore) {
+
+//   const response = await axios.post(`${baseUrl}` )
+// }
+
 const matchService = {
   getMatch,
   increaseScore,
   decreaseScore,
-  issuePenalty
+  issueWarning,
+  issuePenalty,
 }
 
 export default matchService
