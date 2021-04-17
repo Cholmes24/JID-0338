@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { GestureResponderEvent, useColorScheme, StyleSheet, View, FlatList } from 'react-native'
 import { Button, SearchBar } from 'react-native-elements'
 import { useAppSelector } from '../hooks/reduxHooks'
-import { CurrentIds, Fighter, Match, Pool, RootType, SystemEvent, Tournament } from '../redux-types/storeTypes'
+import { Match, Pool, RootType, SystemEvent, Tournament } from '../redux-types/storeTypes'
+import MatchSelectionButton from './MatchSelectionButton'
 
 export type ListProps<T extends RootListItem> = {
   listNameAtRoot: keyof RootType,
@@ -69,16 +70,16 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
   }
 
   const itemMap = (item: T) => (
-    <View style={styles.buttonWrapper}>
-      <Button
-        buttonStyle={styles.entry}
-        onPress={onPressFactory(item)}
-        title={getName(item)}
-      />
-    </View>
-    //   {item.title}
-    //   {item.subTitle || null}
-    // </Button>
+    listNameAtRoot === "matches"
+    ? <MatchSelectionButton matchId={item.id} onPress={onPressFactory(item)} name={getName(item)} />
+    : <View style={styles.buttonWrapper}>
+        <Button
+          buttonStyle={styles.entry}
+          onPress={onPressFactory(item)}
+          title={getName(item)}
+          iconRight={true}
+        />
+      </View>
   )
 
   const theme = useColorScheme()
@@ -87,6 +88,7 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
     container: {
       alignSelf: "stretch",
       textAlign: 'center',
+      flex: 1,
       paddingBottom: 5
     },
     buttonWrapper: {

@@ -5,6 +5,8 @@ import { RootType } from "../redux-types/storeTypes"
 import { MatchesAction } from "../redux-types/actionTypes"
 import asMatchesAction from "../util/reduxActionWrapper"
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks"
+import { AppThunk } from '../store'
+import matchService from "../services/match"
 // import { Icon } from "react-native-elements"
 
 export type UndoButtonProps = {
@@ -17,15 +19,29 @@ export default function UndoButton({matchId}: UndoButtonProps) {
   // const color = useThemeColor({ light: "black", dark: "white"}, "tabIconDefault")
   const matches = useAppSelector((state: RootType) => state.matches)
   const match = matches.find(m => m.id === matchId)
+
   if (!match) {
     throw Error("MATCH ID INVALID")
   }
+
+  const { fighter1Id, fighter2Id } = match
   const fontSize = 35
 
   const undo: MatchesAction = asMatchesAction({ type: "MATCH_UNDO" }, matchId)
 
   const pressedColor = "#BEBEBE"
   const [ buttonColor, setButtonColor ] = useState<"white" | typeof pressedColor>("white")
+
+  const thunkUndo = (): AppThunk => (
+    async dispatch => {
+      // TODO: need to test syncing with db
+      const lastState = match.past.length !== 0 && match.past[match.past.length - 1]
+      if (lastState) {
+        matchService.undo(matchId, fighter1Id, fighter2Id, lastState)
+        dispatch(undo)
+      }
+    }
+  )
 
   const styles = StyleSheet.create({
     buttonIcon: {
@@ -51,7 +67,7 @@ export default function UndoButton({matchId}: UndoButtonProps) {
 
   return (
     <Pressable style={styles.pressable}
-      onPress={() => dispatch(undo)}
+      onPress={() => dispatch(thunkUndo())}
       onPressIn={() => match.past.length !== 0 ? setButtonColor("#BEBEBE") : null}
       onPressOut={() => setButtonColor("white")}
     >

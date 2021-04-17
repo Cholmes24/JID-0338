@@ -51,9 +51,11 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
   )
   const thunkDecrease = (): AppThunk => (
     async dispatch => {
-      const updatedMatch = await matchService.decreaseScore(fighterScoringKey, matchId)
-      if (updatedMatch.present !== match.present) {
-        dispatch(decreaseAction)
+      if (score > 0) {
+        const updatedMatch = await matchService.decreaseScore(fighterScoringKey, matchId)
+        if (updatedMatch.present !== match.present) {
+          dispatch(decreaseAction)
+        }
       }
     }
   )
@@ -103,17 +105,19 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
       <Text style={styles.scoreBox} >{score}</Text>
       <ArrowButton
         iconName="caretdown"
-        onPress={() => score > 0 ? dispatch(thunkDecrease()) : undefined}
+        onPress={() => score > 0 && dispatch(thunkDecrease())}
         fontSize={fontSize}
+        disabled={score <= 0}
       />
     </View>
   )
 }
 
-function ArrowButton({iconName, onPress, fontSize}: {
+function ArrowButton({iconName, onPress, fontSize, disabled = false}: {
   iconName: "caretdown" | "caretup",
   onPress: ((event: GestureResponderEvent) => void) | undefined,
-  fontSize: number
+  fontSize: number,
+  disabled?: boolean,
 }){
   const pressedColor = "#BEBEBE"
   const [ arrowColor, setArrowColor ] = useState<"white" | typeof pressedColor>("white")
@@ -134,7 +138,10 @@ function ArrowButton({iconName, onPress, fontSize}: {
   })
 
   return (
-    <Pressable onPress={onPress} style={styles.buttonSurrounding}
+    <Pressable
+      disabled={disabled}
+      onPress={onPress}
+      style={styles.buttonSurrounding}
       onPressIn={() => setArrowColor("#BEBEBE")}
       onPressOut={() => setArrowColor("white")}
     >
