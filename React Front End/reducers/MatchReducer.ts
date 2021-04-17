@@ -1,6 +1,6 @@
 import { MatchScoringAction, MatchTimingAction } from '../redux-types/actionTypes';
 import { MatchActionType, MatchRedoAction, MatchUndoAction } from "../redux-types/actionTypes"
-import { Match } from "../redux-types/storeTypes"
+import { Match, MatchScore } from "../redux-types/storeTypes"
 import timerReducer from './features/TimerSlice'
 import scoringReducer from './features/ScoringSlice'
 
@@ -32,13 +32,16 @@ function matchScoring(state: Match, action: MatchScoringAction): Match {
       ? scoringReducer(state.present[fighterInState], action.payload.scoringAction)
       : state.present[fighterInState]
   )
+
+  const newPresent: MatchScore = {
+    fighter1Scoring: cleanReducer("fighter1Scoring"),
+    fighter2Scoring: cleanReducer("fighter2Scoring")
+  }
+
   return {
     ...state,
-    past: state.past.concat(state.present),
-    present: {
-      fighter1Scoring: cleanReducer("fighter1Scoring"),
-      fighter2Scoring: cleanReducer("fighter2Scoring")
-    },
+    past: newPresent === state.present ? state.past : state.past.concat(state.present),
+    present: newPresent,
     future: []
   }
 }
