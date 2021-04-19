@@ -11,20 +11,24 @@ type MatchInDB = {
   groupID: number,
   matchID: number,
   matchTime: number,
-  tournamentID: number
+  num_penalties_fighter1: number,
+  num_penalties_fighter2: number,
+  num_warnings_fighter1: number,
+  num_warnings_fighter2: number,
+  tournamentID: number,
 }
 
-type PenaltyInDb = {
-  exchangeType: "penalty",
-  matchID: number,
-  scoringID: number
-}
+// type PenaltyInDb = {
+//   exchangeType: "penalty",
+//   matchID: number,
+//   scoringID: number
+// }
 
-type WarningInDb = {
-  exchangeType: "warning",
-  matchID: number,
-  scoringID: number
-}
+// type WarningInDb = {
+//   exchangeType: "warning",
+//   matchID: number,
+//   scoringID: number
+// }
 
 type FighterScoringKey = 1 | 2 | "fighter1Scoring" | "fighter2Scoring"
 
@@ -46,8 +50,6 @@ const getFighterNumber = (key: FighterScoringKey) => {
 // TODO: Incorporate existing penalty/warning values - partially addressed
 export function mapMatchFields(
   matchInDb: MatchInDB,
-  penalties?: PenaltyInDb[],
-  warnings?: WarningInDb[],
 ): Match {
   const fighter1Id = matchInDb.fighter1ID
   const fighter2Id = matchInDb.fighter2ID
@@ -61,13 +63,13 @@ export function mapMatchFields(
   const present = {
     fighter1Scoring: {
       points: matchInDb.fighter1Score || undefined,
-      numPenalties: penalties?.filter(p => p.scoringID === fighter1Id).length || undefined,
-      numWarnings: warnings?.filter(w => w.scoringID === fighter1Id).length || undefined
+      numPenalties: matchInDb.num_penalties_fighter1 || undefined,
+      numWarnings: matchInDb.num_warnings_fighter1 || undefined,
     },
     fighter2Scoring: {
       points: matchInDb.fighter2Score || undefined,
-      numPenalties: penalties?.filter(p => p.scoringID === fighter2Id).length || undefined,
-      numWarnings: warnings?.filter(w => w.scoringID === fighter2Id).length || undefined,
+      numPenalties: matchInDb.num_penalties_fighter2 || undefined,
+      numWarnings: matchInDb.num_warnings_fighter2 || undefined,
     }
   } as MatchScore
 
@@ -92,11 +94,7 @@ function makeUrl(matchId: number, method?: MatchMethod, fighter?: FighterScoring
 
 async function getMatch(matchId: number) {
   const response = await axios.get(makeUrl(matchId))
-  const data = response.data
-
-  const { match, penalties } = data
-
-  return mapMatchFields(match, penalties)
+  return mapMatchFields(response.data)
 }
 
 async function increaseScore(key: FighterScoringKey, matchId: number) {
@@ -139,6 +137,7 @@ async function undo(matchId: number, fighter1Id: number, fighter2Id: number, sta
   }
 
   const response = await axios.post(`${baseUrl}/undo?matchID=${matchId}`, dataToSend)
+  return response
 }
 
 const matchService = {
@@ -148,7 +147,7 @@ const matchService = {
   issueWarning,
   issuePenalty,
   updateTimer,
-  undo
+  undo,
 }
 
 export default matchService
