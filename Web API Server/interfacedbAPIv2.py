@@ -7,8 +7,8 @@ app.config["DEBUG"] = True
 
 connector_config = {
     'host': "localhost",
-    'user': "root",
-    'password': "hema123",
+    'user': "user",
+    'password': "passw0rd",
     'database': "ScorecardV5",
     'autocommit': True
 }
