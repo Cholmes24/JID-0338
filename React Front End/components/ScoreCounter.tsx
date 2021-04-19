@@ -7,6 +7,31 @@ import asMatchesAction from '../util/reduxActionWrapper'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import { AppThunk } from '../store'
 import matchService from "../services/match"
+import UIfx from 'uifx'
+import daggerWooshAudio from '../assets/sounds/dagger-woosh.wav'
+import knifeHitAudio from '../assets/sounds/knife-fast-hit.wav'
+import swordHitAudio from '../assets/sounds/medieval-metal-sword.wav'
+import metalWooshAudio from '../assets/sounds/metal-hit-woosh.wav'
+import armorHitAudio from '../assets/sounds/sword-strikes-armor.wav'
+import ouchAudio from '../assets/sounds/human-fighter-scream.wav'
+import woodHitAudio from '../assets/sounds/wood-hard-hit.wav'
+import _ from 'lodash'
+
+const config = {
+  volume: 0.2,
+  throttleMs: 120
+}
+
+const dagger = new UIfx(daggerWooshAudio, config)
+const ouch = new UIfx(ouchAudio, config)
+const knife = new UIfx(knifeHitAudio, config)
+const sword = new UIfx(swordHitAudio, config)
+const metal = new UIfx(metalWooshAudio, config)
+const armor = new UIfx(armorHitAudio, config)
+const wood = new UIfx(woodHitAudio, config)
+
+const positive = [dagger, knife, sword, metal, armor]
+const negative: UIfx[] = new Array(10).fill(wood).concat(ouch)
 
 type ScoreCounterProps = {
   matchId: number,
@@ -94,18 +119,29 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
       backgroundColor: color,
     },
   })
+  const onUpPress = () => {
+    positive[_.random(0, positive.length - 1)].play()
+    dispatch(thunkIncrease())
+  }
+
+  const onDownPress = () => {
+    if (score > 0) {
+      negative[_.random(0, negative.length - 1)].play()
+      dispatch(thunkDecrease())
+    }
+  }
 
   return (
     <View style={styles.container} >
       <ArrowButton
         iconName="caretup"
-        onPress={() => dispatch(thunkIncrease())}
+        onPress={onUpPress}
         fontSize={fontSize}
       />
       <Text style={styles.scoreBox} >{score}</Text>
       <ArrowButton
         iconName="caretdown"
-        onPress={() => score > 0 && dispatch(thunkDecrease())}
+        onPress={onDownPress}
         fontSize={fontSize}
         disabled={score <= 0}
       />

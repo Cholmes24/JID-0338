@@ -32,6 +32,7 @@
     "expo-status-bar": "~1.0.2",
     "expo-updates": "~0.3.2",
     "expo-web-browser": "~8.5.0",
+    "ip-address": "^7.1.0",
     "lodash": "^4.17.21",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -51,7 +52,8 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "uifx": "^2.0.7"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
