@@ -21,28 +21,28 @@ const ouchPath = '../assets/sounds/human-fighter-scream.wav'
 const woodHitPath = '../assets/sounds/wood-hard-hit.wav'
 
 type ScoreCounterProps = {
-  matchId: number,
+  matchID: number,
   fighterScoringKey: "fighter1Scoring" | "fighter2Scoring",
   fontSize?: number,
   color?: ColorValue
 }
 
-export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70, color}: ScoreCounterProps) {
+export default function ScoreCounter({matchID, fighterScoringKey, fontSize = 70, color}: ScoreCounterProps) {
   const dispatch = useAppDispatch()
   const fighters = useAppSelector((state: RootType) => state.fighters)
   const matches = useAppSelector((state: RootType) => state.matches)
-  const match = matches.find(m => m.id === matchId)
+  const match = matches.find(m => m.ID === matchID)
   const [ activeSound, setActiveSound ] = useState<Audio.Sound | undefined>()
   const [ audioInterruptible, setAudioInterruptible ] = useState(true)
 
-  // const fighter = useSelector((state: RootType) => state.fighters.find(c => c.id === fighterId))
+  // const fighter = useSelector((state: RootType) => state.fighters.find(c => c.ID === fighterID))
   if (!match) {
     throw Error("INVALID ID")
   }
   const getColorToUse = () => {
     if (!color) {
-      const fighterNumber = fighterScoringKey === "fighter1Scoring" ? "fighter1Id" : "fighter2Id"
-      const fighter = fighters.find((f) => f.id === match[fighterNumber])
+      const fighterNumber = fighterScoringKey === "fighter1Scoring" ? "fighter1ID" : "fighter2ID"
+      const fighter = fighters.find((f) => f.ID === match[fighterNumber])
       if (!fighter) {
         throw Error("MATCH WITH INVALID FIGHTER ID")
       }
@@ -86,7 +86,7 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
 
   const thunkIncrease = (): AppThunk => (
     async dispatch => {
-      const updatedMatch = await matchService.increaseScore(fighterScoringKey, matchId)
+      const updatedMatch = await matchService.increaseScore(fighterScoringKey, matchID)
       if (updatedMatch.present !== match.present) {
         dispatch(increaseAction)
       }
@@ -95,7 +95,7 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
   const thunkDecrease = (): AppThunk => (
     async dispatch => {
       if (score > 0) {
-        const updatedMatch = await matchService.decreaseScore(fighterScoringKey, matchId)
+        const updatedMatch = await matchService.decreaseScore(fighterScoringKey, matchID)
         if (updatedMatch.present !== match.present) {
           dispatch(decreaseAction)
         }
@@ -105,11 +105,11 @@ export default function ScoreCounter({matchId, fighterScoringKey, fontSize = 70,
 
   const increaseAction = asMatchesAction({
     type: "INCREASE_SCORE"
-  }, matchId, fighterScoringKey)
+  }, matchID, fighterScoringKey)
 
   const decreaseAction = asMatchesAction({
     type: "DECREASE_SCORE"
-  }, matchId, fighterScoringKey)
+  }, matchID, fighterScoringKey)
 
   const styles = StyleSheet.create({
     arrow: {
