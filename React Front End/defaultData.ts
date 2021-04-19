@@ -1,4 +1,4 @@
-import { CurrentIds, Fighter, Match, Pool, RootType, Scoring, SystemEvent, Timer, Tournament } from "./redux-types/storeTypes"
+import { CurrentIDs, Fighter, Match, Pool, RootType, Scoring, SystemEvent, Timer, Tournament } from "./redux-types/storeTypes"
 
 const defaultScoring: Scoring = {
   points: 0,
@@ -15,41 +15,41 @@ const defaultTimer: Timer = {
 }
 
 const defaultFighter1: Fighter = {
-  id: 1,
+  ID: 1,
   firstName: "Longname",
   lastName: "Fencermaster",
   color: "#376EDA",
 }
 
 const defaultFighter2: Fighter = {
-  id: 2,
+  ID: 2,
   firstName: "Superlong",
   lastName: "Lastnameman",
   color: "#D43737",
 }
 
 const defaultTournament: Tournament = {
-  id: 0,
+  ID: 0,
   name: "Dummy Tournament",
-  systemEventId: 100,
-  fighterIds: [1, 2],
-  poolIds: [0],
-  matchIds: [0]
+  systemEventID: 100,
+  fighterIDs: [1, 2],
+  poolIDs: [0],
+  matchIDs: [0]
 }
 
 const defaultPool: Pool = {
-  id: 0,
+  ID: 0,
   name: "Pool Party",
-  // fighterIds: [1, 2],
-  tournamentId: 0
+  // fighterIDs: [1, 2],
+  tournamentID: 0
 }
 
 const defaultMatch: Match = {
-  id: 0,
-  poolId: 0,
-  tournamentId: 0,
-  fighter1Id: 1,
-  fighter2Id: 2,
+  ID: 0,
+  poolID: 0,
+  tournamentID: 0,
+  fighter1ID: 1,
+  fighter2ID: 2,
   ringNumber: 0,
   past: [],
   present: {
@@ -61,13 +61,13 @@ const defaultMatch: Match = {
 }
 
 const defaultSystemEvent: SystemEvent = {
-  id: 100,
-  // tournamentIds: [defaultTournament.id],
+  ID: 100,
+  // tournamentIDs: [defaultTournament.ID],
   name: "The Big One"
 }
 
-const defaultCurrentIds: CurrentIds = {
-  matchId: 52598
+const defaultCurrentIDs: CurrentIDs = {
+  matchID: 52598
 }
 
 const defaultData: RootType = {
@@ -76,7 +76,7 @@ const defaultData: RootType = {
   tournaments: [defaultTournament],
   pools: [defaultPool],
   matches: [defaultMatch],
-  currentIds: defaultCurrentIds
+  currentIDs: defaultCurrentIDs
 }
 
 export default defaultData
