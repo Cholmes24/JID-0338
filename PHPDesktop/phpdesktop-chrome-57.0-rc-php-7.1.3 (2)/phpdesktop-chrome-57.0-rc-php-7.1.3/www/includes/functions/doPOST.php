@@ -1170,9 +1170,8 @@ function fullAfterblowScoring($matchInfo,$scoring, $lastExchangeID){
 			$scoreValue += getControlPointValue();
 		}
 
-		if(    $at1['attackPrefix'] == ATTACK_CONTROL_DB 
-			|| $at2['attackPrefix'] == ATTACK_CONTROL_DB){
-
+		if((isset($at1['attackPrefix']) && $at1['attackPrefix'] == ATTACK_CONTROL_DB) 
+			|| (isset($at2['attackPrefix']) && $at2['attackPrefix'] == ATTACK_CONTROL_DB)){
 			$rPrefix = (int)ATTACK_CONTROL_DB;
 		}
 
