@@ -13,6 +13,7 @@ import { AppThunk } from "../store"
 
 import { ScreenPropType } from "../types";
 import { Match } from "../redux-types/storeTypes";
+import ConnectionChecker from "../components/ConnectionChecker"
 
 export default function HomeScreen({
   navigation
@@ -20,13 +21,16 @@ export default function HomeScreen({
 
   const currentMatchId = useAppSelector((state) => state.currentIds.matchId)
   const currentMatches = useAppSelector((state) => state.matches)
+  const hostIP = true // useAppSelector(state => state.hostIPAddress)
 
   const dispatch = useAppDispatch()
   useEffect(() => {
-    dispatch(thunkSystemEvents())
-      .then(() => dispatch(thunkCurrentMatch()))
-      .then((match) => dispatch(thunkCurrentFighters(match)))
-  }, [])
+    if (hostIP) {
+      dispatch(thunkSystemEvents())
+        .then(() => dispatch(thunkCurrentMatch()))
+        .then((match) => dispatch(thunkCurrentFighters(match)))
+    }
+  }, [hostIP])
 
   const thunkSystemEvents = (): AppThunk<Promise<void>> => (
     async dispatch => {
@@ -85,6 +89,7 @@ export default function HomeScreen({
           firstName={"longFirstName"}
           lastName={"longLastName"}
         />
+        {/* <ConnectionChecker /> */}
       </View>
       <View style={styles.buttonWrapper}>
         <Button
@@ -113,8 +118,9 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   userCard: {
-    flex: 4,
-    paddingTop: 10,
+    flex: 3,
+    marginTop: 10,
+    // paddingTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -128,13 +134,14 @@ const styles = StyleSheet.create({
     paddingBottom: 5
   },
   buttonWrapper: {
+    flex: 4,
     textAlign: 'center',
     // backgroundColor: 'white',
     width: '100%',
   },
   entry: {
     width: '95%',
-    padding: '10%',
+    padding: '7%',
     marginTop: '5%',
     marginBottom: '5%',
     borderRadius: 15,

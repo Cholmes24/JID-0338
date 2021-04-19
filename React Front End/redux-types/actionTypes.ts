@@ -196,4 +196,12 @@ export interface SetCurrentMatchIdAction extends Action {
   payload: number
 }
 
-export type CurrentIdsActionType = SetCurrentSystemEventIdAction | SetCurrentTournamentIdAction | SetCurrentPoolIdAction | SetCurrentMatchIdAction 
+export type CurrentIdsActionType = SetCurrentSystemEventIdAction | SetCurrentTournamentIdAction | SetCurrentPoolIdAction | SetCurrentMatchIdAction
+
+export const SET_HOST_IP_ADDRESS = "SET_HOST_IP_ADDRESS"
+
+export interface SetHostIPAddess extends Action {
+  type: typeof SET_HOST_IP_ADDRESS,
+  payload: string
+}
+export type HostIPActionType = SetHostIPAddess

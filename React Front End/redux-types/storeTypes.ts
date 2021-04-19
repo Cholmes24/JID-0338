@@ -1,3 +1,4 @@
+import ipAddress from 'ip-address';
 import { ColorValue } from "react-native"
 
 export interface Fighter {
@@ -89,9 +90,9 @@ export interface RootType {
   tournaments: Tournament[],
   pools: Pool[],
   matches: Match[],
-  currentIds: CurrentIds
+  currentIds: CurrentIds,
+  // hostIPAddress: ipAddress.Address6 | null,
 }
-
 
 
 

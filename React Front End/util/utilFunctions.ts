@@ -9,8 +9,6 @@ export function addItems<T extends {id: number}>(original: T[], payload: T[], te
   // For types with fields not used in the database, an optional template can be
   // passed in for filling in default values. lodash's deep merge will
   // overwrite them if the db provides non-null, defined values
-  if (template) {
-    const added = toAdd.map(t => _.merge(template, t))
-  }
-  return updated.concat(toAdd)
+  const added = template ? toAdd.map(t => _.merge(template, t)) : toAdd
+  return updated.concat(added)
 }

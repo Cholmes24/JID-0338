@@ -1,4 +1,3 @@
-import { CurrentIds } from './redux-types/storeTypes';
 import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { persistStore, persistReducer } from 'redux-persist'
@@ -10,6 +9,7 @@ import fightersReducer from './reducers/FightersReducer'
 import systemEventsReducer from './reducers/SystemEventsReducer';
 import currentIdsReducer from './reducers/CurrentIdsReducer';
 import poolsReducer from './reducers/PoolsReducer';
+import HostIPAddressReducer from './reducers/HostIPAddressReducer';
 
 const persistConfig = {
   key: "root",
@@ -22,10 +22,13 @@ const rootReducer = combineReducers({
   tournaments: tournamentsReducer,
   matches: matchesReducer,
   pools: poolsReducer,
-  currentIds: currentIdsReducer 
+  currentIds: currentIdsReducer,
+  hostIPAddress: HostIPAddressReducer,
 })
 
-const composedEnhancer = composeWithDevTools(applyMiddleware(thunk))
+const composedEnhancer = composeWithDevTools(
+  // { trace: true })(
+    applyMiddleware(thunk))
 
 export const store = createStore(
   persistReducer(persistConfig, rootReducer),
