@@ -642,7 +642,6 @@ function changePage($newPage){
 /******************************************************************************/
 
 function hemaRatings_ExportCsv($informationType){
-
 	if($informationType == 'all'){
 
 		$csvNames[0] = hemaRatings_createEventRosterCsv($_SESSION['eventID'], EXPORT_DIR);

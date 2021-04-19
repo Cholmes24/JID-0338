@@ -58,7 +58,8 @@
 	define("FINALS","0");
 	define("ALL_GROUP_SETS",0);
 
-	define("EXPORT_DIR",'exports/');
+    define("HEMAAPPDATA_DIR", $_SERVER['HOMEPATH']);
+	define("EXPORT_DIR", HEMAAPPDATA_DIR.'\\exports\\');
 
 // Tournament Related Constants
 
@@ -445,7 +446,7 @@ function initializeSession(){
 		$_SESSION['alertMessages']['userAlerts'] = [];
 	}
 	if(!isset($_SESSION['alertMessages']['userWarnings'])){
-		$_SESSION['alertMessages']['userAlerts'] = [];
+		$_SESSION['alertMessages']['userWarnings'] = [];
 	}
 
 	if(!isset($_SESSION['rosterViewMode'])){

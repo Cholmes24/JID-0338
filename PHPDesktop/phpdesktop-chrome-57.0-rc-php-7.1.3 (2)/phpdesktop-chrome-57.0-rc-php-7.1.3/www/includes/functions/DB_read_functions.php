@@ -136,7 +136,7 @@ function hemaRatings_getFighterID($systemRosterID){
 
 /******************************************************************************/
 
-function hemaRatings_createEventInfoCsv($eventID = null, $dir = "exports/"){
+function hemaRatings_createEventInfoCsv($eventID = null, $dir = EXPORT_DIR){
 
 // Get roster/event information	
 	if($eventID == null){$eventID = $_SESSION['eventID'];}
@@ -151,7 +151,7 @@ function hemaRatings_createEventInfoCsv($eventID = null, $dir = "exports/"){
 	$fileName = "{$dir}eventInfo.csv";
 
 // Create the CSV file	
-	$fp = fopen($fileName, 'w');
+	$fp = fopen($fileName, 'w', $dir);
 
 	foreach($eventInfo as $field => $data){
 		if($field == 'organizingSchool'){
@@ -173,7 +173,7 @@ function hemaRatings_createEventInfoCsv($eventID = null, $dir = "exports/"){
 
 /******************************************************************************/
 
-function hemaRatings_CreateEventRosterCsv($eventID = null, $dir = "exports/"){
+function hemaRatings_CreateEventRosterCsv($eventID = null, $dir = EXPORT_DIR){
 // Creates a .csv file with the eventRoster
 // Format: | Name1 | Name2 | Result1 | Result2 | Stage of Tournament |
 
@@ -190,7 +190,7 @@ function hemaRatings_CreateEventRosterCsv($eventID = null, $dir = "exports/"){
 	$fileName = "{$dir}fighters.csv";
 
 // Create the CSV file	
-	$fp = fopen($fileName, 'w');
+	$fp = fopen($fileName, 'w', $dir);
 
 	foreach ($eventRoster as $fields) {
 
