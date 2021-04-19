@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5
   },
   buttonWrapper: {
-    flex: 4,
+    flex: 3,
     textAlign: 'center',
     // backgroundColor: 'white',
     width: '100%',

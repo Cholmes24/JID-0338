@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
   matches: matchesReducer,
   pools: poolsReducer,
   currentIds: currentIdsReducer,
-  hostIPAddress: HostIPAddressReducer,
+  // hostIPAddress: HostIPAddressReducer,
 })
 
 const composedEnhancer = composeWithDevTools(
