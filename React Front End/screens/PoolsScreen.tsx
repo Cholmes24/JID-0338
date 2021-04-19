@@ -13,17 +13,17 @@ export default function PoolsScreen({
   navigation
 }: ScreenPropType<"Pools">) {
   const dispatch = useAppDispatch()
-  const tournamentId = useAppSelector(state => state.currentIds.tournamentId) || route.params.tournamentId
-  if (tournamentId === undefined) {
+  const tournamentID = useAppSelector(state => state.currentIDs.tournamentID) || route.params.tournamentID
+  if (tournamentID === undefined) {
     throw new Error("SYSTEM EVENT ID MISSING AT TOURNAMENTS SCREEN")
   }
   const thunkPoolData = (pool: Pool): AppThunk<Promise<void>> => (
     async dispatch => {
       dispatch({
         type: "SET_CURRENT_POOL_ID",
-        payload: pool.id
+        payload: pool.ID
       })
-      const matches = await matchesService.getAllByTournament(tournamentId)
+      const matches = await matchesService.getAllByTournament(tournamentID)
       dispatch({
         type: "ADD_MATCHES",
         payload: matches
@@ -33,8 +33,8 @@ export default function PoolsScreen({
 
   const onPressFactory = (p: Pool) => () => {
     dispatch(thunkPoolData(p))
-      .then(() => 
-        navigation.navigate("Matches", { poolId: p.id })
+      .then(() =>
+        navigation.navigate("Matches", { poolID: p.ID })
       )
     }
 
@@ -43,8 +43,8 @@ export default function PoolsScreen({
       <List
         listNameAtRoot="pools"
         onPressFactory={i => onPressFactory(i as Pool)}
-        // filter={is => (is as Pool[]).filter(p => p.tournamentId === tournamentId)}
-        getName={i => (i as Pool).name} 
+        // filter={is => (is as Pool[]).filter(p => p.tournamentID === tournamentID)}
+        getName={i => (i as Pool).name}
       />
     </View>
   )

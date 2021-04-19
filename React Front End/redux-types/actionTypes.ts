@@ -54,6 +54,7 @@ export const MATCH_SCORING = "MATCH_SCORING"
 export const MATCH_TIMING = "MATCH_TIMING"
 export const MATCH_UNDO = "MATCH_UNDO"
 export const MATCH_REDO = "MATCH_REDO"
+export const SET_MATCH = "SET_MATCH"
 
 
 export interface MatchScoringAction extends Action {
@@ -79,6 +80,24 @@ export interface MatchRedoAction extends Action {
   type: typeof MATCH_REDO,
 }
 
+export interface SetMatchAction extends Action {
+  type: typeof SET_MATCH,
+  payload: {
+    fighter1ID?: number,
+    fighter1Score?: number,
+    fighter2ID?: number,
+    fighter2Score?: number,
+    groupID?: number,
+    matchID?: number,
+    matchTime?: number,
+    num_penalties_fighter1?: number,
+    num_penalties_fighter2?: number,
+    num_warnings_fighter1?: number,
+    num_warnings_fighter2?: number,
+    tournamentID?: number,
+  }
+}
+
 export type MatchActionType = MatchScoringAction | MatchTimingAction | MatchUndoAction | MatchRedoAction
 
 
@@ -90,7 +109,7 @@ export const ADD_MATCHES = "ADD_MATCHES"
 export interface MatchesAction extends Action {
   type: typeof MATCHES,
   matchAction: MatchActionType,
-  matchId: number
+  matchID: number
 }
 
 export interface SetMatchesAction extends Action {
@@ -176,27 +195,27 @@ export const SET_CURRENT_TOURNAMENT_ID = "SET_CURRENT_TOURNAMENT_ID"
 export const SET_CURRENT_POOL_ID = "SET_CURRENT_POOL_ID"
 export const SET_CURRENT_MATCH_ID = "SET_CURRENT_MATCH_ID"
 
-export interface SetCurrentSystemEventIdAction extends Action {
+export interface SetCurrentSystemEventIDAction extends Action {
   type: typeof SET_CURRENT_SYSTEM_EVENT_ID,
   payload: number
 }
 
-export interface SetCurrentTournamentIdAction extends Action {
+export interface SetCurrentTournamentIDAction extends Action {
   type: typeof SET_CURRENT_TOURNAMENT_ID,
   payload: number
 }
 
-export interface SetCurrentPoolIdAction extends Action {
+export interface SetCurrentPoolIDAction extends Action {
   type: typeof SET_CURRENT_POOL_ID,
   payload: number
 }
 
-export interface SetCurrentMatchIdAction extends Action {
+export interface SetCurrentMatchIDAction extends Action {
   type: typeof SET_CURRENT_MATCH_ID,
   payload: number
 }
 
-export type CurrentIdsActionType = SetCurrentSystemEventIdAction | SetCurrentTournamentIdAction | SetCurrentPoolIdAction | SetCurrentMatchIdAction
+export type CurrentIDsActionType = SetCurrentSystemEventIDAction | SetCurrentTournamentIDAction | SetCurrentPoolIDAction | SetCurrentMatchIDAction
 
 export const SET_HOST_IP_ADDRESS = "SET_HOST_IP_ADDRESS"
 

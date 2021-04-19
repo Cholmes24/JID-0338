@@ -14,23 +14,23 @@ export type ListProps<T extends RootListItem> = {
 type RootListItem = SystemEvent | Tournament | Pool | Match
 
 export default function List<T extends RootListItem>({ listNameAtRoot, onPressFactory, getName }: ListProps<T>) {
-  if (listNameAtRoot === "currentIds") {
+  if (listNameAtRoot === "currentIDs") {
     throw new Error("INVALID LIST KEY")
   }
   if (listNameAtRoot === "fighters") {
     throw new Error("FIGHTER LIST KEY FUNCTIONALITY NOT IMPLEMENTED")
   }
 
-  type AllowedParentKeyName = "poolId" | "tournamentId" | "systemEventId"
-  type InputParentKeyName = "poolId" | "tournamentId" | "systemEventId" | undefined
+  type AllowedParentKeyName = "poolID" | "tournamentID" | "systemEventID"
+  type InputParentKeyName = "poolID" | "tournamentID" | "systemEventID" | undefined
   const getParentKeyName = () => {
     switch (listNameAtRoot) {
       case "matches":
-        return "poolId"
+        return "poolID"
       case "pools":
-        return "tournamentId"
+        return "tournamentID"
       case "tournaments":
-        return "systemEventId"
+        return "systemEventID"
       default:
         return undefined
     }
@@ -38,19 +38,19 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
 
   const parentKeyName = getParentKeyName()
 
-  const currentParentId = parentKeyName !== undefined ? useAppSelector(state => state.currentIds[parentKeyName]) : undefined
+  const currentParentID = parentKeyName !== undefined ? useAppSelector(state => state.currentIDs[parentKeyName]) : undefined
 
   function checkForParentKeyName(item: T, parentKeyName: AllowedParentKeyName): item is T & Record<AllowedParentKeyName, number>  {
     return item.hasOwnProperty(parentKeyName)
   }
 
-  function parentKeyNameAllowed(idKey: InputParentKeyName): idKey is AllowedParentKeyName {
-    return idKey !== undefined
+  function parentKeyNameAllowed(IDKey: InputParentKeyName): IDKey is AllowedParentKeyName {
+    return IDKey !== undefined
   }
 
   const allItems = useAppSelector(state => state[listNameAtRoot]) as T[]
   const relevantItems = parentKeyNameAllowed(parentKeyName)
-    ? allItems.filter(i => checkForParentKeyName(i, parentKeyName) && i[parentKeyName] === currentParentId)
+    ? allItems.filter(i => checkForParentKeyName(i, parentKeyName) && i[parentKeyName] === currentParentID)
     : allItems
 
   const [searchTerm, setSearchTerm] = useState('')
@@ -59,7 +59,7 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
   useEffect(() => {
     setSearchTerm('')
     setFiltered(relevantItems)
-  }, [currentParentId])
+  }, [currentParentID])
 
   const updateSearch = (search: string) => {
       setSearchTerm(search)
@@ -71,7 +71,7 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
 
   const itemMap = (item: T) => (
     listNameAtRoot === "matches"
-    ? <MatchSelectionButton matchId={item.id} onPress={onPressFactory(item)} name={getName(item)} />
+    ? <MatchSelectionButton matchID={item.ID} onPress={onPressFactory(item)} name={getName(item)} />
     : <View style={styles.buttonWrapper}>
         <Button
           buttonStyle={styles.entry}
@@ -129,7 +129,7 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
       <FlatList
         data={filtered}
         renderItem={({item}) => itemMap(item)}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.ID.toString()}
       />
     </View>
   )

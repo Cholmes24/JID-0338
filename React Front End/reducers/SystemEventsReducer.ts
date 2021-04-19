@@ -1,7 +1,6 @@
 import { AddSystemEvents } from './../redux-types/actionTypes';
 import { AnyAction, Reducer } from "redux"
 import { SystemEvent } from "../redux-types/storeTypes"
-import defaultData from '../defaultData'
 import { addItems } from "../util/utilFunctions"
 
 const systemEventsReducer: Reducer<SystemEvent[], AnyAction> = (state = [], action) => {

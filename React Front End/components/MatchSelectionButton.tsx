@@ -5,16 +5,16 @@ import { useAppSelector } from '../hooks/reduxHooks'
 import { Match } from '../redux-types/storeTypes'
 
 export default function MatchSelectionButton({
-  matchId,
+  matchID,
   onPress,
   name
 }: {
-  matchId: number,
+  matchID: number,
   onPress: (event: GestureResponderEvent) => void,
   name: string
 }) {
   const matches = useAppSelector(state => state.matches)
-  const timerRunning = matches.find(m => m.id === matchId)?.timer.isRunning
+  const timerRunning = matches.find(m => m.ID === matchID)?.timer.isRunning
   // const timerRunning = item.timer.isRunning
   // const [ hasIcon, setHasIcon ] = useState(false)
 

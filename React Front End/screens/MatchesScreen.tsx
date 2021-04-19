@@ -8,37 +8,38 @@ import List from '../components/List';
 import { Match } from '../redux-types/storeTypes';
 import matchesService from '../services/matches';
 import fightersService from '../services/fighters';
+
 export default function MatchesScreen({
   route,
   navigation
 }: ScreenPropType<"Matches">) {
   const dispatch = useAppDispatch()
-  const poolId = useAppSelector(state => state.currentIds.poolId) || route.params.poolId
+  const poolID = useAppSelector(state => state.currentIDs.poolID) || route.params.poolID
 
-  const tournamentId = useAppSelector(state => state.currentIds.tournamentId) as number
+  const tournamentID = useAppSelector(state => state.currentIDs.tournamentID) as number
   const fighters = useAppSelector(state => state.fighters)
-  if (poolId === undefined) {
+  if (poolID === undefined) {
     throw new Error("SYSTEM EVENT ID MISSING AT TOURNAMENTS SCREEN")
   }
 
   // const allMatches = useAppSelector(state => state.matches)
-  // const matches = allMatches.filter(m => m.poolId === poolId)
+  // const matches = allMatches.filter(m => m.poolID === poolID)
 
 
   const thunkMatchData = (match: Match): AppThunk<Promise<void>> => (
     async dispatch => {
       dispatch({
         type: "SET_CURRENT_MATCH_ID",
-        payload: match.id
+        payload: match.ID
       })
-      const matches = await matchesService.getAllByTournament(tournamentId)
+      const matches = await matchesService.getAllByTournament(tournamentID)
       dispatch({
         type: "ADD_MATCHES",
         payload: matches
       })
-      const fighter1 = await fightersService.getById(match.fighter1Id)
-      const fighter2 = await fightersService.getById(match.fighter2Id)
-      // const pools = await matchesService.getAll(tournament.id)
+      const fighter1 = await fightersService.getByID(match.fighter1ID)
+      const fighter2 = await fightersService.getByID(match.fighter2ID)
+      // const pools = await matchesService.getAll(tournament.ID)
       dispatch({
         type: "ADD_FIGHTERS",
         payload: [fighter1, fighter2]
@@ -48,15 +49,15 @@ export default function MatchesScreen({
 
   const onPressFactory = (m: Match) => () => {
     dispatch(thunkMatchData(m)).then(() =>
-      navigation.navigate("Match", { matchId: m.id })
+      navigation.navigate("Match", { matchID: m.ID })
     )
   }
 
   const getMatchName = (m: Match) => {
-    const fighter1 = fighters.find(f => f.id === m.fighter1Id)
-    const fighter2 = fighters.find(f => f.id === m.fighter2Id)
-    const name1 = fighter1 ? `${fighter1.firstName} ${fighter1.lastName}` : m.fighter1Id
-    const name2 = fighter2 ? `${fighter2.firstName} ${fighter2.lastName}` : m.fighter1Id
+    const fighter1 = fighters.find(f => f.ID === m.fighter1ID)
+    const fighter2 = fighters.find(f => f.ID === m.fighter2ID)
+    const name1 = fighter1 ? `${fighter1.firstName} ${fighter1.lastName}` : m.fighter1ID
+    const name2 = fighter2 ? `${fighter2.firstName} ${fighter2.lastName}` : m.fighter1ID
     return `${name1} vs. ${name2}`
   }
 
@@ -66,9 +67,9 @@ export default function MatchesScreen({
         // items={namedMatches}
         listNameAtRoot="matches"
         onPressFactory={i => onPressFactory(i as Match)}
-        // filter={is => (is as Match[]).filter(m => m.poolId === poolId)}
+        // filter={is => (is as Match[]).filter(m => m.poolID === poolID)}
         getName={i => getMatchName(i as Match)}
-        // parentIdKeyName="poolId"
+        // parentIDKeyName="poolID"
 
       />
     </View>

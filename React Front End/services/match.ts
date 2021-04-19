@@ -18,18 +18,6 @@ type MatchInDB = {
   tournamentID: number,
 }
 
-// type PenaltyInDb = {
-//   exchangeType: "penalty",
-//   matchID: number,
-//   scoringID: number
-// }
-
-// type WarningInDb = {
-//   exchangeType: "warning",
-//   matchID: number,
-//   scoringID: number
-// }
-
 type FighterScoringKey = 1 | 2 | "fighter1Scoring" | "fighter2Scoring"
 
 const getFighterNumber = (key: FighterScoringKey) => {
@@ -51,9 +39,7 @@ const getFighterNumber = (key: FighterScoringKey) => {
 export function mapMatchFields(
   matchInDb: MatchInDB,
 ): Match {
-  const fighter1Id = matchInDb.fighter1ID
-  const fighter2Id = matchInDb.fighter2ID
-
+  const { fighter1ID, fighter2ID, tournamentID } = matchInDb
   const timer: Timer = {
     // maxTime: 180000,
     // timeRemaining: matchInDb.matchTime * 1000,
@@ -62,81 +48,81 @@ export function mapMatchFields(
 
   const present = {
     fighter1Scoring: {
-      points: matchInDb.fighter1Score || undefined,
-      numPenalties: matchInDb.num_penalties_fighter1 || undefined,
-      numWarnings: matchInDb.num_warnings_fighter1 || undefined,
+      points: matchInDb.fighter1Score,
+      numPenalties: matchInDb.num_penalties_fighter1,
+      numWarnings: matchInDb.num_warnings_fighter1,
     },
     fighter2Scoring: {
-      points: matchInDb.fighter2Score || undefined,
-      numPenalties: matchInDb.num_penalties_fighter2 || undefined,
-      numWarnings: matchInDb.num_warnings_fighter2 || undefined,
+      points: matchInDb.fighter2Score,
+      numPenalties: matchInDb.num_penalties_fighter2,
+      numWarnings: matchInDb.num_warnings_fighter2,
     }
   } as MatchScore
 
   return ({
-    fighter1Id,
-    fighter2Id,
-    id: matchInDb.matchID,
-    poolId: matchInDb.groupID,
+    fighter1ID,
+    fighter2ID,
+    ID: matchInDb.matchID,
+    poolID: matchInDb.groupID,
     present,
     timer,
-    tournamentId: matchInDb.tournamentID,
+    tournamentID,
     // ringNumber: 0           // Fix this
   }) as Match
 }
 
 type MatchMethod = "increase_score_fighter" | "decrease_score_fighter" | "penalty_fighter" | "warning_fighter"
 
-function makeUrl(matchId: number, method?: MatchMethod, fighter?: FighterScoringKey) {
+function makeUrl(matchID: number, method?: MatchMethod, fighter?: FighterScoringKey) {
   const suffix = method && fighter ? `/${method}${getFighterNumber(fighter)}` : ''
-  return `${baseUrl}${suffix}?matchID=${matchId}`
+  return `${baseUrl}${suffix}?matchID=${matchID}`
 }
 
-async function getMatch(matchId: number) {
-  const response = await axios.get(makeUrl(matchId))
+async function getMatch(matchID: number) {
+  const response = await axios.get(makeUrl(matchID))
   return mapMatchFields(response.data)
 }
 
-async function increaseScore(key: FighterScoringKey, matchId: number) {
-  const response = await axios.post(makeUrl(matchId, 'increase_score_fighter', key))
+async function increaseScore(key: FighterScoringKey, matchID: number) {
+  const response = await axios.post(makeUrl(matchID, 'increase_score_fighter', key))
   return mapMatchFields(response.data)
 }
 
-async function decreaseScore(key: FighterScoringKey, matchId: number) {
-  const response = await axios.post(makeUrl(matchId, 'decrease_score_fighter', key))
+async function decreaseScore(key: FighterScoringKey, matchID: number) {
+  const response = await axios.post(makeUrl(matchID, 'decrease_score_fighter', key))
   return mapMatchFields(response.data)
 }
 
-async function issueWarning(key: FighterScoringKey, matchId: number) {
-  const response = await axios.post(makeUrl(matchId, 'warning_fighter', key))
+async function issueWarning(key: FighterScoringKey, matchID: number) {
+  const response = await axios.post(makeUrl(matchID, 'warning_fighter', key))
   return mapMatchFields(response.data)
 }
 
-async function issuePenalty(key: FighterScoringKey, matchId: number) {
-  const response = await axios.post(makeUrl(matchId, 'penalty_fighter', key))
+async function issuePenalty(key: FighterScoringKey, matchID: number) {
+  const response = await axios.post(makeUrl(matchID, 'penalty_fighter', key))
   return mapMatchFields(response.data)
 }
 
-async function updateTimer(timeInSeconds: number, matchId: number) {
-  const response = await axios.post(`${baseUrl}/set_match_time?matchID=${matchId}`, {
+async function updateTimer(timeInSeconds: number, matchID: number) {
+  const response = await axios.post(`${baseUrl}/set_match_time?matchID=${matchID}`, {
     matchTime: timeInSeconds
   })
   return mapMatchFields(response.data)
 }
 
-async function undo(matchId: number, fighter1Id: number, fighter2Id: number, stateAfterUndo: MatchScore) {
+async function undo(matchID: number, fighter1ID: number, fighter2ID: number, stateAfterUndo: MatchScore) {
   const dataToSend = {
-    fighter1ID: fighter1Id,
+    fighter1ID: fighter1ID,
     fighter1Score: stateAfterUndo.fighter1Scoring.points,
     fighter1Warnings: stateAfterUndo.fighter1Scoring.numWarnings,
     fighter1Penalties: stateAfterUndo.fighter1Scoring.numPenalties,
-    fighter2ID: fighter2Id,
+    fighter2ID: fighter2ID,
     fighter2Score: stateAfterUndo.fighter2Scoring.points,
     fighter2Warnings: stateAfterUndo.fighter2Scoring.numWarnings,
     fighter2Penalties: stateAfterUndo.fighter2Scoring.numPenalties,
   }
 
-  const response = await axios.post(`${baseUrl}/undo?matchID=${matchId}`, dataToSend)
+  const response = await axios.post(`${baseUrl}/undo?matchID=${matchID}`, dataToSend)
   return response
 }
 

@@ -8,41 +8,37 @@ import { Match, RootType } from '../redux-types/storeTypes'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import { ScreenPropType } from '../types';
 
-// type MatchScreenProps = {
-//   matchId: number
-// }
 
-//TODO Don't hardcode matchId
 export default function MatchScreen({
   route,
   navigation
 }: ScreenPropType<"Match">) {
-  const matchId = route.params.matchId
-  
+  const matchID = route.params.matchID
+
   const matches = useAppSelector((state: RootType) => state.matches)
-  const match = matches.find((m: Match) => m.id === matchId)
+  const match = matches.find((m: Match) => m.ID === matchID)
   if (!match) {
     throw Error("MATCH ID INVALID AT MATCH SCREEN")
   }
 
-  const fighter1Id = match.fighter1Id
-  const fighter2Id = match.fighter2Id
+  const fighter1ID = match.fighter1ID
+  const fighter2ID = match.fighter2ID
 
   return (
     <View style={styles.container}>
       <View style={styles.timer}>
-        <Timer matchId={matchId} />
+        <Timer matchID={matchID} />
       </View>
       <View style={styles.scoreMonitor}>
         <View style={styles.FighterColumn} >
-          <FighterColumn matchId={matchId} fighterId={fighter1Id} />
+          <FighterColumn matchID={matchID} fighterID={fighter1ID} />
         </View>
         <View style={styles.FighterColumn} >
-          <FighterColumn matchId={matchId} fighterId={fighter2Id} />
+          <FighterColumn matchID={matchID} fighterID={fighter2ID} />
         </View>
       </View>
       <View style={styles.bottomTab}>
-        <UndoButton matchId={matchId} />
+        <UndoButton matchID={matchID} />
         {/* TODO: Slide up tab at the bottom for undo */}
       </View>
     </View>

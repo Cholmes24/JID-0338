@@ -10,9 +10,9 @@ type SystemEventInDb = {
 
 function mapSystemEventFields(systemEventInDb: SystemEventInDb): SystemEvent {
   return ({
-    id: systemEventInDb.eventID,
+    ID: systemEventInDb.eventID,
     name: systemEventInDb.eventName,
-    // tournamentIds: systemEventInDb.tournaments
+    // tournamentIDs: systemEventInDb.tournaments
   })
 }
 

@@ -9,14 +9,14 @@ import Modal from 'react-native-modal'
 import matchService from '../services/match'
 
 type TimerProps = {
-  matchId: number
+  matchID: number
 }
 
 //TODO: implement remote functionality
-export default function Timer({matchId}: TimerProps) {
+export default function Timer({matchID}: TimerProps) {
   const dispatch = useAppDispatch()
   const matches = useAppSelector((state: RootType) => state.matches)
-  const timerStore = matches.find(m => m.id === matchId)?.timer
+  const timerStore = matches.find(m => m.ID === matchID)?.timer
   const theme = useColorScheme()
 
   if (!timerStore) {
@@ -40,7 +40,7 @@ export default function Timer({matchId}: TimerProps) {
   })
 
   useEffect(() => {
-    matchService.updateTimer(timeLeft / 1000, matchId)
+    matchService.updateTimer(timeLeft / 1000, matchID)
   }, [ timerStore.isRunning ] )
 
   const calculateTimeRemaining = (
@@ -55,7 +55,7 @@ export default function Timer({matchId}: TimerProps) {
       dispatch(asMatchesAction({
         type: "UPDATE_TIMER",
         payload: { currentTime: Date.now() }
-      }, matchId))
+      }, matchID))
     }
     setTimeLeft(timeRemaining)
   }
@@ -65,7 +65,7 @@ export default function Timer({matchId}: TimerProps) {
       asMatchesAction({
         type: "TOGGLE_TIMER",
         payload: { currentTime: Date.now() }
-      }, matchId)
+      }, matchID)
     )
   }
 
@@ -99,7 +99,7 @@ export default function Timer({matchId}: TimerProps) {
       asMatchesAction({
         type: "ADD_TO_TIMER",
         payload: { currentTime, amountToAdd }
-      }, matchId)
+      }, matchID)
     )
   }
 
@@ -107,7 +107,7 @@ export default function Timer({matchId}: TimerProps) {
   const timerRunning: () => boolean = () => timerStore.isRunning
   const onChangeText = (input: string) => setTimeAddText(input)
 
-  const styles = StyleSheet.create({
+  const Astyles = StyleSheet.create({
     addTray: {
       flexDirection: "row"
     },
@@ -242,7 +242,7 @@ export default function Timer({matchId}: TimerProps) {
         }
         onPress={() => (hasTimeLeft() ? toggle() : null)}
       />
-      <Modal
+      {/* <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => {setIsModalVisible(false); Keyboard.dismiss()}}
         backdropOpacity={0.3}
@@ -273,7 +273,7 @@ export default function Timer({matchId}: TimerProps) {
             onPress={addTime}
           />
         </View>
-      </Modal>
+      </Modal> */}
     </View>
   )
 }
@@ -289,5 +289,72 @@ const buttonDefaults = {
   borderRadius: 13,
   ...testBorder
 }
+
+const styles = StyleSheet.create({
+  addTray: {
+    flexDirection: "row"
+  },
+  addBox: {
+    fontSize: 30,
+    backgroundColor: "#C0C0C0",
+    fontVariant: ['tabular-nums'],
+    margin: 10,
+    flex: 1,
+    borderRadius: 8,
+  },
+  addText: {
+    fontSize: 30,
+    margin: 20,
+    flex: 1,
+  },
+  modalButton: {
+    flex: 1
+  },
+  modalWindow: {
+    backgroundColor: "white",
+    borderRadius: 8,
+    marginBottom: 150,
+  },
+  text: {
+    fontSize: 30,
+    textAlign: 'center',
+    fontVariant: ['tabular-nums'],
+    alignSelf: 'center',
+    marginHorizontal: 5,
+    ...testBorder
+  },
+  play_pause: {
+    ...buttonDefaults,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  timerBox: {
+    width: '100%',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    marginVertical: 3,
+    alignSelf: 'center',
+    flexDirection:'row',
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...testBorder
+  },
+  add_time: {
+    ...buttonDefaults,
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  modalAddTime: {
+    ...buttonDefaults,
+    justifyContent: 'center',
+    alignSelf: 'flex-end',
+    marginBottom: 20,
+  }
+})
 
 const isValidDecimal = (input: string) => (RegExp(/\d*((\.d+)|(\d\.?))/).test(input))

@@ -17,9 +17,9 @@ export default function SystemEventsScreen({
     async dispatch => {
       dispatch({
         type: "SET_CURRENT_SYSTEM_EVENT_ID",
-        payload: systemEvent.id
+        payload: systemEvent.ID
       })
-      const tournaments = await tournamentsService.getAll(systemEvent.id)
+      const tournaments = await tournamentsService.getAll(systemEvent.ID)
       dispatch({
         type: "ADD_TOURNAMENTS",
         payload: tournaments
@@ -27,8 +27,8 @@ export default function SystemEventsScreen({
     }
   )
   const onPressFactory = (s: SystemEvent) => () => {
-    dispatch(thunkSystemEventData(s)).then(() => 
-      navigation.navigate("Tournaments", { systemEventId: s.id })
+    dispatch(thunkSystemEventData(s)).then(() =>
+      navigation.navigate("Tournaments", { systemEventID: s.ID })
     )
   }
 

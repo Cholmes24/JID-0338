@@ -49,10 +49,10 @@ function getProperWrapping(innerAction: WrappableAction, fighter?: fighterScorin
   }
 }
 
-export default function asMatchesAction(innerAction: WrappableAction, matchId: number, fighter?: fighterScoringKey): MatchesAction {
+export default function asMatchesAction(innerAction: WrappableAction, matchID: number, fighter?: fighterScoringKey): MatchesAction {
   return {
     type: "MATCHES",
     matchAction: getProperWrapping(innerAction, fighter),
-    matchId
+    matchID
   }
 }

@@ -1,8 +1,8 @@
-import ipAddress from 'ip-address';
+import ipAddress from 'ip-address'
 import { ColorValue } from "react-native"
 
 export interface Fighter {
-  id: number,
+  ID: number,
   firstName: string,
   middleName?: string,
   lastName: string,
@@ -12,7 +12,7 @@ export interface Fighter {
   // club: string,
   // nationality: string,
   // seed: number,
-  // schoolId: string,
+  // schoolID: string,
 }
 
 export interface Scoring {
@@ -27,16 +27,16 @@ export interface MatchScore {
 }
 
 export interface Match {
-  id: number,
-  poolId: number,
-  tournamentId: number,
+  ID: number,
+  poolID: number,
+  tournamentID: number,
   // name: string,
 
   ringNumber: number,
 
-  fighter1Id: number,
-  fighter2Id: number,
-  winnerId?: number,
+  fighter1ID: number,
+  fighter2ID: number,
+  winnerID?: number,
 
   past: MatchScore[],
   present: MatchScore,
@@ -54,34 +54,34 @@ export interface Timer {
 }
 
 export interface SystemEvent {
-  id: number,
-  // tournamentIds: number[],
+  ID: number,
+  // tournamentIDs: number[],
   name: string
 }
 
 export interface Tournament {
   name: string,
-  id: number,
-  systemEventId: number,
+  ID: number,
+  systemEventID: number,
   weaponType?: string,
   // ruleset: MatchRuleset
-  fighterIds: number[],
-  poolIds: number[],
-  matchIds: number[]
+  fighterIDs: number[],
+  poolIDs: number[],
+  matchIDs: number[]
 }
 
 export interface Pool {
-  id: number,
+  ID: number,
   name: string,
-  // fighterIds: number[],
-  tournamentId: number,
+  // fighterIDs: number[],
+  tournamentID: number,
 }
 
-export interface CurrentIds {
-  systemEventId?: number,
-  tournamentId?: number,
-  poolId?: number,
-  matchId?: number,
+export interface CurrentIDs {
+  systemEventID?: number,
+  tournamentID?: number,
+  poolID?: number,
+  matchID?: number,
 }
 
 export interface RootType {
@@ -90,7 +90,7 @@ export interface RootType {
   tournaments: Tournament[],
   pools: Pool[],
   matches: Match[],
-  currentIds: CurrentIds,
+  currentIDs: CurrentIDs,
   // hostIPAddress: ipAddress.Address6 | null,
 }
 

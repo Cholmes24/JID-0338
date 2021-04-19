@@ -10,26 +10,26 @@ import { AppThunk } from '../store'
 import matchService from '../services/match'
 
 export type FighterColumnProps = {
-  matchId: number
+  matchID: number
 } & ({
   fighter: "fighter1" | "fighter2"
 } | {
-  fighterId: number
+  fighterID: number
 })
 
 export default function FighterColumn(props: FighterColumnProps) {
   const dispatch = useAppDispatch()
-  const matchId = props.matchId
+  const matchID = props.matchID
   const matches = useAppSelector((state: RootType) => state.matches)
   const fighters = useAppSelector((state: RootType) => state.fighters)
 
-  const match = matches.find(m => m.id === matchId)
+  const match = matches.find(m => m.ID === matchID)
   if (!match) {
     throw Error("INVALID MATCH ID")
   }
 
-  const [ fighterId, fighterScoringKey ] = getFighterIdAndScoringKey(match, props)
-  const fighter = fighters.find((f: Fighter) => f.id === fighterId)
+  const [ fighterID, fighterScoringKey ] = getFighterIDAndScoringKey(match, props)
+  const fighter = fighters.find((f: Fighter) => f.ID === fighterID)
 
   if (!fighter) {
     throw Error("INVALID FIGHTER ID")
@@ -37,15 +37,15 @@ export default function FighterColumn(props: FighterColumnProps) {
 
   const issueWarning = asMatchesAction({
     type: "ISSUE_WARNING"
-  }, matchId, fighterScoringKey)
+  }, matchID, fighterScoringKey)
 
   const issuePenalty = asMatchesAction({
     type: "ISSUE_PENALTY"
-  }, matchId, fighterScoringKey)
+  }, matchID, fighterScoringKey)
 
   const thunkIssueWarning = (): AppThunk => (
     async dispatch => {
-      const updatedMatch = await matchService.issueWarning(fighterScoringKey, matchId)
+      const updatedMatch = await matchService.issueWarning(fighterScoringKey, matchID)
       if (updatedMatch.present !== match.present) {
         dispatch(issueWarning)
       }
@@ -54,7 +54,7 @@ export default function FighterColumn(props: FighterColumnProps) {
 
   const thunkIssuePenalty = (): AppThunk => (
     async dispatch => {
-      const updatedMatch = await matchService.issuePenalty(fighterScoringKey, matchId)
+      const updatedMatch = await matchService.issuePenalty(fighterScoringKey, matchID)
       if (updatedMatch.present !== match.present) {
         dispatch(issuePenalty)
       }
@@ -85,13 +85,13 @@ export default function FighterColumn(props: FighterColumnProps) {
 
       backgroundColor: color,
       borderRadius: 15,
-      width: '100%',
+      wIDth: '100%',
       justifyContent: 'center',
       alignItems: 'center',
       alignContent: "center",
       elevation: 5,
       // shadowRadius: 2,
-      // shadowOffset: { width: 1, height: 2 },
+      // shadowOffset: { wIDth: 1, height: 2 },
       // shadowColor: 'black',
       // shadowOpacity: 0.4,
     },
@@ -116,7 +116,7 @@ export default function FighterColumn(props: FighterColumnProps) {
       flex: 1,
       padding: 5,
       paddingBottom: 8,
-      width: "100%"
+      wIDth: "100%"
     },
     buttonList: {
       // For testing purposes to align things
@@ -153,7 +153,7 @@ export default function FighterColumn(props: FighterColumnProps) {
       <Text style={styles.warningsAndPenalties}>Warnings: {warnings}</Text>
       <Text style={styles.warningsAndPenalties}>Penalties: {penalties}</Text>
       <View style={styles.scoreCounter}>
-        <ScoreCounter matchId={matchId} fighterScoringKey={fighterScoringKey} />
+        <ScoreCounter matchID={matchID} fighterScoringKey={fighterScoringKey} />
       </View>
 
       <View style={styles.buttonList} >
@@ -175,19 +175,19 @@ export default function FighterColumn(props: FighterColumnProps) {
   )
 }
 
-function getFighterIdAndScoringKey(match: Match, props: FighterColumnProps): [number, "fighter1Scoring" | "fighter2Scoring"] {
-  if (props.hasOwnProperty("fighterId")) {
-    const p = props as { matchId: number, fighterId: number}
-    const id = p.fighterId
-    if (match.fighter1Id !== id && match.fighter2Id !== id) {
+function getFighterIDAndScoringKey(match: Match, props: FighterColumnProps): [number, "fighter1Scoring" | "fighter2Scoring"] {
+  if (props.hasOwnProperty("fighterID")) {
+    const p = props as { matchID: number, fighterID: number}
+    const ID = p.fighterID
+    if (match.fighter1ID !== ID && match.fighter2ID !== ID) {
       throw Error("FIGHTER NOT IN MATCH")
     }
-    const scoringKey = match.fighter1Id === id ? "fighter1Scoring" : "fighter2Scoring"
-    return [id, scoringKey]
+    const scoringKey = match.fighter1ID === ID ? "fighter1Scoring" : "fighter2Scoring"
+    return [ID, scoringKey]
   } else {
-    const p = props as { matchId: number, fighter: "fighter1" | "fighter2" }
-    const id = match[p.fighter === "fighter1" ? "fighter1Id" : "fighter2Id"]
+    const p = props as { matchID: number, fighter: "fighter1" | "fighter2" }
+    const ID = match[p.fighter === "fighter1" ? "fighter1ID" : "fighter2ID"]
     const scoringKey = `${p.fighter}Scoring` as "fighter1Scoring" | "fighter2Scoring"
-    return [id, scoringKey]
+    return [ID, scoringKey]
   }
 }

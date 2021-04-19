@@ -10,24 +10,24 @@ import matchService from "../services/match"
 // import { Icon } from "react-native-elements"
 
 export type UndoButtonProps = {
-  matchId: number
+  matchID: number
 }
 
 //TODO: Implement Remote functionality with thunks
-export default function UndoButton({matchId}: UndoButtonProps) {
+export default function UndoButton({matchID}: UndoButtonProps) {
   const dispatch = useAppDispatch()
   // const color = useThemeColor({ light: "black", dark: "white"}, "tabIconDefault")
   const matches = useAppSelector((state: RootType) => state.matches)
-  const match = matches.find(m => m.id === matchId)
+  const match = matches.find(m => m.ID === matchID)
 
   if (!match) {
     throw Error("MATCH ID INVALID")
   }
 
-  const { fighter1Id, fighter2Id } = match
+  const { fighter1ID, fighter2ID } = match
   const fontSize = 35
 
-  const undo: MatchesAction = asMatchesAction({ type: "MATCH_UNDO" }, matchId)
+  const undo: MatchesAction = asMatchesAction({ type: "MATCH_UNDO" }, matchID)
 
   const pressedColor = "#BEBEBE"
   const [ buttonColor, setButtonColor ] = useState<"white" | typeof pressedColor>("white")
@@ -37,7 +37,7 @@ export default function UndoButton({matchId}: UndoButtonProps) {
       // TODO: need to test syncing with db
       const lastState = match.past.length !== 0 && match.past[match.past.length - 1]
       if (lastState) {
-        matchService.undo(matchId, fighter1Id, fighter2Id, lastState)
+        matchService.undo(matchID, fighter1ID, fighter2ID, lastState)
         dispatch(undo)
       }
     }

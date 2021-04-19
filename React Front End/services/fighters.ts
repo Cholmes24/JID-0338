@@ -9,12 +9,12 @@ type FighterInDb = {
 }
 
 //TODO: complete/remove this function making sure relevant fields are accounted for
-function mapFighterFields(fighterInDb: FighterInDb, id: number): Fighter {
+function mapFighterFields(fighterInDb: FighterInDb, ID: number): Fighter {
   return {
     firstName: fighterInDb.firstName,
     lastName: fighterInDb.lastName,
-    id,
-    color: (id % 2 === 1) ? "#376EDA" : "#D43737"
+    ID,
+    color: (ID % 2 === 1) ? "#376EDA" : "#D43737"
   }
 }
 
@@ -27,12 +27,12 @@ function mapFighters(fromDb: FighterInDb[]): Fighter[] {
 //   return mapFighters(response.data)
 // }
 
-async function getById(fighterId: number) {
-  const response = await axios.get(`${baseUrl}?fighterID=${fighterId}`)
-  return mapFighterFields(response.data, fighterId)
+async function getByID(fighterID: number) {
+  const response = await axios.get(`${baseUrl}?fighterID=${fighterID}`)
+  return mapFighterFields(response.data, fighterID)
 }
 
 const fightersService = {
-  getById
+  getByID
 }
 export default fightersService

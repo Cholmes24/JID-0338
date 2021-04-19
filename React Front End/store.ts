@@ -7,7 +7,7 @@ import matchesReducer from './reducers/MatchesReducer'
 import tournamentsReducer from './reducers/TournamentsReducer'
 import fightersReducer from './reducers/FightersReducer'
 import systemEventsReducer from './reducers/SystemEventsReducer';
-import currentIdsReducer from './reducers/CurrentIdsReducer';
+import currentIDsReducer from './reducers/CurrentIDsReducer';
 import poolsReducer from './reducers/PoolsReducer';
 import HostIPAddressReducer from './reducers/HostIPAddressReducer';
 
@@ -22,7 +22,7 @@ const rootReducer = combineReducers({
   tournaments: tournamentsReducer,
   matches: matchesReducer,
   pools: poolsReducer,
-  currentIds: currentIdsReducer,
+  currentIDs: currentIDsReducer,
   // hostIPAddress: HostIPAddressReducer,
 })
 

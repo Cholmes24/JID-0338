@@ -1,7 +1,6 @@
 import { AddFightersAction } from './../redux-types/actionTypes';
 import { AnyAction, Reducer } from "redux"
 import { Fighter } from "../redux-types/storeTypes"
-import defaultData from '../defaultData'
 import { addItems } from '../util/utilFunctions';
 
 const fightersReducer: Reducer<Fighter[], AnyAction> = (state = [], action) => {

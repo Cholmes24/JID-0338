@@ -5,7 +5,7 @@ import { Text, Input } from 'react-native-elements'
 
 export default function ConnectionChecker() {
   const dispatch = useAppDispatch()
-  const hostIP = useAppSelector(state => state.hostIPAddress)
+  const hostIP = true // useAppSelector(state => state.hostIPAddress)
   const [ inputText, setInputText ] = useState("")
 
   const conectionEstablished = hostIP !== undefined

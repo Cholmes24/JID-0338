@@ -1,6 +1,5 @@
 import { AnyAction, Reducer } from "redux"
 import { Tournament } from "../redux-types/storeTypes"
-import defaultData from '../defaultData'
 import { AddTournamentsAction } from "../redux-types/actionTypes"
 import { addItems } from "../util/utilFunctions"
 

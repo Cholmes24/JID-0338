@@ -19,7 +19,7 @@ export default function HomeScreen({
   navigation
 }: ScreenPropType<"Home">) {
 
-  const currentMatchId = useAppSelector((state) => state.currentIds.matchId)
+  const currentMatchID = useAppSelector((state) => state.currentIDs.matchID)
   const currentMatches = useAppSelector((state) => state.matches)
   const hostIP = true // useAppSelector(state => state.hostIPAddress)
 
@@ -45,8 +45,8 @@ export default function HomeScreen({
 
   const thunkCurrentMatch = (): AppThunk<Promise<Match | undefined>> => (
     async dispatch => {
-      if (currentMatchId !== undefined && !currentMatches.find(m => m.id == currentMatchId)) {
-        const currentMatch = await matchService.getMatch(currentMatchId)
+      if (currentMatchID !== undefined && !currentMatches.find(m => m.ID == currentMatchID)) {
+        const currentMatch = await matchService.getMatch(currentMatchID)
         dispatch({
           type: "SET_MATCHES",
           payload: [currentMatch]
@@ -60,8 +60,8 @@ export default function HomeScreen({
   const thunkCurrentFighters = (match?: Match): AppThunk<Promise<void>> => (
     async dispatch => {
       if (match) {
-        const fighter1 = await fightersService.getById(match.fighter1Id)
-        const fighter2 = await fightersService.getById(match.fighter2Id)
+        const fighter1 = await fightersService.getByID(match.fighter1ID)
+        const fighter2 = await fightersService.getByID(match.fighter2ID)
         dispatch({
           type: "SET_FIGHTERS",
           payload: [fighter1, fighter2]
@@ -72,11 +72,11 @@ export default function HomeScreen({
   )
 
   const mostRecentMatchButton = () => (
-    currentMatchId !== undefined
+    currentMatchID !== undefined
       ? <Button
           buttonStyle={styles.entry}
           title='Most Recent Match'
-          onPress={() => navigation.navigate("Match", { matchId: currentMatchId }) }
+          onPress={() => navigation.navigate("Match", { matchID: currentMatchID }) }
         />
       : null //<View style={styles.matchButton} > </View>
   )
