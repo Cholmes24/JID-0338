@@ -1,9 +1,9 @@
+import { MatchScore, Timer } from './../redux-types/storeTypes';
 import { AnyAction, Reducer } from "redux"
 import { Match } from "../redux-types/storeTypes"
 import matchReducer from "./MatchReducer"
-import defaultData from '../defaultData'
 import { AddMatchesAction, MatchesAction } from "../redux-types/actionTypes"
-import { addItems } from "../util/utilFunctions"
+import { addItems, addItemsWithMergeCustomizer } from "../util/utilFunctions"
 
 function isMatchesActionType(action: AnyAction): action is MatchesAction {
   if (action.type !== "MATCHES") {
@@ -24,7 +24,9 @@ const matchesReducer: Reducer<Match[], AnyAction> = (state = [], action) => {
     case "SET_MATCHES":
       return action.payload
     case "ADD_MATCHES":
-      return addItems(state, (action as AddMatchesAction).payload, defaultData.matches[0])
+      return addItemsWithMergeCustomizer(state, (action as AddMatchesAction).payload,
+        timerMergeCustomizer,
+        matchTemplate as Match)
     default:
       return state
   }
@@ -40,4 +42,39 @@ function forwardMatchesAction(state: Match[], action: MatchesAction): Match[] {
       return match
     }
   })
+}
+
+const matchTemplate: unknown = {
+  past: [],
+  future: [],
+  timer: {
+    maxTime: 90000,
+    timeRemaining: undefined,
+    timeRemainingAtLastStop: 0,
+    timeOfLastStart: 0,
+    isRunning: false
+  }
+}
+
+function isTimer(t: any): t is Timer {
+  return typeof t === 'object'
+    && t !== null
+    && 'timeRemaining' in t
+    && typeof t["timeRemaining"] === 'number'
+}
+
+function timerMergeCustomizer (objVal: any, dbVal: any): Timer | undefined {
+  if (isTimer(objVal) && isTimer(dbVal)) {
+    const storedTime = objVal.timeRemaining
+    const dbTime = dbVal.timeRemaining
+    if (Math.abs(storedTime - dbTime) > 1000) {
+      return {
+        ...objVal,
+        timeRemaining: dbTime,
+        timeRemainingAtLastStop: objVal.isRunning ? objVal.timeRemainingAtLastStop : dbTime,
+      }
+    } else {
+      return objVal
+    }
+  }
 }

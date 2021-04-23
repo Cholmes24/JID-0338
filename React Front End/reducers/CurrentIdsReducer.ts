@@ -1,4 +1,3 @@
-import { CurrentIDsActionType } from '../redux-types/actionTypes';
 import { CurrentIDs } from '../redux-types/storeTypes';
 import { AnyAction, Reducer } from "redux"
 import defaultData from "../defaultData"

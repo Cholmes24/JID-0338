@@ -1,6 +1,5 @@
 import { AnyAction, Reducer } from "redux"
 import { Pool } from "../redux-types/storeTypes"
-import defaultData from '../defaultData'
 import { addItems } from "../util/utilFunctions"
 import { AddPoolsAction } from "../redux-types/actionTypes"
 

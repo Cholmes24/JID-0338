@@ -1,50 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AddToTimerAction, TimerActionType, ToggleTimerAction, UpdateTimerAction } from '../../redux-types/actionTypes'
 import { Timer } from '../../redux-types/storeTypes'
-
-// const initialState: Timer = {
-//   maxTime: 180000,
-//   timeRemaining: 180000,
-//   timeOfLastStart: 0,
-//   timeRemainingAtLastStop: 180000,
-//   isRunning: false
-// }
-
-// export const timerSlice = createSlice({
-//   name: "timer",
-//   initialState,
-//   reducers: {
-//     toggleTimer: (state, action: PayloadAction<number>) => {
-//       if (state.timeRemaining > 0) {
-//         if (state.isRunning) {
-//           state.timeRemaining = calculateTimeRemaining(action.payload, state)
-//           state.timeRemainingAtLastStop = state.timeRemaining
-//         } else {
-//           state.timeOfLastStart = action.payload
-//         }
-//         state.isRunning = !state.isRunning
-//       }
-//     },
-//     addToTimer: (state, action: PayloadAction<number>) => {
-//       if (state.timeRemaining <= 0) {
-//         state.isRunning = false
-//       } else {
-//         state.timeRemainingAtLastStop += action.payload
-//       }
-//       state.timeRemaining += action.payload
-//     },
-//     updateTimer: (state, action: PayloadAction<number>) => {
-//       state.timeRemaining = calculateTimeRemaining(action.payload, state)
-//       if (state.timeRemaining <= 0) {
-//         state.isRunning = false
-//       }
-//     }
-//   }
-// })
-
-// export const { toggleTimer, addToTimer, updateTimer } = timerSlice.actions
-
-// export default timerSlice.reducer
 
 export default function timerReducer(state: Timer, action: TimerActionType) {
   switch (action.type) {
