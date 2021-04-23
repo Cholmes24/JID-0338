@@ -1,29 +1,31 @@
-import { Timer } from './../redux-types/storeTypes';
+import { SetMatchesAction, MatchActionType } from './../redux-types/actionTypes'
+import { Timer } from './../redux-types/storeTypes'
 import { AnyAction, Reducer } from "redux"
 import { Match } from "../redux-types/storeTypes"
 import matchReducer from "./MatchReducer"
 import { AddMatchesAction, MatchesAction } from "../redux-types/actionTypes"
+import {ADD_MATCHES, MATCHES, SET_MATCHES } from "../redux-types/actionTypes"
 import { addItemsWithMergeCustomizer } from "../util/utilFunctions"
 
 function isMatchesActionType(action: AnyAction): action is MatchesAction {
-  if (action.type !== "MATCHES") {
+  if (action.type !== MATCHES) {
     return false
   }
   const a = action as MatchesAction
-  return a.type === "MATCHES" && a.matchAction !== undefined && a.matchID !== undefined
+  return a.type === MATCHES && a.matchAction !== undefined && a.matchID !== undefined
 }
 
 const matchesReducer: Reducer<Match[], AnyAction> = (state = [], action) => {
   switch (action.type) {
-    case "MATCHES":
+    case MATCHES:
       if (isMatchesActionType(action)) {
         return forwardMatchesAction(state, action)
       } else {
         return state
       }
-    case "SET_MATCHES":
+    case SET_MATCHES:
       return action.payload
-    case "ADD_MATCHES":
+    case ADD_MATCHES:
       return addItemsWithMergeCustomizer(state, (action as AddMatchesAction).payload,
         timerMergeCustomizer, matchTemplate as Match)
     default:
@@ -77,3 +79,22 @@ function timerMergeCustomizer (objVal: any, dbVal: any): Timer | undefined {
     }
   }
 }
+
+export const matches: (matchAction: MatchActionType, matchID: number) => MatchesAction = (
+  matchAction,
+  matchID
+) => ({
+  type: MATCHES,
+  matchAction,
+  matchID
+})
+
+export const setMatches: (matches: Match[]) => SetMatchesAction = matches => ({
+  type: SET_MATCHES,
+  payload: matches
+})
+
+export const addMatches: (matches: Match[]) => AddMatchesAction = matches => ({
+  type: ADD_MATCHES,
+  payload: matches
+})

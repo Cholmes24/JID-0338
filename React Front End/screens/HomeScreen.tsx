@@ -11,6 +11,9 @@ import { AppThunk } from "../store"
 
 import { ScreenPropType } from "../types";
 import { Match } from "../redux-types/storeTypes";
+import { setFighters } from "../reducers/FightersReducer"
+import { setMatches } from "../reducers/MatchesReducer"
+import { setSystemEvents } from "../reducers/SystemEventsReducer"
 
 export default function HomeScreen({
   navigation
@@ -38,10 +41,7 @@ export default function HomeScreen({
   const thunkSystemEvents = (): AppThunk<Promise<void>> => (
     async dispatch => {
       const systemEvents = await systemEventsService.getAll()
-      dispatch({
-        type: "SET_SYSTEM_EVENTS",
-        payload: systemEvents
-      })
+      dispatch(setSystemEvents(systemEvents))
       return Promise.resolve()
     }
   )
@@ -50,10 +50,7 @@ export default function HomeScreen({
     async dispatch => {
       if (currentMatchID !== undefined && !currentMatches.find(m => m.ID == currentMatchID)) {
         const currentMatch = await matchService.getMatch(currentMatchID)
-        dispatch({
-          type: "SET_MATCHES",
-          payload: [currentMatch]
-        })
+        dispatch(setMatches([currentMatch]))
         return Promise.resolve(currentMatch)
       }
       return Promise.resolve(undefined)
@@ -65,10 +62,7 @@ export default function HomeScreen({
       if (match) {
         const fighter1 = await fightersService.getByID(match.fighter1ID)
         const fighter2 = await fightersService.getByID(match.fighter2ID)
-        dispatch({
-          type: "SET_FIGHTERS",
-          payload: [fighter1, fighter2]
-        })
+        dispatch(setFighters([fighter1, fighter2]))
       }
       return Promise.resolve()
     }

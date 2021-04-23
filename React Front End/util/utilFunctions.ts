@@ -1,31 +1,10 @@
 import { Match, Pool, RootType, SystemEvent, Tournament } from './../redux-types/storeTypes';
 import _ from 'lodash'
 
-export function addItems<T extends {ID: number}>(original: T[], payload: T[], template?: T) {
-
-  const byID = (t: T) => t.ID
-  const existingIDs = original.map(byID)
-
-  const [ payloadUpdate, payloadAdd ] = _.partition(payload, t => existingIDs.includes(t.ID))
-  const updateIDs = payloadUpdate.map(byID)
-  const [ toAlter, unalteredElements ] = _.partition(original, t => updateIDs.includes(t.ID))
-
-  const sortedToAlter = _.sortBy(toAlter, byID)
-  const sortedUpdates = _.sortBy(payloadUpdate, byID)
-
-  const updatedElements = _.merge(sortedToAlter, sortedUpdates)
-
-  // For types with fields not used in the database, an optional template can be
-  // passed in for filling in default values. lodash's deep merge will
-  // overwrite them if the db provides non-null, defined values
-  const newElements = template ? payloadAdd.map(t => _.merge(t, template)) : payloadAdd
-  return _.union(unalteredElements, updatedElements, newElements)
-}
-
-export function addItemsWithMergeCustomizer<T extends {ID: number}>(
+function addItemsWithOptionalCustomizer<T extends {ID: number}>(
   original: T[],
   payload: T[],
-  customizer: (oldValue: any, newValue: any, key: string, oldObject: any, newObject: any) => any,
+  customizer?: (oldValue: any, newValue: any, key: string, oldObject: any, newObject: any) => any,
   template?: T,
 ) {
   const byID = (t: T) => t.ID
@@ -37,12 +16,25 @@ export function addItemsWithMergeCustomizer<T extends {ID: number}>(
 
   const sortedToAlter = _.sortBy(toAlter, byID)
   const sortedUpdates = _.sortBy(payloadUpdate, byID)
-  const nestCustomizer = (oldObj: T, newObj: T) => _.mergeWith(oldObj, newObj, customizer)
-
-  const updatedElements = _.mergeWith(sortedToAlter, sortedUpdates, nestCustomizer)
+  const updatedElements = customizer
+    ? _.mergeWith(sortedToAlter, sortedUpdates,
+      (oldObj: T, newObj: T) => _.mergeWith(oldObj, newObj, customizer))
+    : _.merge(sortedToAlter, sortedUpdates)
   const newElements = template ? payloadAdd.map(t => _.merge(t, template)) : payloadAdd
-
   return _.union(unalteredElements, updatedElements, newElements)
+}
+
+export function addItems<T extends {ID: number}>(original: T[], payload: T[], template?: T) {
+  return addItemsWithOptionalCustomizer(original, payload, undefined, template)
+}
+
+export function addItemsWithMergeCustomizer<T extends {ID: number}>(
+  original: T[],
+  payload: T[],
+  customizer: (oldValue: any, newValue: any, key: string, oldObject: any, newObject: any) => any,
+  template?: T,
+) {
+  return addItemsWithOptionalCustomizer(original, payload, customizer, template)
 }
 
 export function isValidDecimal(input: string): boolean{

@@ -7,6 +7,9 @@ import { Tournament } from '../redux-types/storeTypes';
 import { AppThunk } from '../store';
 import poolsService from '../services/pools';
 import List from '../components/List';
+import { setCurrentTournamentID } from '../reducers/CurrentIDsReducer'
+import { addPools } from '../reducers/PoolsReducer'
+
 export default function TournamentsScreen({
   route,
   navigation
@@ -21,15 +24,9 @@ export default function TournamentsScreen({
 
   const thunkTournamentData = (tournament: Tournament): AppThunk<Promise<void>> => (
     async dispatch => {
-      dispatch({
-        type: "SET_CURRENT_TOURNAMENT_ID",
-        payload: tournament.ID
-      })
+      dispatch(setCurrentTournamentID(tournament.ID))
       const pools = await poolsService.getAll(tournament.ID)
-      dispatch({
-        type: "ADD_POOLS",
-        payload: pools
-      })
+      dispatch(addPools(pools))
     }
   )
 
@@ -38,7 +35,7 @@ export default function TournamentsScreen({
       .then(() =>
         navigation.navigate("Pools", { tournamentID: t.ID })
       )
-    }
+  }
 
   return (
     <View style={styles.container} >

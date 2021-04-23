@@ -1,12 +1,11 @@
 import React from "react"
 import { RootType } from "../redux-types/storeTypes"
-import { MatchesAction } from "../redux-types/actionTypes"
-import asMatchesAction from "../util/reduxActionWrapper"
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks"
 import { AppThunk } from '../store'
 import matchService from "../services/match"
 import Button from './Button'
 import { Icon } from "react-native-elements"
+import { undo } from "../reducers/MatchReducer"
 
 export type UndoButtonProps = {
   matchID: number
@@ -28,10 +27,9 @@ export default function UndoButton({matchID}: UndoButtonProps) {
     async dispatch => {
       // TODO: need to test syncing with db
       const lastState = match.past.length !== 0 && match.past[match.past.length - 1]
-      const undo: MatchesAction = asMatchesAction({ type: "MATCH_UNDO" }, matchID)
       if (lastState) {
         await matchService.undo(matchID, fighter1ID, fighter2ID, lastState)
-        dispatch(undo)
+        dispatch(undo(matchID))
       }
     }
   )

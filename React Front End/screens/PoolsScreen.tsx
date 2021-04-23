@@ -3,6 +3,9 @@ import { StyleSheet } from 'react-native'
 import List from '../components/List'
 import { View } from '../components/Themed'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
+import { setCurrentPoolID } from '../reducers/CurrentIDsReducer'
+import { addFighters } from '../reducers/FightersReducer'
+import { addMatches } from '../reducers/MatchesReducer'
 import { Pool } from '../redux-types/storeTypes'
 import fightersService from '../services/fighters'
 import matchesService from '../services/matches'
@@ -23,20 +26,11 @@ export default function PoolsScreen({
 
   const thunkPoolData = (pool: Pool): AppThunk<Promise<void>> => (
     async dispatch => {
-      dispatch({
-        type: "SET_CURRENT_POOL_ID",
-        payload: pool.ID
-      })
+      dispatch(setCurrentPoolID(pool.ID))
       const matches = await matchesService.getAll(pool.ID)
-      dispatch({
-        type: "ADD_MATCHES",
-        payload: matches
-      })
+      dispatch(addMatches(matches))
       const fighters = await fightersService.getAllByPoolID(pool.ID)
-      dispatch({
-        type: "ADD_FIGHTERS",
-        payload: fighters
-      })
+      dispatch(addFighters(fighters))
     }
   )
 

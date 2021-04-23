@@ -1,4 +1,6 @@
-import { MatchScoringAction, MatchTimingAction } from '../redux-types/actionTypes';
+import { matches } from './MatchesReducer'
+import { MatchScoringAction, MatchTimingAction, ScoringActionType, TimerActionType } from '../redux-types/actionTypes'
+import { MATCH_REDO, MATCH_SCORING, MATCH_TIMING, MATCH_UNDO } from '../redux-types/actionTypes'
 import { MatchActionType, MatchRedoAction, MatchUndoAction } from "../redux-types/actionTypes"
 import { Match, MatchScore } from "../redux-types/storeTypes"
 import timerReducer from './features/TimerSlice'
@@ -6,28 +8,28 @@ import scoringReducer from './features/ScoringSlice'
 
 export default function matchReducer(state: Match, action: MatchActionType) {
   switch (action.type) {
-    case "MATCH_TIMING":
-      return matchTiming(state, action)
-    case "MATCH_SCORING":
-      return matchScoring(state, action)
-    case "MATCH_UNDO":
+    case MATCH_TIMING:
+      return determineMatchTiming(state, action)
+    case MATCH_SCORING:
+      return determineMatchScoring(state, action)
+    case MATCH_UNDO:
       return matchUndo(state, action)
-    case "MATCH_REDO":
+    case MATCH_REDO:
       return matchRedo(state, action)
     default:
       return state
   }
 }
 
-function matchTiming(state: Match, action: MatchTimingAction): Match {
+function determineMatchTiming(state: Match, action: MatchTimingAction): Match {
   return {
     ...state,
     timer: timerReducer(state.timer, action.payload.timingAction)
   }
 }
 
-function matchScoring(state: Match, action: MatchScoringAction): Match {
-  const cleanReducer = (fighterInState: "fighter1Scoring" | "fighter2Scoring") => (
+function determineMatchScoring(state: Match, action: MatchScoringAction): Match {
+  const cleanReducer = (fighterInState: FighterScoringKey) => (
     action.payload.fighter === fighterInState
       ? scoringReducer(state.present[fighterInState], action.payload.scoringAction)
       : state.present[fighterInState]
@@ -70,4 +72,35 @@ function matchRedo(state: Match, _: MatchRedoAction): Match {
       future: state.future.slice(1, state.future.length)
     }
   }
+}
+
+type FighterScoringKey = "fighter1Scoring" | "fighter2Scoring"
+
+export function matchScoring(scoringAction: ScoringActionType, fighter: FighterScoringKey): MatchScoringAction {
+  return {
+    type: MATCH_SCORING,
+    payload: {
+      scoringAction,
+      fighter
+    }
+  }
+}
+
+export function matchTiming(timingAction: TimerActionType): MatchTimingAction {
+  return {
+    type: MATCH_TIMING,
+    payload: { timingAction }
+  }
+}
+
+export function undo(matchID: number) {
+  return matches({
+    type: MATCH_UNDO
+  }, matchID)
+}
+
+export function redo(matchID: number) {
+  return matches({
+    type: MATCH_REDO
+  }, matchID)
 }

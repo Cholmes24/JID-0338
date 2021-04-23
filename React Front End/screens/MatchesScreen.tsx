@@ -8,6 +8,9 @@ import List from '../components/List';
 import { Match } from '../redux-types/storeTypes';
 import matchesService from '../services/matches';
 import fightersService from '../services/fighters';
+import { setCurrentMatchID } from '../reducers/CurrentIDsReducer'
+import { addMatches } from '../reducers/MatchesReducer'
+import { addFighters } from '../reducers/FightersReducer'
 
 export default function MatchesScreen({
   route,
@@ -23,22 +26,13 @@ export default function MatchesScreen({
 
   const thunkMatchData = (match: Match): AppThunk<Promise<void>> => (
     async dispatch => {
-      dispatch({
-        type: "SET_CURRENT_MATCH_ID",
-        payload: match.ID
-      })
+      dispatch(setCurrentMatchID(match.ID))
       const matches = await matchesService.getAll(poolID)
-      dispatch({
-        type: "ADD_MATCHES",
-        payload: matches
-      })
+      dispatch(addMatches(matches))
       const fighter1 = await fightersService.getByID(match.fighter1ID)
       const fighter2 = await fightersService.getByID(match.fighter2ID)
       // const pools = await matchesService.getAll(tournament.ID)
-      dispatch({
-        type: "ADD_FIGHTERS",
-        payload: [fighter1, fighter2]
-      })
+      dispatch(addFighters([fighter1, fighter2]))
     }
   )
 

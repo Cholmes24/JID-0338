@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Text, Icon } from 'react-native-elements'
-import { View, StyleSheet, TextInput, useColorScheme, Keyboard } from 'react-native'
+import { View, StyleSheet, TextInput, Keyboard } from 'react-native'
 import { RootType } from '../redux-types/storeTypes'
-import asMatchesAction from '../util/reduxActionWrapper'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import Modal from 'react-native-modal'
 import matchService from '../services/match'
 import { formatClock, isValidDecimal } from '../util/utilFunctions'
+import { addToTimer, toggleTimer, updateTimer } from '../reducers/features/TimerSlice'
 
 type TimerProps = {
   matchID: number
@@ -56,22 +56,12 @@ export default function Timer({ matchID }: TimerProps) {
   const update = () => {
     const timeRemaining = calculateTimeRemaining()
     if (timeRemaining === 0 || timerStore.timeRemaining - timeRemaining > 150) {
-      dispatch(asMatchesAction({
-        type: "UPDATE_TIMER",
-        payload: { currentTime: Date.now() }
-      }, matchID))
+      dispatch(updateTimer(matchID, Date.now()))
     }
     setTimeLeft(timeRemaining)
   }
 
-  const toggle = () => {
-      dispatch(
-      asMatchesAction({
-        type: "TOGGLE_TIMER",
-        payload: { currentTime: Date.now() }
-      }, matchID)
-    )
-  }
+  const toggle = () => dispatch(toggleTimer(matchID, Date.now()))
 
   const addTime = () => {
     if (isValidDecimal(timeAddText.trim())) {
@@ -86,12 +76,7 @@ export default function Timer({ matchID }: TimerProps) {
   const addParticularTime = (amountToAdd: number) => {
     const currentTime = Date.now()
     setTimeLeft(timeLeft + amountToAdd)
-    dispatch(
-      asMatchesAction({
-        type: "ADD_TO_TIMER",
-        payload: { currentTime, amountToAdd }
-      }, matchID)
-    )
+    dispatch(addToTimer(matchID, currentTime, amountToAdd))
     triggerRemoteUpdate()
   }
 
@@ -128,7 +113,7 @@ export default function Timer({ matchID }: TimerProps) {
         >
         <View style={styles.modalWindow}>
           <View style={styles.addTray}>
-            <Text style={styles.addText} >Seconds: </Text>
+            <Text style={styles.addText} >Seconds:</Text>
             <TextInput
               style={styles.addBox}
               onChangeText={onChangeText}
@@ -148,17 +133,11 @@ export default function Timer({ matchID }: TimerProps) {
   )
 }
 
-const testBorder = {
-  // borderColor: "yellow",
-  // borderWidth: 4
-}
-
 const buttonDefaults = {
   backgroundColor: '#C0C0C0',
   width: 55,
   marginHorizontal: 25,
   borderRadius: 13,
-  ...testBorder
 }
 
 const styles = StyleSheet.create({
@@ -192,7 +171,6 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
     alignSelf: 'center',
     marginHorizontal: 5,
-    ...testBorder
   },
   play_pause: {
     ...buttonDefaults,
@@ -213,7 +191,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    ...testBorder
   },
   add_time: {
     ...buttonDefaults,

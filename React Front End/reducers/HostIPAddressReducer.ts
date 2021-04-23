@@ -1,4 +1,4 @@
-import { SetHostIPAddess, SET_HOST_IP_ADDRESS } from './../redux-types/actionTypes';
+import { SetHostIPAddess, SET_HOST_IP_ADDRESS } from './../redux-types/actionTypes'
 import { AnyAction, Reducer } from "redux"
 import ipAddress from 'ip-address'
 

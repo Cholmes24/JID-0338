@@ -3,13 +3,13 @@ import { ColorValue, StyleSheet } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { Text, View } from './Themed'
 import { RootType } from '../redux-types/storeTypes'
-import asMatchesAction from '../util/reduxActionWrapper'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import { AppThunk } from '../store'
 import matchService from "../services/match"
 import Button from './Button'
 // import { Audio, AVPlaybackStatus } from 'expo-av'
 import _ from 'lodash'
+import { decreaseScore, increaseScore } from '../reducers/features/ScoringSlice'
 
 /**
 const daggerWooshPath = '../assets/sounds/dagger-woosh.wav'
@@ -23,11 +23,10 @@ const woodHitPath = '../assets/sounds/wood-hard-hit.wav'
 type ScoreCounterProps = {
   matchID: number,
   fighterScoringKey: "fighter1Scoring" | "fighter2Scoring",
-  fontSize?: number,
   color?: ColorValue
 }
 
-export default function ScoreCounter({matchID, fighterScoringKey, fontSize = 70, color}: ScoreCounterProps) {
+export default function ScoreCounter({matchID, fighterScoringKey, color}: ScoreCounterProps) {
   const dispatch = useAppDispatch()
   const fighters = useAppSelector((state: RootType) => state.fighters)
   const matches = useAppSelector((state: RootType) => state.matches)
@@ -89,7 +88,7 @@ export default function ScoreCounter({matchID, fighterScoringKey, fontSize = 70,
     async dispatch => {
       const updatedMatch = await matchService.increaseScore(fighterScoringKey, matchID)
       if (updatedMatch.present !== match.present) {
-        dispatch(increaseAction)
+        dispatch(increaseScore(matchID, fighterScoringKey))
       }
     }
   )
@@ -98,19 +97,11 @@ export default function ScoreCounter({matchID, fighterScoringKey, fontSize = 70,
       if (score > 0) {
         const updatedMatch = await matchService.decreaseScore(fighterScoringKey, matchID)
         if (updatedMatch.present !== match.present) {
-          dispatch(decreaseAction)
+          dispatch(decreaseScore(matchID, fighterScoringKey))
         }
       }
     }
   )
-
-  const increaseAction = asMatchesAction({
-    type: "INCREASE_SCORE"
-  }, matchID, fighterScoringKey)
-
-  const decreaseAction = asMatchesAction({
-    type: "DECREASE_SCORE"
-  }, matchID, fighterScoringKey)
 
   const onUpPress = () => {
     // playSound(positive[_.random(0, positive.length - 1)])

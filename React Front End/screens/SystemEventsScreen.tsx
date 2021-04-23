@@ -7,6 +7,8 @@ import { ScreenPropType } from '../types';
 
 import tournamentsService from '../services/tournaments'
 import List from '../components/List';
+import { setCurrentSystemEventID } from '../reducers/CurrentIDsReducer'
+import { addTournaments } from '../reducers/TournamentsReducer'
 
 export default function SystemEventsScreen({
   navigation
@@ -14,15 +16,9 @@ export default function SystemEventsScreen({
   const dispatch = useAppDispatch()
   const thunkSystemEventData = (systemEvent: SystemEvent): AppThunk<Promise<void>> => (
     async dispatch => {
-      dispatch({
-        type: "SET_CURRENT_SYSTEM_EVENT_ID",
-        payload: systemEvent.ID
-      })
+      dispatch(setCurrentSystemEventID(systemEvent.ID))
       const tournaments = await tournamentsService.getAll(systemEvent.ID)
-      dispatch({
-        type: "ADD_TOURNAMENTS",
-        payload: tournaments
-      })
+      dispatch(addTournaments(tournaments))
     }
   )
   const onPressFactory = (s: SystemEvent) => () => {
