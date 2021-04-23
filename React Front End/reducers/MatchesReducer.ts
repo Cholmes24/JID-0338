@@ -1,9 +1,9 @@
-import { MatchScore, Timer } from './../redux-types/storeTypes';
+import { Timer } from './../redux-types/storeTypes';
 import { AnyAction, Reducer } from "redux"
 import { Match } from "../redux-types/storeTypes"
 import matchReducer from "./MatchReducer"
 import { AddMatchesAction, MatchesAction } from "../redux-types/actionTypes"
-import { addItems, addItemsWithMergeCustomizer } from "../util/utilFunctions"
+import { addItemsWithMergeCustomizer } from "../util/utilFunctions"
 
 function isMatchesActionType(action: AnyAction): action is MatchesAction {
   if (action.type !== "MATCHES") {
@@ -25,8 +25,7 @@ const matchesReducer: Reducer<Match[], AnyAction> = (state = [], action) => {
       return action.payload
     case "ADD_MATCHES":
       return addItemsWithMergeCustomizer(state, (action as AddMatchesAction).payload,
-        timerMergeCustomizer,
-        matchTemplate as Match)
+        timerMergeCustomizer, matchTemplate as Match)
     default:
       return state
   }

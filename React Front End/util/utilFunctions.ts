@@ -1,16 +1,5 @@
+import { Match, Pool, RootType, SystemEvent, Tournament } from './../redux-types/storeTypes';
 import _ from 'lodash'
-
-// export function addItems<T extends {ID: number}>(original: T[], payload: T[], template?: T) {
-//   const existingIDs = original.map(t => t.ID)
-//   const [ toUpdate, toAdd ] = _.partition(payload, t => existingIDs.includes(t.ID))
-
-//   // For types with fields not used in the database, an optional template can be
-//   // passed in for filling in default values. lodash's deep merge will
-//   // overwrite them if the db provides non-null, defined values
-//   const formattedNewElements = template ? toAdd.map(t => _.merge(t, template)) : toAdd
-//   return _.unionBy(toUpdate, original, formattedNewElements, t => t.ID)
-// }
-
 
 export function addItems<T extends {ID: number}>(original: T[], payload: T[], template?: T) {
 
@@ -66,4 +55,25 @@ export function formatClock(ms: number) {
   const minutes = Math.floor(ms / (1000 * 60)) % 60
 
   return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}.${points}`
+}
+
+type ValidParentKey = "poolID" | "tournamentID" | "systemEventID"
+
+export function checkForParentKeyName<T extends SystemEvent | Tournament | Pool | Match>(
+  item: T, pKey: ValidParentKey
+): item is T & Record<ValidParentKey, number>  {
+  return item.hasOwnProperty(pKey)
+}
+
+export function getParentKeyName(key: keyof RootType) {
+  switch (key) {
+    case "matches":
+      return "poolID"
+    case "pools":
+      return "tournamentID"
+    case "tournaments":
+      return "systemEventID"
+    default:
+      return undefined
+  }
 }

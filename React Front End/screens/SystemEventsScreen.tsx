@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native';
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
+import { useAppDispatch } from '../hooks/reduxHooks';
 import { SystemEvent } from '../redux-types/storeTypes';
 import { AppThunk } from '../store';
 import { ScreenPropType } from '../types';
@@ -9,7 +9,6 @@ import tournamentsService from '../services/tournaments'
 import List from '../components/List';
 
 export default function SystemEventsScreen({
-  route,
   navigation
 }: ScreenPropType<"Events">) {
   const dispatch = useAppDispatch()
@@ -37,18 +36,15 @@ export default function SystemEventsScreen({
       <List
         listNameAtRoot="systemEvents"
         onPressFactory={i => onPressFactory(i as SystemEvent)}
-        // filter={events => events}
         getName={(event) => (event as SystemEvent).name}
       />
     </View>
   )
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    // justifyContent: 'center',
   },
 })

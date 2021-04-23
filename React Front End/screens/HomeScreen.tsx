@@ -1,19 +1,16 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import { Button } from 'react-native-elements'
 import UserCard from "../components/UserCard"
-
 import matchService from '../services/match'
 import fightersService from '../services/fighters'
 import systemEventsService from '../services/systemEvents'
-
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks"
 import { AppThunk } from "../store"
 
 import { ScreenPropType } from "../types";
 import { Match } from "../redux-types/storeTypes";
-import ConnectionChecker from "../components/ConnectionChecker"
 
 export default function HomeScreen({
   navigation
@@ -22,6 +19,12 @@ export default function HomeScreen({
   const currentMatchID = useAppSelector((state) => state.currentIDs.matchID)
   const currentMatches = useAppSelector((state) => state.matches)
   const hostIP = true // useAppSelector(state => state.hostIPAddress)
+  const [ hasRecentMatch, setHasRecentMatch ] = useState(false)
+
+  useEffect(() => {
+    setHasRecentMatch(currentMatches.find(m => m.ID === currentMatchID) !== undefined)
+  }, [ currentMatchID, currentMatches ])
+
 
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -72,13 +75,13 @@ export default function HomeScreen({
   )
 
   const mostRecentMatchButton = () => (
-    currentMatchID !== undefined
+    currentMatchID && hasRecentMatch
       ? <Button
           buttonStyle={styles.entry}
           title='Most Recent Match'
           onPress={() => navigation.navigate("Match", { matchID: currentMatchID }) }
         />
-      : null //<View style={styles.matchButton} > </View>
+      : null
   )
 
   return (
@@ -99,33 +102,16 @@ export default function HomeScreen({
         />
         {mostRecentMatchButton()}
       </View>
-
-      {/* <View style={styles.filler}></View> */}
-
     </View>
-
   )
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
   userCard: {
     flex: 3,
     marginTop: 10,
-    // paddingTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  filler: {
-    height: '15%'
   },
   container: {
     flex: 2,
@@ -136,7 +122,6 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     flex: 3,
     textAlign: 'center',
-    // backgroundColor: 'white',
     width: '100%',
   },
   entry: {

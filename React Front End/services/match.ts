@@ -34,36 +34,33 @@ const getFighterNumber = (key: FighterScoringKey) => {
 }
 
 // TODO: Need to get ringNumber
-// TODO: Determine meaning of db field "matchTime"
 // TODO: Incorporate existing penalty/warning values - partially addressed
-export function mapMatchFields(
-  matchInDb: MatchInDB,
-): Match {
-  const { fighter1ID, fighter2ID, tournamentID } = matchInDb
+export function mapMatchFields(matchInDB: MatchInDB): Match {
+  const { fighter1ID, fighter2ID, tournamentID } = matchInDB
   const timer: Timer = {
     // maxTime: 180000,
-    // timeRemaining: matchInDb.matchTime * 1000,
-    // timeRemainingAtLastStop: matchInDb.matchTime * 1000,
+    timeRemaining: matchInDB.matchTime * 1000,
+    timeRemainingAtLastStop: matchInDB.matchTime * 1000,
   } as Timer
 
   const present = {
     fighter1Scoring: {
-      points: matchInDb.fighter1Score,
-      numPenalties: matchInDb.num_penalties_fighter1,
-      numWarnings: matchInDb.num_warnings_fighter1,
+      points: matchInDB.fighter1Score,
+      numPenalties: matchInDB.num_penalties_fighter1,
+      numWarnings: matchInDB.num_warnings_fighter1,
     },
     fighter2Scoring: {
-      points: matchInDb.fighter2Score,
-      numPenalties: matchInDb.num_penalties_fighter2,
-      numWarnings: matchInDb.num_warnings_fighter2,
+      points: matchInDB.fighter2Score,
+      numPenalties: matchInDB.num_penalties_fighter2,
+      numWarnings: matchInDB.num_warnings_fighter2,
     }
   } as MatchScore
 
   return ({
     fighter1ID,
     fighter2ID,
-    ID: matchInDb.matchID,
-    poolID: matchInDb.groupID,
+    ID: matchInDB.matchID,
+    poolID: matchInDB.groupID,
     present,
     timer,
     tournamentID,

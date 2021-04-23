@@ -16,15 +16,10 @@ export default function MatchesScreen({
   const dispatch = useAppDispatch()
   const poolID = useAppSelector(state => state.currentIDs.poolID) || route.params.poolID
 
-  const tournamentID = useAppSelector(state => state.currentIDs.tournamentID) as number
   const fighters = useAppSelector(state => state.fighters)
   if (poolID === undefined) {
     throw new Error("SYSTEM EVENT ID MISSING AT TOURNAMENTS SCREEN")
   }
-
-  // const allMatches = useAppSelector(state => state.matches)
-  // const matches = allMatches.filter(m => m.poolID === poolID)
-
 
   const thunkMatchData = (match: Match): AppThunk<Promise<void>> => (
     async dispatch => {
@@ -32,7 +27,7 @@ export default function MatchesScreen({
         type: "SET_CURRENT_MATCH_ID",
         payload: match.ID
       })
-      const matches = await matchesService.getAllByTournament(tournamentID)
+      const matches = await matchesService.getAll(poolID)
       dispatch({
         type: "ADD_MATCHES",
         payload: matches
@@ -64,13 +59,9 @@ export default function MatchesScreen({
   return (
     <View style={styles.container} >
       <List
-        // items={namedMatches}
         listNameAtRoot="matches"
         onPressFactory={i => onPressFactory(i as Match)}
-        // filter={is => (is as Match[]).filter(m => m.poolID === poolID)}
         getName={i => getMatchName(i as Match)}
-        // parentIDKeyName="poolID"
-
       />
     </View>
   )
@@ -80,15 +71,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    // justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
 })

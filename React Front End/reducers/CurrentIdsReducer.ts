@@ -1,8 +1,7 @@
 import { CurrentIDs } from '../redux-types/storeTypes';
 import { AnyAction, Reducer } from "redux"
-import defaultData from "../defaultData"
 
-const currentIDsReducer: Reducer<CurrentIDs, AnyAction> = (state = defaultData.currentIDs, action) => {
+const currentIDsReducer: Reducer<CurrentIDs, AnyAction> = (state = {}, action) => {
   switch (action.type) {
     case "SET_CURRENT_SYSTEM_EVENT_ID":
       return { ...state, systemEventID: action.payload }

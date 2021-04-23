@@ -4,6 +4,7 @@ import List from '../components/List'
 import { View } from '../components/Themed'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import { Pool } from '../redux-types/storeTypes'
+import fightersService from '../services/fighters'
 import matchesService from '../services/matches'
 import { AppThunk } from '../store'
 import { ScreenPropType } from '../types'
@@ -13,20 +14,28 @@ export default function PoolsScreen({
   navigation
 }: ScreenPropType<"Pools">) {
   const dispatch = useAppDispatch()
-  const tournamentID = useAppSelector(state => state.currentIDs.tournamentID) || route.params.tournamentID
+  const tournamentID = useAppSelector(state => state.currentIDs.tournamentID)
+    || route.params.tournamentID
+
   if (tournamentID === undefined) {
     throw new Error("SYSTEM EVENT ID MISSING AT TOURNAMENTS SCREEN")
   }
+
   const thunkPoolData = (pool: Pool): AppThunk<Promise<void>> => (
     async dispatch => {
       dispatch({
         type: "SET_CURRENT_POOL_ID",
         payload: pool.ID
       })
-      const matches = await matchesService.getAllByTournament(tournamentID)
+      const matches = await matchesService.getAll(pool.ID)
       dispatch({
         type: "ADD_MATCHES",
         payload: matches
+      })
+      const fighters = await fightersService.getAllByPoolID(pool.ID)
+      dispatch({
+        type: "ADD_FIGHTERS",
+        payload: fighters
       })
     }
   )
@@ -43,7 +52,6 @@ export default function PoolsScreen({
       <List
         listNameAtRoot="pools"
         onPressFactory={i => onPressFactory(i as Pool)}
-        // filter={is => (is as Pool[]).filter(p => p.tournamentID === tournamentID)}
         getName={i => (i as Pool).name}
       />
     </View>
@@ -54,15 +62,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    // justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
 })

@@ -12,8 +12,10 @@ export default function TournamentsScreen({
   navigation
 }: ScreenPropType<"Tournaments">) {
   const dispatch = useAppDispatch()
-  const systemEventId = useAppSelector(state => state.currentIds.systemEventId) || route.params.systemEventId
-  if (systemEventId === undefined) {
+  const systemEventID = useAppSelector(state => state.currentIDs.systemEventID)
+    || route.params.systemEventID
+
+  if (systemEventID === undefined) {
     throw new Error("SYSTEM EVENT ID MISSING AT TOURNAMENTS SCREEN")
   }
 
@@ -21,9 +23,9 @@ export default function TournamentsScreen({
     async dispatch => {
       dispatch({
         type: "SET_CURRENT_TOURNAMENT_ID",
-        payload: tournament.id
+        payload: tournament.ID
       })
-      const pools = await poolsService.getAll(tournament.id)
+      const pools = await poolsService.getAll(tournament.ID)
       dispatch({
         type: "ADD_POOLS",
         payload: pools
@@ -33,18 +35,17 @@ export default function TournamentsScreen({
 
   const onPressFactory = (t: Tournament) => () => {
     dispatch(thunkTournamentData(t))
-      .then(() => 
-        navigation.navigate("Pools", { tournamentId: t.id })  
+      .then(() =>
+        navigation.navigate("Pools", { tournamentID: t.ID })
       )
     }
 
   return (
     <View style={styles.container} >
       <List
-        listNameAtRoot={"tournaments"} 
-        onPressFactory={i => onPressFactory(i as Tournament)} 
+        listNameAtRoot={"tournaments"}
+        onPressFactory={i => onPressFactory(i as Tournament)}
         getName={i => (i as Tournament).name}
-        // filter={is => (is as Tournament[]).filter(t => t.systemEventId === systemEventId)}
       />
     </View>
   )
@@ -54,15 +55,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    // justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
 })
