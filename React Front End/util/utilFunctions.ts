@@ -55,3 +55,15 @@ export function addItemsWithMergeCustomizer<T extends {ID: number}>(
 
   return _.union(unalteredElements, updatedElements, newElements)
 }
+
+export function isValidDecimal(input: string): boolean{
+  return RegExp(/\d*((\.d+)|(\d\.?))/).test(input)
+}
+
+export function formatClock(ms: number) {
+  const points = Math.floor(ms / 100) % 10
+  const seconds = Math.floor((ms / 1000)) % 60
+  const minutes = Math.floor(ms / (1000 * 60)) % 60
+
+  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}.${points}`
+}

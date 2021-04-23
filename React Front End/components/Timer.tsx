@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Text } from 'react-native-elements'
+import { Button, Text, Icon } from 'react-native-elements'
 import { View, StyleSheet, TextInput, useColorScheme, Keyboard } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { RootType } from '../redux-types/storeTypes'
 import asMatchesAction from '../util/reduxActionWrapper'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import Modal from 'react-native-modal'
 import matchService from '../services/match'
+import { formatClock, isValidDecimal } from '../util/utilFunctions'
 
 type TimerProps = {
   matchID: number
 }
 
-//TODO: implement remote functionality
-export default function Timer({matchID}: TimerProps) {
+export default function Timer({ matchID }: TimerProps) {
   const dispatch = useAppDispatch()
   const matches = useAppSelector((state: RootType) => state.matches)
   const timerStore = matches.find(m => m.ID === matchID)?.timer
-  const theme = useColorScheme()
 
   if (!timerStore) {
     throw Error("INVALID MATCH ID - TIMER NOT FOUND")
   }
+
+  // Used to trigger the remote update when performing a timer change.
+  // Keeps all asynchronous logic in one place.
+  // Just alternates between 0 and 1.
+  const [ checkTimer, setCheckTimer ] = useState(0)
+  const triggerRemoteUpdate = () => setCheckTimer(1 - checkTimer)
 
   const [ timeAddText, setTimeAddText ] = useState<string>('')
   const [ timeLeft, setTimeLeft ] = useState<number>(timerStore.timeRemaining)
@@ -41,7 +45,7 @@ export default function Timer({matchID}: TimerProps) {
 
   useEffect(() => {
     matchService.updateTimer(timeLeft / 1000, matchID)
-  }, [ timerStore.isRunning ] )
+  }, [ timerStore.isRunning, checkTimer ] )
 
   const calculateTimeRemaining = (
     currentTime: number = Date.now()
@@ -51,7 +55,7 @@ export default function Timer({matchID}: TimerProps) {
 
   const update = () => {
     const timeRemaining = calculateTimeRemaining()
-    if (timeRemaining === 0 || timerStore.timeRemaining - timeRemaining > 400) {
+    if (timeRemaining === 0 || timerStore.timeRemaining - timeRemaining > 150) {
       dispatch(asMatchesAction({
         type: "UPDATE_TIMER",
         payload: { currentTime: Date.now() }
@@ -69,15 +73,6 @@ export default function Timer({matchID}: TimerProps) {
     )
   }
 
-  const formattedTimeLeft = () => {
-    // const ms: number = timerStore.timeRemaining
-    const ms: number = timeLeft
-    const points = Math.floor(ms / 100) % 10
-    const seconds = Math.floor((ms / 1000)) % 60
-    const minutes = Math.floor(ms / (1000 * 60)) % 60
-    return `${minutes}:${seconds < 10 ? "0" :""}${seconds}.${points}`
-  }
-
   const addTime = () => {
     if (isValidDecimal(timeAddText.trim())) {
       const asFloat: number = Number.parseFloat(timeAddText)
@@ -86,10 +81,6 @@ export default function Timer({matchID}: TimerProps) {
       setIsModalVisible(false)
       Keyboard.dismiss()
     }
-  }
-
-  const quickAddTime = () => {
-    addParticularTime(10000)
   }
 
   const addParticularTime = (amountToAdd: number) => {
@@ -101,148 +92,34 @@ export default function Timer({matchID}: TimerProps) {
         payload: { currentTime, amountToAdd }
       }, matchID)
     )
+    triggerRemoteUpdate()
   }
 
   const hasTimeLeft: () => boolean = () => timerStore.timeRemaining > 0
   const timerRunning: () => boolean = () => timerStore.isRunning
   const onChangeText = (input: string) => setTimeAddText(input)
 
-  const Astyles = StyleSheet.create({
-    addTray: {
-      flexDirection: "row"
-    },
-    addBox: {
-      fontSize: 30,
-      backgroundColor: "#C0C0C0",
-      fontVariant: ['tabular-nums'],
-      margin: 10,
-      // alignSelf: "center",
-      flex: 1,
-      borderRadius: 8,
-    },
-    addText: {
-      fontSize: 30,
-      margin: 20,
-      flex: 1,
-    },
-    // modalFiller: {
-    //   flex: 1,
-    // },
-    modalButton: {
-      flex: 1
-    },
-    modalWindow: {
-      // height: 200,
-      backgroundColor: "white",
-      borderRadius: 8,
+  const icon = (name: string) => <Icon
+    name={name}
+    type="font-awesome"
+    size={40}
+    color={"white"}
+  />
 
-      marginBottom: 150,
-      // justifyContent: 'center',
-      // alignSelf: 'center',
-      // alignItems: 'center',
-      // flex: 1,
-    },
-    text: {
-      fontSize: 30,
-      textAlign: 'center',
-      // fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace'
-      fontVariant: ['tabular-nums'],
-      alignSelf: 'center',
-      marginHorizontal: 5,
-      ...testBorder
-    },
-    play_pause: {
-      ...buttonDefaults,
-      justifyContent: 'center',
-      alignSelf: 'center',
-      alignItems: 'center',
-      // shadowRadius: 4,
-      // shadowOffset: { width: 1, height: 3 },
-      // shadowColor: 'black',
-      // shadowOpacity: 0.4,
-    },
-    timerBox: {
-      width: '100%',
-      justifyContent: 'center',
-      alignSelf: 'center',
-      alignItems: 'center',
-    },
-    container: {
-      // width: '100%',
-      marginVertical: 3,
-      alignSelf: 'center',
-      flexDirection:'row',
-      alignContent: 'center',
-      justifyContent: 'center',
-      alignItems: 'center',
-      ...testBorder
-    },
-    add_time: {
-      ...buttonDefaults,
-      justifyContent: 'center',
-      alignSelf: 'center',
-      // shadowRadius: 4,
-      // shadowOffset: { width: 1, height: 3 },
-      // shadowColor: 'black',
-      // shadowOpacity: 0.4,
-    },
-    modalAddTime: {
-      ...buttonDefaults,
-      justifyContent: 'center',
-      alignSelf: 'flex-end',
-      // marginVertical: 10,
-      // paddingLeft: 50,
-      marginBottom: 20,
-      // shadowRadius: 4,
-      // shadowOffset: { width: 1, height: 3 },
-      // shadowColor: 'black',
-      // shadowOpacity: 0.4,
-    }
-  });
   return (
     <View style={styles.container}>
-      {/* <Button
-        buttonStyle={styles.add_time}
-        disabled={!timerRunning()}
-        icon={
-          <Icon
-              name="plus"
-              size={40}
-              color="white"
-            />
-          }
-        onPress={addTime}
-      /> */}
       <Button
         buttonStyle={styles.add_time}
-        icon={
-          <Icon
-              name="plus"
-              size={40}
-              color="white"
-            />
-          }
+        icon={icon("plus")}
         onPress={toggleModal}
       />
-      <Text style={styles.text}>{formattedTimeLeft()} </Text>
+      <Text style={styles.text}>{formatClock(timeLeft)} </Text>
       <Button
         buttonStyle={styles.play_pause}
-        icon={timerRunning() && hasTimeLeft() ?
-          <Icon
-            name="pause"
-            size={40}
-            color="white"
-          />
-          :
-          <Icon
-            name="play"
-            size={40}
-            color="white"
-          />
-        }
+        icon={icon(timerRunning() && hasTimeLeft() ? "pause": "play")}
         onPress={() => (hasTimeLeft() ? toggle() : null)}
       />
-      {/* <Modal
+      <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => {setIsModalVisible(false); Keyboard.dismiss()}}
         backdropOpacity={0.3}
@@ -253,7 +130,6 @@ export default function Timer({matchID}: TimerProps) {
           <View style={styles.addTray}>
             <Text style={styles.addText} >Seconds: </Text>
             <TextInput
-              // placeholder="seconds"
               style={styles.addBox}
               onChangeText={onChangeText}
               value={timeAddText}
@@ -263,20 +139,15 @@ export default function Timer({matchID}: TimerProps) {
           </View>
           <Button
             buttonStyle={styles.modalAddTime}
-            icon={
-              <Icon
-                name="plus"
-                size={40}
-                color="white"
-              />
-            }
+            icon={icon("plus")}
             onPress={addTime}
           />
         </View>
-      </Modal> */}
+      </Modal>
     </View>
   )
 }
+
 const testBorder = {
   // borderColor: "yellow",
   // borderWidth: 4
@@ -356,5 +227,3 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   }
 })
-
-const isValidDecimal = (input: string) => (RegExp(/\d*((\.d+)|(\d\.?))/).test(input))

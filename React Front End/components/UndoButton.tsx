@@ -1,13 +1,12 @@
-import React, { useState } from "react"
-import Icon from "react-native-vector-icons/EvilIcons"
-import { Pressable, StyleSheet } from "react-native"
+import React from "react"
 import { RootType } from "../redux-types/storeTypes"
 import { MatchesAction } from "../redux-types/actionTypes"
 import asMatchesAction from "../util/reduxActionWrapper"
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks"
 import { AppThunk } from '../store'
 import matchService from "../services/match"
-// import { Icon } from "react-native-elements"
+import Button from './Button'
+import { Icon } from "react-native-elements"
 
 export type UndoButtonProps = {
   matchID: number
@@ -16,7 +15,6 @@ export type UndoButtonProps = {
 //TODO: Implement Remote functionality with thunks
 export default function UndoButton({matchID}: UndoButtonProps) {
   const dispatch = useAppDispatch()
-  // const color = useThemeColor({ light: "black", dark: "white"}, "tabIconDefault")
   const matches = useAppSelector((state: RootType) => state.matches)
   const match = matches.find(m => m.ID === matchID)
 
@@ -25,57 +23,31 @@ export default function UndoButton({matchID}: UndoButtonProps) {
   }
 
   const { fighter1ID, fighter2ID } = match
-  const fontSize = 35
-
-  const undo: MatchesAction = asMatchesAction({ type: "MATCH_UNDO" }, matchID)
-
-  const pressedColor = "#BEBEBE"
-  const [ buttonColor, setButtonColor ] = useState<"white" | typeof pressedColor>("white")
 
   const thunkUndo = (): AppThunk => (
     async dispatch => {
       // TODO: need to test syncing with db
       const lastState = match.past.length !== 0 && match.past[match.past.length - 1]
+      const undo: MatchesAction = asMatchesAction({ type: "MATCH_UNDO" }, matchID)
       if (lastState) {
-        matchService.undo(matchID, fighter1ID, fighter2ID, lastState)
+        await matchService.undo(matchID, fighter1ID, fighter2ID, lastState)
         dispatch(undo)
       }
     }
   )
 
-  const styles = StyleSheet.create({
-    buttonIcon: {
-      color: "black",
-      alignSelf: "center",
-      fontSize
-    },
-    pressable: {
-      backgroundColor: buttonColor,
-      borderRadius: 15,
-      padding: 6,
-      width: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      elevation: 5,
-      flex: 1,
-      shadowRadius: 4,
-      shadowOffset: { width: 1, height: 3 },
-      shadowColor: 'black',
-      shadowOpacity: 0.4,
-    },
-  })
+  const onPress = () => dispatch(thunkUndo())
+  const content = () => <Icon
+    name="undo"
+    type="evilicon"
+    size={40}
+    color="black"
+  />
 
   return (
-    <Pressable style={styles.pressable}
-      onPress={() => dispatch(thunkUndo())}
-      onPressIn={() => match.past.length !== 0 ? setButtonColor("#BEBEBE") : null}
-      onPressOut={() => setButtonColor("white")}
-    >
-      <Icon
-        name="undo"
-        size={40}
-        color="black"
-      />
-    </Pressable>
+    <Button
+      onPress={onPress}
+      content={content}
+    />
   )
 }
