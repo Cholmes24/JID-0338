@@ -35,16 +35,11 @@ export default function FighterColumn(props: FighterColumnProps) {
     throw Error("INVALID FIGHTER ID")
   }
 
-  const issueWarning = asMatchesAction({
-    type: "ISSUE_WARNING"
-  }, matchID, fighterScoringKey)
 
-  const issuePenalty = asMatchesAction({
-    type: "ISSUE_PENALTY"
-  }, matchID, fighterScoringKey)
 
   const thunkIssueWarning = (): AppThunk => (
     async dispatch => {
+      const issueWarning = asMatchesAction({ type: "ISSUE_WARNING" }, matchID, fighterScoringKey)
       const updatedMatch = await matchService.issueWarning(fighterScoringKey, matchID)
       if (updatedMatch.present !== match.present) {
         dispatch(issueWarning)
@@ -54,6 +49,7 @@ export default function FighterColumn(props: FighterColumnProps) {
 
   const thunkIssuePenalty = (): AppThunk => (
     async dispatch => {
+      const issuePenalty = asMatchesAction({ type: "ISSUE_PENALTY" }, matchID, fighterScoringKey)
       const updatedMatch = await matchService.issuePenalty(fighterScoringKey, matchID)
       if (updatedMatch.present !== match.present) {
         dispatch(issuePenalty)
@@ -85,7 +81,7 @@ export default function FighterColumn(props: FighterColumnProps) {
 
       backgroundColor: color,
       borderRadius: 15,
-      wIDth: '100%',
+      width: '100%',
       justifyContent: 'center',
       alignItems: 'center',
       alignContent: "center",
@@ -116,7 +112,7 @@ export default function FighterColumn(props: FighterColumnProps) {
       flex: 1,
       padding: 5,
       paddingBottom: 8,
-      wIDth: "100%"
+      width: "100%"
     },
     buttonList: {
       // For testing purposes to align things

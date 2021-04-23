@@ -1,17 +1,17 @@
-import { AntDesign } from '@expo/vector-icons'
-import React, { useEffect, useState } from 'react'
-import { ColorValue, GestureResponderEvent, Pressable, StyleSheet } from 'react-native'
+import React from 'react'
+import { ColorValue, StyleSheet } from 'react-native'
+import { Icon } from 'react-native-elements'
 import { Text, View } from './Themed'
 import { RootType } from '../redux-types/storeTypes'
 import asMatchesAction from '../util/reduxActionWrapper'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import { AppThunk } from '../store'
 import matchService from "../services/match"
-import { Audio, AVPlaybackStatus } from 'expo-av'
+import Button from './Button'
+// import { Audio, AVPlaybackStatus } from 'expo-av'
 import _ from 'lodash'
-// import UIfx from 'uifx'
 
-
+/**
 const daggerWooshPath = '../assets/sounds/dagger-woosh.wav'
 const knifeHitPath = '../assets/sounds/knife-fast-hit.wav'
 const swordHitPath = '../assets/sounds/medieval-metal-sword.wav'
@@ -19,7 +19,7 @@ const metalWooshPath = '../assets/sounds/metal-hit-woosh.wav'
 const armorHitPath = '../assets/sounds/sword-strikes-armor.wav'
 const ouchPath = '../assets/sounds/human-fighter-scream.wav'
 const woodHitPath = '../assets/sounds/wood-hard-hit.wav'
-
+*/
 type ScoreCounterProps = {
   matchID: number,
   fighterScoringKey: "fighter1Scoring" | "fighter2Scoring",
@@ -32,8 +32,8 @@ export default function ScoreCounter({matchID, fighterScoringKey, fontSize = 70,
   const fighters = useAppSelector((state: RootType) => state.fighters)
   const matches = useAppSelector((state: RootType) => state.matches)
   const match = matches.find(m => m.ID === matchID)
-  const [ activeSound, setActiveSound ] = useState<Audio.Sound | undefined>()
-  const [ audioInterruptible, setAudioInterruptible ] = useState(true)
+  // const [ activeSound, setActiveSound ] = useState<Audio.Sound | undefined>()
+  // const [ audioInterruptible, setAudioInterruptible ] = useState(true)
 
   // const fighter = useSelector((state: RootType) => state.fighters.find(c => c.ID === fighterID))
   if (!match) {
@@ -51,7 +51,7 @@ export default function ScoreCounter({matchID, fighterScoringKey, fontSize = 70,
       return color
     }
   }
-
+  /**
   const daggerSound = () => Audio.Sound.createAsync(require(daggerWooshPath))
   const knifeSound = () => Audio.Sound.createAsync(require(knifeHitPath))
   const swordSound = () => Audio.Sound.createAsync(require(swordHitPath))
@@ -79,6 +79,7 @@ export default function ScoreCounter({matchID, fighterScoringKey, fontSize = 70,
       activeSound.unloadAsync()
     } : undefined
   }, [activeSound])
+  */
 
   // const colorToUse = getColorToUse()
   const scoring = match.present[fighterScoringKey]
@@ -111,95 +112,75 @@ export default function ScoreCounter({matchID, fighterScoringKey, fontSize = 70,
     type: "DECREASE_SCORE"
   }, matchID, fighterScoringKey)
 
-  const styles = StyleSheet.create({
-    arrow: {
-      color: "black",
-      fontSize: fontSize * 1.8,
-      paddingBottom: 5,
-    },
-    scoreBox: {
-      height: fontSize * 1.3,
-      width: fontSize * 1.3,
-      fontSize,
-      fontWeight: "bold",
-      color: "white",
-      // borderColor: "black",
-      // borderWidth: 1,
-      backgroundColor: color,
-      backfaceVisibility: "hidden",
-      textAlign: "center",
-      textAlignVertical: "center",
-      position: "absolute",
-    },
-    container: {
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: color,
-    },
-  })
   const onUpPress = () => {
-    playSound(positive[_.random(0, positive.length - 1)])
+    // playSound(positive[_.random(0, positive.length - 1)])
     dispatch(thunkIncrease())
   }
 
   const onDownPress = () => {
     if (score > 0) {
-      playSound(negative[_.random(0, negative.length - 1)])
+      // playSound(negative[_.random(0, negative.length - 1)])
       dispatch(thunkDecrease())
     }
   }
 
   return (
-    <View style={styles.container} >
-      <ArrowButton
-        iconName="caretup"
+    <View style={[ styles.container, { backgroundColor: color } ]} >
+      <Button
+        invertColor={true}
         onPress={onUpPress}
-        fontSize={fontSize}
+        content={(color) =>
+          <Icon
+            name="caretup"
+            type="antdesign"
+            iconStyle={styles.arrow}
+            color={color as string}
+          />
+        }
       />
-      <Text style={styles.scoreBox} >{score}</Text>
-      <ArrowButton
-        iconName="caretdown"
-        onPress={onDownPress}
-        fontSize={fontSize}
+      <Text style={[ styles.scoreBox, { backgroundColor: color } ]} >{score}</Text>
+      <Button
+        invertColor={true}
         disabled={score <= 0}
+        onPress={onDownPress}
+        content={(color) =>
+          <Icon
+            name="caretdown"
+            type="antdesign"
+            iconStyle={styles.arrow}
+            color={color as string}
+          />
+        }
       />
     </View>
   )
 }
 
-function ArrowButton({iconName, onPress, fontSize, disabled = false}: {
-  iconName: "caretdown" | "caretup",
-  onPress: ((event: GestureResponderEvent) => void) | undefined,
-  fontSize: number,
-  disabled?: boolean,
-}){
-  const pressedColor = "#BEBEBE"
-  const [ arrowColor, setArrowColor ] = useState<"white" | typeof pressedColor>("white")
-
-  const styles = StyleSheet.create({
-    buttonSurrounding: {
-      // borderRadius: 15,
-      width: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      elevation: 5,
-    },
-    buttonIcon: {
-      color: arrowColor,
-      fontSize: fontSize * 1.8,
-      paddingBottom: 5
-    }
-  })
-
-  return (
-    <Pressable
-      disabled={disabled}
-      onPress={onPress}
-      style={styles.buttonSurrounding}
-      onPressIn={() => setArrowColor("#BEBEBE")}
-      onPressOut={() => setArrowColor("white")}
-    >
-      <AntDesign name={iconName} style={styles.buttonIcon}/>
-    </Pressable>
-  )
-}
+const styles = StyleSheet.create({
+  arrow: {
+    fontSize: 125,
+    paddingBottom: 5,
+  },
+  scoreBox: {
+    height: 90,
+    width: 90,
+    fontSize: 70,
+    fontWeight: "bold",
+    color: "white",
+    backfaceVisibility: "hidden",
+    textAlign: "center",
+    textAlignVertical: "center",
+    position: "absolute",
+    paddingTop: 5,
+  },
+  container: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonSurrounding: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+  },
+})
