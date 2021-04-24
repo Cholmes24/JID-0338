@@ -1,8 +1,9 @@
+import { createIncreaseScoreAction, createDecreaseScoreAction, createIssueWarningAction, createIssuePenaltyAction } from './features/ScoringSlice';
 import { SetMatchesAction, MatchActionType } from './../redux-types/actionTypes'
 import { Timer } from './../redux-types/storeTypes'
 import { AnyAction, Reducer } from "redux"
 import { Match } from "../redux-types/storeTypes"
-import matchReducer from "./MatchReducer"
+import matchReducer, { matchScoring } from "./MatchReducer"
 import { AddMatchesAction, MatchesAction } from "../redux-types/actionTypes"
 import {ADD_MATCHES, MATCHES, SET_MATCHES } from "../redux-types/actionTypes"
 import { addItemsWithMergeCustomizer } from "../util/utilFunctions"
@@ -98,3 +99,20 @@ export const addMatches: (matches: Match[]) => AddMatchesAction = matches => ({
   type: ADD_MATCHES,
   payload: matches
 })
+
+type FighterScoringKey = "fighter1Scoring" | "fighter2Scoring"
+
+export function increaseScore(matchID: number, fighter: FighterScoringKey) {
+  return matches(matchScoring(createIncreaseScoreAction(), fighter), matchID)
+}
+
+export function decreaseScore(matchID: number, fighter: FighterScoringKey) {
+  return matches(matchScoring(createDecreaseScoreAction(), fighter), matchID)
+}
+
+export function issueWarning(matchID: number, fighter: FighterScoringKey) {
+  return matches(matchScoring(createIssueWarningAction(), fighter), matchID)}
+
+export function issuePenalty(matchID: number, fighter: FighterScoringKey) {
+  return matches(matchScoring(createIssuePenaltyAction(), fighter), matchID)
+}

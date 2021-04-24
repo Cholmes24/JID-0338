@@ -7,7 +7,7 @@ import { Fighter, Match, RootType } from '../redux-types/storeTypes'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import { AppThunk } from '../store'
 import matchService from '../services/match'
-import { issuePenalty, issueWarning } from '../reducers/features/ScoringSlice'
+import { issuePenalty, issueWarning } from '../reducers/MatchesReducer'
 
 export type FighterColumnProps = {
   matchID: number

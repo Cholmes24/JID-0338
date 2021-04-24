@@ -9,7 +9,7 @@ import matchService from "../services/match"
 import Button from './Button'
 // import { Audio, AVPlaybackStatus } from 'expo-av'
 import _ from 'lodash'
-import { decreaseScore, increaseScore } from '../reducers/features/ScoringSlice'
+import { decreaseScore, increaseScore } from '../reducers/MatchesReducer'
 
 /**
 const daggerWooshPath = '../assets/sounds/dagger-woosh.wav'

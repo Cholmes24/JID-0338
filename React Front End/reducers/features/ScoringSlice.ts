@@ -53,27 +53,27 @@ function determinePenaltyIssued(state: Scoring, action: IssuePenaltyAction): Sco
   }
 }
 
-type FighterScoringKey = "fighter1Scoring" | "fighter2Scoring"
 
-export function increaseScore(matchID: number, fighter: FighterScoringKey) {
-  return matches(matchScoring({
+export function createIncreaseScoreAction(): IncreaseScoreAction {
+  return {
     type: INCREASE_SCORE
-  }, fighter), matchID)
+  }
 }
 
-export function decreaseScore(matchID: number, fighter: FighterScoringKey) {
-  return matches(matchScoring({
+export function createDecreaseScoreAction(): DecreaseScoreAction {
+  return {
     type: DECREASE_SCORE
-  }, fighter), matchID)
+  }
 }
 
-export function issueWarning(matchID: number, fighter: FighterScoringKey) {
-  return matches(matchScoring({
+export function createIssueWarningAction(): IssueWarningAction {
+  return {
     type: ISSUE_WARNING
-  }, fighter), matchID)}
+  }
+}
 
-export function issuePenalty(matchID: number, fighter: FighterScoringKey) {
-  return matches(matchScoring({
+export function createIssuePenaltyAction(): IssuePenaltyAction {
+  return {
     type: ISSUE_PENALTY
-  }, fighter), matchID)
+  }
 }
