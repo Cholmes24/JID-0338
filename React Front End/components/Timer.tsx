@@ -28,11 +28,17 @@ export default function Timer({ matchID }: TimerProps) {
 
   const [timeAddText, setTimeAddText] = useState<string>('')
   const [timeLeft, setTimeLeft] = useState<number>(timerStore.timeRemaining)
+  const [timeLeftText, setTimeLeftText] = useState<string>(timeLeft.toString())
   const [isModalVisible, setIsModalVisible] = useState(false)
 
   const toggleModal = () => setIsModalVisible(!isModalVisible)
 
   const refreshRate = 85 // in ms
+
+  useEffect(() => {
+    update()
+  }, [matchID])
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (timerStore.isRunning) {
@@ -59,8 +65,12 @@ export default function Timer({ matchID }: TimerProps) {
       dispatch(updateTimer(matchID, Date.now()))
     }
     setTimeLeft(timeRemaining)
+    setTimeLeftText(formatClock(timeRemaining))
   }
-
+  const dismissModal = () => {
+    setIsModalVisible(false)
+    Keyboard.dismiss()
+  }
   const toggle = () => dispatch(toggleTimer(matchID, Date.now()))
 
   const addTime = () => {
@@ -68,8 +78,7 @@ export default function Timer({ matchID }: TimerProps) {
       const asFloat: number = Number.parseFloat(timeAddText)
       addParticularTime(asFloat * 1000)
       setTimeAddText('')
-      setIsModalVisible(false)
-      Keyboard.dismiss()
+      dismissModal()
     }
   }
 
@@ -89,7 +98,7 @@ export default function Timer({ matchID }: TimerProps) {
   return (
     <View style={styles.container}>
       <Button buttonStyle={styles.add_time} icon={icon('plus')} onPress={toggleModal} />
-      <Text style={styles.text}>{formatClock(timeLeft)} </Text>
+      <Text style={styles.text}>{timeLeftText}</Text>
       <Button
         buttonStyle={styles.play_pause}
         icon={icon(timerRunning() && hasTimeLeft() ? 'pause' : 'play')}
@@ -97,10 +106,7 @@ export default function Timer({ matchID }: TimerProps) {
       />
       <Modal
         isVisible={isModalVisible}
-        onBackdropPress={() => {
-          setIsModalVisible(false)
-          Keyboard.dismiss()
-        }}
+        onBackdropPress={dismissModal}
         backdropOpacity={0.3}
         animationIn="fadeInUp"
         animationOut="fadeOutDown"

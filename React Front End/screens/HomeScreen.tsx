@@ -71,8 +71,8 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
   return (
     <View style={styles.container}>
       <View style={styles.userCard}>
-        {/* <CodeEntry /> */}
-        <UserCard firstName={'longFirstName'} lastName={'longLastName'} />
+        <CodeEntry />
+        {/* <UserCard firstName={'longFirstName'} lastName={'longLastName'} /> */}
         {/* <ConnectionChecker /> */}
       </View>
       <View style={styles.buttonWrapper}>
