@@ -1,10 +1,14 @@
 import { CurrentIDs } from '../redux-types/storeTypes'
-import { AnyAction, Reducer } from "redux"
+import { AnyAction, Reducer } from 'redux'
 import {
-  SetCurrentSystemEventIDAction, SET_CURRENT_SYSTEM_EVENT_ID,
-  SetCurrentTournamentIDAction, SET_CURRENT_TOURNAMENT_ID,
-  SetCurrentPoolIDAction, SET_CURRENT_POOL_ID,
-  SetCurrentMatchIDAction, SET_CURRENT_MATCH_ID,
+  SetCurrentSystemEventIDAction,
+  SET_CURRENT_SYSTEM_EVENT_ID,
+  SetCurrentTournamentIDAction,
+  SET_CURRENT_TOURNAMENT_ID,
+  SetCurrentPoolIDAction,
+  SET_CURRENT_POOL_ID,
+  SetCurrentMatchIDAction,
+  SET_CURRENT_MATCH_ID,
 } from '../redux-types/actionTypes'
 
 const currentIDsReducer: Reducer<CurrentIDs, AnyAction> = (state = {}, action) => {
@@ -24,22 +28,22 @@ const currentIDsReducer: Reducer<CurrentIDs, AnyAction> = (state = {}, action) =
 
 export default currentIDsReducer
 
-export const setCurrentSystemEventID: (ID: number) => SetCurrentSystemEventIDAction = ID => ({
+export const setCurrentSystemEventID: (ID: number) => SetCurrentSystemEventIDAction = (ID) => ({
   type: SET_CURRENT_SYSTEM_EVENT_ID,
-  payload: ID
+  payload: ID,
 })
 
-export const setCurrentTournamentID: (ID: number) => SetCurrentTournamentIDAction = ID =>({
+export const setCurrentTournamentID: (ID: number) => SetCurrentTournamentIDAction = (ID) => ({
   type: SET_CURRENT_TOURNAMENT_ID,
-  payload: ID
+  payload: ID,
 })
 
-export const setCurrentPoolID: (ID: number) => SetCurrentPoolIDAction = ID => ({
+export const setCurrentPoolID: (ID: number) => SetCurrentPoolIDAction = (ID) => ({
   type: SET_CURRENT_POOL_ID,
-  payload: ID
+  payload: ID,
 })
 
-export const setCurrentMatchID: (ID: number) => SetCurrentMatchIDAction = ID => ({
+export const setCurrentMatchID: (ID: number) => SetCurrentMatchIDAction = (ID) => ({
   type: SET_CURRENT_MATCH_ID,
-  payload: ID
+  payload: ID,
 })

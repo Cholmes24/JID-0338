@@ -1,17 +1,19 @@
 import { Timer } from './../redux-types/storeTypes'
-import { AnyAction, Reducer } from "redux"
-import { Match } from "../redux-types/storeTypes"
-import matchReducer, { matchActionCreator } from "./MatchReducer"
-import { addItemsWithMergeCustomizer } from "../util/utilFunctions"
+import { AnyAction, Reducer } from 'redux'
+import { Match } from '../redux-types/storeTypes'
+import matchReducer, { matchActionCreator } from './MatchReducer'
+import { addItemsWithMergeCustomizer } from '../util/utilFunctions'
 import { scoringActionCreator } from './features/ScoringSlice'
 import { timingActionCreator } from './features/TimerSlice'
 import {
-  MATCHES, MatchesAction,
-  SET_MATCHES, SetMatchesAction,
-  ADD_MATCHES, AddMatchesAction,
+  MATCHES,
+  MatchesAction,
+  SET_MATCHES,
+  SetMatchesAction,
+  ADD_MATCHES,
+  AddMatchesAction,
   MatchActionType,
-} from "../redux-types/actionTypes"
-
+} from '../redux-types/actionTypes'
 
 function isMatchesActionType(action: AnyAction): action is MatchesAction {
   if (action.type !== MATCHES) {
@@ -32,8 +34,12 @@ const matchesReducer: Reducer<Match[], AnyAction> = (state = [], action) => {
     case SET_MATCHES:
       return action.payload
     case ADD_MATCHES:
-      return addItemsWithMergeCustomizer(state, (action as AddMatchesAction).payload,
-        timerMergeCustomizer, matchTemplate as Match)
+      return addItemsWithMergeCustomizer(
+        state,
+        (action as AddMatchesAction).payload,
+        timerMergeCustomizer,
+        matchTemplate as Match
+      )
     default:
       return state
   }
@@ -59,18 +65,20 @@ const matchTemplate: unknown = {
     timeRemaining: undefined,
     timeRemainingAtLastStop: 0,
     timeOfLastStart: 0,
-    isRunning: false
-  }
+    isRunning: false,
+  },
 }
 
 function isTimer(t: any): t is Timer {
-  return typeof t === 'object'
-    && t !== null
-    && 'timeRemaining' in t
-    && typeof t["timeRemaining"] === 'number'
+  return (
+    typeof t === 'object' &&
+    t !== null &&
+    'timeRemaining' in t &&
+    typeof t['timeRemaining'] === 'number'
+  )
 }
 
-function timerMergeCustomizer (objVal: any, dbVal: any): Timer | undefined {
+function timerMergeCustomizer(objVal: any, dbVal: any): Timer | undefined {
   if (isTimer(objVal) && isTimer(dbVal)) {
     const storedTime = objVal.timeRemaining
     const dbTime = dbVal.timeRemaining
@@ -90,69 +98,76 @@ export function matches(matchAction: MatchActionType, matchID: number): MatchesA
   return {
     type: MATCHES,
     matchAction,
-    matchID
+    matchID,
   }
 }
 
 export function setMatches(matches: Match[]): SetMatchesAction {
-  return ({
+  return {
     type: SET_MATCHES,
-    payload: matches
-  })
+    payload: matches,
+  }
 }
 
 export function addMatches(matches: Match[]): AddMatchesAction {
-  return ({
+  return {
     type: ADD_MATCHES,
-    payload: matches
-  })
+    payload: matches,
+  }
 }
 
-type FighterScoringKey = "fighter1Scoring" | "fighter2Scoring"
+type FighterScoringKey = 'fighter1Scoring' | 'fighter2Scoring'
 
 export function increaseScore(matchID: number, fighter: FighterScoringKey) {
-  return matches(matchActionCreator.matchScoring(
-    scoringActionCreator.createIncreaseScoreAction(), fighter
-  ), matchID)
+  return matches(
+    matchActionCreator.matchScoring(scoringActionCreator.createIncreaseScoreAction(), fighter),
+    matchID
+  )
 }
 
 export function decreaseScore(matchID: number, fighter: FighterScoringKey) {
-  return matches(matchActionCreator.matchScoring(
-    scoringActionCreator.createDecreaseScoreAction(), fighter
-  ), matchID)
+  return matches(
+    matchActionCreator.matchScoring(scoringActionCreator.createDecreaseScoreAction(), fighter),
+    matchID
+  )
 }
 
 export function issueWarning(matchID: number, fighter: FighterScoringKey) {
-  return matches(matchActionCreator.matchScoring(
-    scoringActionCreator.createIssueWarningAction(), fighter
-  ), matchID)
+  return matches(
+    matchActionCreator.matchScoring(scoringActionCreator.createIssueWarningAction(), fighter),
+    matchID
+  )
 }
 
 export function issuePenalty(matchID: number, fighter: FighterScoringKey) {
-  return matches(matchActionCreator.matchScoring(
-    scoringActionCreator.createIssuePenaltyAction(), fighter
-  ), matchID)
+  return matches(
+    matchActionCreator.matchScoring(scoringActionCreator.createIssuePenaltyAction(), fighter),
+    matchID
+  )
 }
 
-
 export function toggleTimer(matchID: number, currentTime: number) {
-  return matches(matchActionCreator.matchTiming(
-    timingActionCreator.createToggleTimerAction(currentTime)
-  ), matchID)
+  return matches(
+    matchActionCreator.matchTiming(timingActionCreator.createToggleTimerAction(currentTime)),
+    matchID
+  )
 }
 
 export function addToTimer(matchID: number, currentTime: number, amountToAdd: number) {
-  return matches(matchActionCreator.matchTiming(
-    timingActionCreator.createAddToTimerAction(currentTime, amountToAdd)
-  ), matchID)
+  return matches(
+    matchActionCreator.matchTiming(
+      timingActionCreator.createAddToTimerAction(currentTime, amountToAdd)
+    ),
+    matchID
+  )
 }
 
 export function updateTimer(matchID: number, currentTime: number) {
-  return matches(matchActionCreator.matchTiming(
-    timingActionCreator.createUpdateTimerAction(currentTime)
-  ), matchID)
+  return matches(
+    matchActionCreator.matchTiming(timingActionCreator.createUpdateTimerAction(currentTime)),
+    matchID
+  )
 }
-
 
 export function undo(matchID: number) {
   return matches(matchActionCreator.undo(), matchID)

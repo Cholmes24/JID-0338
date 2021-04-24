@@ -1,10 +1,13 @@
 import { Timer } from '../../redux-types/storeTypes'
 import {
-  AddToTimerAction, ADD_TO_TIMER,
-  ToggleTimerAction, TOGGLE_TIMER,
-  UpdateTimerAction, UPDATE_TIMER,
+  AddToTimerAction,
+  ADD_TO_TIMER,
+  ToggleTimerAction,
+  TOGGLE_TIMER,
+  UpdateTimerAction,
+  UPDATE_TIMER,
   TimerActionType,
- } from '../../redux-types/actionTypes'
+} from '../../redux-types/actionTypes'
 
 export default function timerReducer(state: Timer, action: TimerActionType) {
   switch (action.type) {
@@ -19,9 +22,11 @@ export default function timerReducer(state: Timer, action: TimerActionType) {
   }
 }
 
-const calculateTimeRemaining = (currentTime: number, state: Timer) => (
-  Math.max(0, state.timeRemainingAtLastStop - (state.isRunning ? (currentTime - state.timeOfLastStart) : 0))
-)
+const calculateTimeRemaining = (currentTime: number, state: Timer) =>
+  Math.max(
+    0,
+    state.timeRemainingAtLastStop - (state.isRunning ? currentTime - state.timeOfLastStart : 0)
+  )
 
 function toggleTimer(state: Timer, action: ToggleTimerAction): Timer {
   if (state.timeRemaining <= 0) {
@@ -32,13 +37,13 @@ function toggleTimer(state: Timer, action: ToggleTimerAction): Timer {
       ...state,
       timeRemaining,
       timeRemainingAtLastStop: timeRemaining,
-      isRunning: false
+      isRunning: false,
     }
   } else {
     return {
       ...state,
       timeOfLastStart: action.payload.currentTime,
-      isRunning: true
+      isRunning: true,
     }
   }
 }
@@ -48,13 +53,13 @@ function addToTimer(state: Timer, action: AddToTimerAction): Timer {
     return {
       ...state,
       isRunning: false,
-      timeRemaining: action.payload.amountToAdd
+      timeRemaining: action.payload.amountToAdd,
     }
   } else {
     return {
       ...state,
       timeRemaining: state.timeRemaining + action.payload.amountToAdd,
-      timeRemainingAtLastStop: state.timeRemainingAtLastStop + action.payload.amountToAdd
+      timeRemainingAtLastStop: state.timeRemainingAtLastStop + action.payload.amountToAdd,
     }
   }
 }
@@ -64,7 +69,7 @@ function updateTimer(state: Timer, action: UpdateTimerAction): Timer {
   return {
     ...state,
     timeRemaining,
-    isRunning: timeRemaining === 0 ? false : state.isRunning
+    isRunning: timeRemaining === 0 ? false : state.isRunning,
   }
 }
 

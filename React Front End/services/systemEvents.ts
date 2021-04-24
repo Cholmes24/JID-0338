@@ -1,19 +1,19 @@
-import { SystemEvent } from './../redux-types/storeTypes';
+import { SystemEvent } from './../redux-types/storeTypes'
 import axios from 'axios'
 
-const baseUrl = "/api/system_events"
+const baseUrl = '/api/system_events'
 
 type SystemEventInDb = {
-  eventID: number,
+  eventID: number
   eventName: string
 }
 
 function mapSystemEventFields(systemEventInDb: SystemEventInDb): SystemEvent {
-  return ({
+  return {
     ID: systemEventInDb.eventID,
     name: systemEventInDb.eventName,
     // tournamentIDs: systemEventInDb.tournaments
-  })
+  }
 }
 
 function mapSystemEvents(systemEventsInDb: SystemEventInDb[]): SystemEvent[] {
@@ -27,7 +27,7 @@ async function getAll(): Promise<SystemEvent[]> {
 }
 
 const systemEventsService = {
-  getAll
+  getAll,
 }
 
 export default systemEventsService

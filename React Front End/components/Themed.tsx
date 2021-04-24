@@ -1,19 +1,15 @@
 import * as React from 'react'
-import {
-  Text as DefaultText,
-  View as DefaultView,
-  FlatList as DefaultList,
-} from 'react-native'
+import { Text as DefaultText, View as DefaultView, FlatList as DefaultList } from 'react-native'
 import {
   SearchBar as DefaultSearchBar,
-  SearchBarProps as DefaultSearchBarProps
+  SearchBarProps as DefaultSearchBarProps,
 } from 'react-native-elements'
 
 import Colors from '../constants/Colors'
 import useColorScheme from '../hooks/useColorScheme'
 
 export function useThemeColor(
-  props: { light?: string, dark?: string },
+  props: { light?: string; dark?: string },
   colorName: keyof typeof Colors.light & keyof typeof Colors.dark
 ) {
   const theme = useColorScheme()
@@ -59,15 +55,21 @@ export function FlatList(props: FlatListProps) {
 
 export function SearchBar(props: SearchBarProps & DefaultView['props']) {
   const { inputContainerStyle, lightColor, darkColor, containerStyle, round, ...otherProps } = props
-  const backgroundColor = useThemeColor({
-    light: lightColor || "#e4e4e4",
-    dark: darkColor
-  }, 'background')
+  const backgroundColor = useThemeColor(
+    {
+      light: lightColor || '#e4e4e4',
+      dark: darkColor,
+    },
+    'background'
+  )
 
-  return <DefaultSearchBar
-    inputContainerStyle={[ inputContainerStyle, { backgroundColor: "#e4e4e4" }]}
-    round={true}
-    containerStyle={[ containerStyle, { backgroundColor }]}
-    {...otherProps}
-  />
+  return (
+    <DefaultSearchBar
+      inputContainerStyle={[inputContainerStyle, { backgroundColor: '#e4e4e4' }]}
+      // @ts-ignore
+      round={true}
+      containerStyle={[containerStyle, { backgroundColor }]}
+      {...otherProps}
+    />
+  )
 }

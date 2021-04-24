@@ -1,11 +1,11 @@
-import { Fighter } from './../redux-types/storeTypes';
+import { Fighter } from './../redux-types/storeTypes'
 import axios from 'axios'
 
-const baseUrl = "/api/fighters"
+const baseUrl = '/api/fighters'
 
 type FighterInDB = {
-  firstName: string,
-  lastName: string,
+  firstName: string
+  lastName: string
   fighterID: number
 }
 
@@ -17,7 +17,7 @@ function mapFighterFields(fighterInDB: FighterInDB): Fighter {
     firstName,
     lastName,
     ID,
-    color: (ID % 2 === 1) ? "#376EDA" : "#D43737"
+    color: ID % 2 === 1 ? '#376EDA' : '#D43737',
   }
 }
 
@@ -33,6 +33,6 @@ async function getByID(fighterID: number) {
 
 const fightersService = {
   getAllByPoolID,
-  getByID
+  getByID,
 }
 export default fightersService

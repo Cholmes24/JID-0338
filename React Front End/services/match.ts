@@ -4,31 +4,31 @@ import { Match, MatchScore, Timer } from '../redux-types/storeTypes'
 const baseUrl = '/api/match'
 
 type MatchInDB = {
-  fighter1ID: number,
-  fighter1Score: number,
-  fighter2ID: number,
-  fighter2Score: number,
-  groupID: number,
-  matchID: number,
-  matchTime: number,
-  num_penalties_fighter1: number,
-  num_penalties_fighter2: number,
-  num_warnings_fighter1: number,
-  num_warnings_fighter2: number,
-  tournamentID: number,
+  fighter1ID: number
+  fighter1Score: number
+  fighter2ID: number
+  fighter2Score: number
+  groupID: number
+  matchID: number
+  matchTime: number
+  num_penalties_fighter1: number
+  num_penalties_fighter2: number
+  num_warnings_fighter1: number
+  num_warnings_fighter2: number
+  tournamentID: number
 }
 
-type FighterScoringKey = 1 | 2 | "fighter1Scoring" | "fighter2Scoring"
+type FighterScoringKey = 1 | 2 | 'fighter1Scoring' | 'fighter2Scoring'
 
 const getFighterNumber = (key: FighterScoringKey) => {
   switch (key) {
     case 1:
       return 1
-    case "fighter1Scoring":
+    case 'fighter1Scoring':
       return 1
     case 2:
       return 2
-    case "fighter2Scoring":
+    case 'fighter2Scoring':
       return 2
   }
 }
@@ -53,10 +53,10 @@ export function mapMatchFields(matchInDB: MatchInDB): Match {
       points: matchInDB.fighter2Score,
       numPenalties: matchInDB.num_penalties_fighter2,
       numWarnings: matchInDB.num_warnings_fighter2,
-    }
+    },
   } as MatchScore
 
-  return ({
+  return {
     fighter1ID,
     fighter2ID,
     ID: matchInDB.matchID,
@@ -65,10 +65,10 @@ export function mapMatchFields(matchInDB: MatchInDB): Match {
     timer,
     tournamentID,
     // ringNumber: 0           // Fix this
-  }) as Match
+  } as Match
 }
 
-type MatchMethod = "increase_score_fighter" | "decrease_score_fighter" | "penalty_fighter" | "warning_fighter"
+type MatchMethod = 'increase_score_fighter' | 'decrease_score_fighter' | 'penalty_fighter' | 'warning_fighter'
 
 function makeUrl(matchID: number, method?: MatchMethod, fighter?: FighterScoringKey) {
   const suffix = method && fighter ? `/${method}${getFighterNumber(fighter)}` : ''
@@ -102,7 +102,7 @@ async function issuePenalty(key: FighterScoringKey, matchID: number) {
 
 async function updateTimer(timeInSeconds: number, matchID: number) {
   const response = await axios.post(`${baseUrl}/set_match_time?matchID=${matchID}`, {
-    matchTime: timeInSeconds
+    matchTime: timeInSeconds,
   })
   return mapMatchFields(response.data)
 }

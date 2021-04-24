@@ -5,7 +5,7 @@ import { Text, View } from './Themed'
 import { RootType } from '../redux-types/storeTypes'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import { AppThunk } from '../store'
-import matchService from "../services/match"
+import matchService from '../services/match'
 import Button from './Button'
 // import { Audio, AVPlaybackStatus } from 'expo-av'
 import _ from 'lodash'
@@ -21,29 +21,29 @@ const ouchPath = '../assets/sounds/human-fighter-scream.wav'
 const woodHitPath = '../assets/sounds/wood-hard-hit.wav'
 */
 type ScoreCounterProps = {
-  matchID: number,
-  fighterScoringKey: "fighter1Scoring" | "fighter2Scoring",
+  matchID: number
+  fighterScoringKey: 'fighter1Scoring' | 'fighter2Scoring'
   color?: ColorValue
 }
 
-export default function ScoreCounter({matchID, fighterScoringKey, color}: ScoreCounterProps) {
+export default function ScoreCounter({ matchID, fighterScoringKey, color }: ScoreCounterProps) {
   const dispatch = useAppDispatch()
   const fighters = useAppSelector((state: RootType) => state.fighters)
   const matches = useAppSelector((state: RootType) => state.matches)
-  const match = matches.find(m => m.ID === matchID)
+  const match = matches.find((m) => m.ID === matchID)
   // const [ activeSound, setActiveSound ] = useState<Audio.Sound | undefined>()
   // const [ audioInterruptible, setAudioInterruptible ] = useState(true)
 
   // const fighter = useSelector((state: RootType) => state.fighters.find(c => c.ID === fighterID))
   if (!match) {
-    throw Error("INVALID ID")
+    throw Error('INVALID ID')
   }
   const getColorToUse = () => {
     if (!color) {
-      const fighterNumber = fighterScoringKey === "fighter1Scoring" ? "fighter1ID" : "fighter2ID"
+      const fighterNumber = fighterScoringKey === 'fighter1Scoring' ? 'fighter1ID' : 'fighter2ID'
       const fighter = fighters.find((f) => f.ID === match[fighterNumber])
       if (!fighter) {
-        throw Error("MATCH WITH INVALID FIGHTER ID")
+        throw Error('MATCH WITH INVALID FIGHTER ID')
       }
       return fighter.color
     } else {
@@ -84,24 +84,20 @@ export default function ScoreCounter({matchID, fighterScoringKey, color}: ScoreC
   const scoring = match.present[fighterScoringKey]
   const score = scoring.points
 
-  const thunkIncrease = (): AppThunk => (
-    async dispatch => {
-      const updatedMatch = await matchService.increaseScore(fighterScoringKey, matchID)
+  const thunkIncrease = (): AppThunk => async (dispatch) => {
+    const updatedMatch = await matchService.increaseScore(fighterScoringKey, matchID)
+    if (updatedMatch.present !== match.present) {
+      dispatch(increaseScore(matchID, fighterScoringKey))
+    }
+  }
+  const thunkDecrease = (): AppThunk => async (dispatch) => {
+    if (score > 0) {
+      const updatedMatch = await matchService.decreaseScore(fighterScoringKey, matchID)
       if (updatedMatch.present !== match.present) {
-        dispatch(increaseScore(matchID, fighterScoringKey))
+        dispatch(decreaseScore(matchID, fighterScoringKey))
       }
     }
-  )
-  const thunkDecrease = (): AppThunk => (
-    async dispatch => {
-      if (score > 0) {
-        const updatedMatch = await matchService.decreaseScore(fighterScoringKey, matchID)
-        if (updatedMatch.present !== match.present) {
-          dispatch(decreaseScore(matchID, fighterScoringKey))
-        }
-      }
-    }
-  )
+  }
 
   const onUpPress = () => {
     // playSound(positive[_.random(0, positive.length - 1)])
@@ -116,32 +112,27 @@ export default function ScoreCounter({matchID, fighterScoringKey, color}: ScoreC
   }
 
   return (
-    <View style={[ styles.container, { backgroundColor: color } ]} >
+    <View style={[styles.container, { backgroundColor: color }]}>
       <Button
         invertColor={true}
         onPress={onUpPress}
-        content={(color) =>
-          <Icon
-            name="caretup"
-            type="antdesign"
-            iconStyle={styles.arrow}
-            color={color as string}
-          />
-        }
+        content={(color) => (
+          <Icon name="caretup" type="antdesign" iconStyle={styles.arrow} color={color as string} />
+        )}
       />
-      <Text style={[ styles.scoreBox, { backgroundColor: color } ]} >{score}</Text>
+      <Text style={[styles.scoreBox, { backgroundColor: color }]}>{score}</Text>
       <Button
         invertColor={true}
         disabled={score <= 0}
         onPress={onDownPress}
-        content={(color) =>
+        content={(color) => (
           <Icon
             name="caretdown"
             type="antdesign"
             iconStyle={styles.arrow}
             color={color as string}
           />
-        }
+        )}
       />
     </View>
   )
@@ -156,17 +147,17 @@ const styles = StyleSheet.create({
     height: 90,
     width: 90,
     fontSize: 70,
-    fontWeight: "bold",
-    color: "white",
-    backfaceVisibility: "hidden",
-    textAlign: "center",
-    textAlignVertical: "center",
-    position: "absolute",
+    fontWeight: 'bold',
+    color: 'white',
+    backfaceVisibility: 'hidden',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    position: 'absolute',
     paddingTop: 5,
   },
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonSurrounding: {
     width: '100%',

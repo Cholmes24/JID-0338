@@ -12,41 +12,33 @@ import matchesService from '../services/matches'
 import { AppThunk } from '../store'
 import { ScreenPropType } from '../types'
 
-export default function PoolsScreen({
-  route,
-  navigation
-}: ScreenPropType<"Pools">) {
+export default function PoolsScreen({ route, navigation }: ScreenPropType<'Pools'>) {
   const dispatch = useAppDispatch()
-  const tournamentID = useAppSelector(state => state.currentIDs.tournamentID)
-    || route.params.tournamentID
+  const tournamentID =
+    useAppSelector((state) => state.currentIDs.tournamentID) || route.params.tournamentID
 
   if (tournamentID === undefined) {
-    throw new Error("SYSTEM EVENT ID MISSING AT TOURNAMENTS SCREEN")
+    throw new Error('SYSTEM EVENT ID MISSING AT TOURNAMENTS SCREEN')
   }
 
-  const thunkPoolData = (pool: Pool): AppThunk<Promise<void>> => (
-    async dispatch => {
-      dispatch(setCurrentPoolID(pool.ID))
-      const matches = await matchesService.getAll(pool.ID)
-      dispatch(addMatches(matches))
-      const fighters = await fightersService.getAllByPoolID(pool.ID)
-      dispatch(addFighters(fighters))
-    }
-  )
+  const thunkPoolData = (pool: Pool): AppThunk<Promise<void>> => async (dispatch) => {
+    dispatch(setCurrentPoolID(pool.ID))
+    const matches = await matchesService.getAll(pool.ID)
+    dispatch(addMatches(matches))
+    const fighters = await fightersService.getAllByPoolID(pool.ID)
+    dispatch(addFighters(fighters))
+  }
 
   const onPressFactory = (p: Pool) => () => {
-    dispatch(thunkPoolData(p))
-      .then(() =>
-        navigation.navigate("Matches", { poolID: p.ID })
-      )
-    }
+    dispatch(thunkPoolData(p)).then(() => navigation.navigate('Matches', { poolID: p.ID }))
+  }
 
   return (
-    <View style={styles.container} >
+    <View style={styles.container}>
       <List
         listNameAtRoot="pools"
-        onPressFactory={i => onPressFactory(i as Pool)}
-        getName={i => (i as Pool).name}
+        onPressFactory={(i) => onPressFactory(i as Pool)}
+        getName={(i) => (i as Pool).name}
       />
     </View>
   )

@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Button,
-  Text,
-  Icon } from 'react-native-elements'
-import {
-  View,
-  StyleSheet, TextInput, Keyboard } from 'react-native'
+import { Button, Text, Icon } from 'react-native-elements'
+import { View, StyleSheet, TextInput, Keyboard } from 'react-native'
 import { RootType } from '../redux-types/storeTypes'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import Modal from 'react-native-modal'
 import matchService from '../services/match'
 import { formatClock, isValidDecimal } from '../util/utilFunctions'
 import { addToTimer, toggleTimer, updateTimer } from '../reducers/MatchesReducer'
-// import { Text, View } from './Themed'
 type TimerProps = {
   matchID: number
 }
@@ -19,21 +14,21 @@ type TimerProps = {
 export default function Timer({ matchID }: TimerProps) {
   const dispatch = useAppDispatch()
   const matches = useAppSelector((state: RootType) => state.matches)
-  const timerStore = matches.find(m => m.ID === matchID)?.timer
+  const timerStore = matches.find((m) => m.ID === matchID)?.timer
 
   if (!timerStore) {
-    throw Error("INVALID MATCH ID - TIMER NOT FOUND")
+    throw Error('INVALID MATCH ID - TIMER NOT FOUND')
   }
 
   // Used to trigger the remote update when performing a timer change.
   // Keeps all asynchronous logic in one place.
   // Just alternates between 0 and 1.
-  const [ checkTimer, setCheckTimer ] = useState(0)
+  const [checkTimer, setCheckTimer] = useState(0)
   const triggerRemoteUpdate = () => setCheckTimer(1 - checkTimer)
 
-  const [ timeAddText, setTimeAddText ] = useState<string>('')
-  const [ timeLeft, setTimeLeft ] = useState<number>(timerStore.timeRemaining)
-  const [ isModalVisible, setIsModalVisible ] = useState(false)
+  const [timeAddText, setTimeAddText] = useState<string>('')
+  const [timeLeft, setTimeLeft] = useState<number>(timerStore.timeRemaining)
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
   const toggleModal = () => setIsModalVisible(!isModalVisible)
 
@@ -49,13 +44,14 @@ export default function Timer({ matchID }: TimerProps) {
 
   useEffect(() => {
     matchService.updateTimer(timeLeft / 1000, matchID)
-  }, [ timerStore.isRunning, checkTimer ] )
+  }, [timerStore.isRunning, checkTimer])
 
-  const calculateTimeRemaining = (
-    currentTime: number = Date.now()
-  ) => (
-    Math.max(0, timerStore.timeRemainingAtLastStop - (timerStore.isRunning ? (currentTime - timerStore.timeOfLastStart) : 0))
-  )
+  const calculateTimeRemaining = (currentTime: number = Date.now()) =>
+    Math.max(
+      0,
+      timerStore.timeRemainingAtLastStop -
+        (timerStore.isRunning ? currentTime - timerStore.timeOfLastStart : 0)
+    )
 
   const update = () => {
     const timeRemaining = calculateTimeRemaining()
@@ -71,7 +67,7 @@ export default function Timer({ matchID }: TimerProps) {
     if (isValidDecimal(timeAddText.trim())) {
       const asFloat: number = Number.parseFloat(timeAddText)
       addParticularTime(asFloat * 1000)
-      setTimeAddText("")
+      setTimeAddText('')
       setIsModalVisible(false)
       Keyboard.dismiss()
     }
@@ -88,36 +84,30 @@ export default function Timer({ matchID }: TimerProps) {
   const timerRunning: () => boolean = () => timerStore.isRunning
   const onChangeText = (input: string) => setTimeAddText(input)
 
-  const icon = (name: string) => <Icon
-    name={name}
-    type="font-awesome"
-    size={40}
-    color={"white"}
-  />
+  const icon = (name: string) => <Icon name={name} type="font-awesome" size={40} color={'white'} />
 
   return (
     <View style={styles.container}>
-      <Button
-        buttonStyle={styles.add_time}
-        icon={icon("plus")}
-        onPress={toggleModal}
-      />
+      <Button buttonStyle={styles.add_time} icon={icon('plus')} onPress={toggleModal} />
       <Text style={styles.text}>{formatClock(timeLeft)} </Text>
       <Button
         buttonStyle={styles.play_pause}
-        icon={icon(timerRunning() && hasTimeLeft() ? "pause": "play")}
+        icon={icon(timerRunning() && hasTimeLeft() ? 'pause' : 'play')}
         onPress={() => (hasTimeLeft() ? toggle() : null)}
       />
       <Modal
         isVisible={isModalVisible}
-        onBackdropPress={() => {setIsModalVisible(false); Keyboard.dismiss()}}
+        onBackdropPress={() => {
+          setIsModalVisible(false)
+          Keyboard.dismiss()
+        }}
         backdropOpacity={0.3}
         animationIn="fadeInUp"
         animationOut="fadeOutDown"
-        >
+      >
         <View style={styles.modalWindow}>
           <View style={styles.addTray}>
-            <Text style={styles.addText} >Seconds:</Text>
+            <Text style={styles.addText}>Seconds:</Text>
             <TextInput
               style={styles.addBox}
               onChangeText={onChangeText}
@@ -126,11 +116,7 @@ export default function Timer({ matchID }: TimerProps) {
               autoFocus={true}
             />
           </View>
-          <Button
-            buttonStyle={styles.modalAddTime}
-            icon={icon("plus")}
-            onPress={addTime}
-          />
+          <Button buttonStyle={styles.modalAddTime} icon={icon('plus')} onPress={addTime} />
         </View>
       </Modal>
     </View>
@@ -146,11 +132,11 @@ const buttonDefaults = {
 
 const styles = StyleSheet.create({
   addTray: {
-    flexDirection: "row"
+    flexDirection: 'row',
   },
   addBox: {
     fontSize: 30,
-    backgroundColor: "#C0C0C0",
+    backgroundColor: '#C0C0C0',
     fontVariant: ['tabular-nums'],
     margin: 10,
     flex: 1,
@@ -162,10 +148,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalButton: {
-    flex: 1
+    flex: 1,
   },
   modalWindow: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 8,
     marginBottom: 150,
   },
@@ -191,7 +177,7 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 3,
     alignSelf: 'center',
-    flexDirection:'row',
+    flexDirection: 'row',
     alignContent: 'center',
     justifyContent: 'center',
     alignItems: 'center',
@@ -206,5 +192,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'flex-end',
     marginBottom: 20,
-  }
+  },
 })

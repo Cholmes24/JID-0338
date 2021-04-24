@@ -6,34 +6,41 @@ import { Match, Pool, RootType, SystemEvent, Tournament } from '../redux-types/s
 import { checkForParentKeyName, getParentKeyName } from '../util/utilFunctions'
 import MatchSelectionButton from './MatchSelectionButton'
 
-import { View, FlatList, SearchBar} from './Themed'
+import { View, FlatList, SearchBar } from './Themed'
 
 export type ListProps<T extends RootListItem> = {
-  listNameAtRoot: keyof RootType,
-  onPressFactory: (t: T) => ((event: GestureResponderEvent) => void),
-  getName: (listItem: T) => string,
+  listNameAtRoot: keyof RootType
+  onPressFactory: (t: T) => (event: GestureResponderEvent) => void
+  getName: (listItem: T) => string
 }
 
 type RootListItem = SystemEvent | Tournament | Pool | Match
 
-export default function List<T extends RootListItem>({ listNameAtRoot, onPressFactory, getName }: ListProps<T>) {
-  if (listNameAtRoot === "currentIDs") {
-    throw new Error("INVALID LIST KEY")
+export default function List<T extends RootListItem>({
+  listNameAtRoot,
+  onPressFactory,
+  getName,
+}: ListProps<T>) {
+  if (listNameAtRoot === 'currentIDs') {
+    throw new Error('INVALID LIST KEY')
   }
-  if (listNameAtRoot === "fighters") {
-    throw new Error("FIGHTER LIST KEY FUNCTIONALITY NOT IMPLEMENTED")
+  if (listNameAtRoot === 'fighters') {
+    throw new Error('FIGHTER LIST KEY FUNCTIONALITY NOT IMPLEMENTED')
   }
 
-  const allItems = useAppSelector(state => state[listNameAtRoot]) as T[]
+  const allItems = useAppSelector((state) => state[listNameAtRoot]) as T[]
 
   const parentKeyName = getParentKeyName(listNameAtRoot)
 
-  const currentParentID = parentKeyName !== undefined
-    ? useAppSelector(state => state.currentIDs[parentKeyName])
-    : undefined
+  const currentParentID =
+    parentKeyName !== undefined
+      ? useAppSelector((state) => state.currentIDs[parentKeyName])
+      : undefined
 
   const relevantItems = parentKeyName
-    ? allItems.filter(i => checkForParentKeyName(i, parentKeyName) && i[parentKeyName] === currentParentID)
+    ? allItems.filter(
+        (i) => checkForParentKeyName(i, parentKeyName) && i[parentKeyName] === currentParentID
+      )
     : allItems
 
   const [searchTerm, setSearchTerm] = useState('')
@@ -45,10 +52,12 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
   }, [listNameAtRoot, allItems])
 
   const updateSearch = (search: string) => {
-      setSearchTerm(search)
-      setFiltered(relevantItems.filter(item =>
-          getName(item).toLocaleLowerCase().includes(search.toLocaleLowerCase().trim())
-      ))
+    setSearchTerm(search)
+    setFiltered(
+      relevantItems.filter((item) =>
+        getName(item).toLocaleLowerCase().includes(search.toLocaleLowerCase().trim())
+      )
+    )
   }
 
   const getItemData = (item: T) => ({
@@ -57,25 +66,29 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
     title: getName(item),
   })
 
-  const matchesButton = (item: T) => <MatchSelectionButton matchID={item.ID} {...getItemData(item)} />
+  const matchesButton = (item: T) => (
+    <MatchSelectionButton matchID={item.ID} {...getItemData(item)} />
+  )
 
   const itemButton = (item: T) => <Button {...getItemData(item)} />
 
   return (
     <View style={styles.container}>
       <SearchBar
-        inputStyle={{ color: "#111" }}
+        inputStyle={{ color: '#111' }}
         containerStyle={styles.searchBar}
+        // @ts-ignore
         onChangeText={updateSearch}
         placeholder="Click Here to Search"
         value={searchTerm}
       />
       <FlatList
         data={filtered}
-        renderItem={({item}) =>
+        renderItem={({ item }) => (
           <View style={styles.buttonWrapper}>
-            {listNameAtRoot === "matches" ? matchesButton(item) : itemButton(item)}
-          </View>}
+            {listNameAtRoot === 'matches' ? matchesButton(item) : itemButton(item)}
+          </View>
+        )}
         keyExtractor={(item) => item.ID.toString()}
       />
     </View>
@@ -84,10 +97,10 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
 
 const styles = StyleSheet.create({
   container: {
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     textAlign: 'center',
     flex: 1,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
   buttonWrapper: {
     textAlign: 'center',
@@ -99,10 +112,10 @@ const styles = StyleSheet.create({
     marginTop: '5%',
     marginBottom: '5%',
     borderRadius: 15,
-    alignSelf: "center",
-    paddingHorizontal: 5
+    alignSelf: 'center',
+    paddingHorizontal: 5,
   },
   searchBar: {
     marginTop: '3%',
-  }
+  },
 })

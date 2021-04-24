@@ -1,7 +1,7 @@
-import { Tournament } from './../redux-types/storeTypes';
+import { Tournament } from './../redux-types/storeTypes'
 import axios from 'axios'
 
-const baseUrl = "/api/system_events/tournaments"
+const baseUrl = '/api/system_events/tournaments'
 
 type TournamentInDb = {
   tournamentID: number
@@ -15,7 +15,7 @@ function mapTournamentField(tournamentInDb: TournamentInDb, systemEventID: numbe
     systemEventID,
     fighterIDs: [],
     poolIDs: [],
-    matchIDs: []
+    matchIDs: [],
   }
 }
 
@@ -29,7 +29,7 @@ async function getAll(eventID: number) {
 }
 
 const tournamentsService = {
-  getAll
+  getAll,
 }
 
 export default tournamentsService

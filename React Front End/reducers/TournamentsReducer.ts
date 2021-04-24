@@ -1,10 +1,12 @@
-import { AnyAction, Reducer } from "redux"
-import { Tournament } from "../redux-types/storeTypes"
-import { addItems } from "../util/utilFunctions"
+import { AnyAction, Reducer } from 'redux'
+import { Tournament } from '../redux-types/storeTypes'
+import { addItems } from '../util/utilFunctions'
 import {
-  ADD_TOURNAMENTS, AddTournamentsAction,
-  SET_TOURNAMENTS, SetTournamentsAction,
-} from "../redux-types/actionTypes"
+  ADD_TOURNAMENTS,
+  AddTournamentsAction,
+  SET_TOURNAMENTS,
+  SetTournamentsAction,
+} from '../redux-types/actionTypes'
 
 const tournamentsReducer: Reducer<Tournament[], AnyAction> = (state = [], action) => {
   switch (action.type) {
@@ -19,12 +21,16 @@ const tournamentsReducer: Reducer<Tournament[], AnyAction> = (state = [], action
 
 export default tournamentsReducer
 
-export const setTournaments: (tournaments: Tournament[]) => SetTournamentsAction = tournaments => ({
+export const setTournaments: (tournaments: Tournament[]) => SetTournamentsAction = (
+  tournaments
+) => ({
   type: SET_TOURNAMENTS,
-  payload: tournaments
+  payload: tournaments,
 })
 
-export const addTournaments: (tournaments: Tournament[]) => AddTournamentsAction = tournaments => ({
+export const addTournaments: (tournaments: Tournament[]) => AddTournamentsAction = (
+  tournaments
+) => ({
   type: ADD_TOURNAMENTS,
-  payload: tournaments
+  payload: tournaments,
 })
