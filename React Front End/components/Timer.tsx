@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Text, Icon } from 'react-native-elements'
-import { View, StyleSheet, TextInput, Keyboard } from 'react-native'
+import { Button,
+  Text,
+  Icon } from 'react-native-elements'
+import {
+  View,
+  StyleSheet, TextInput, Keyboard } from 'react-native'
 import { RootType } from '../redux-types/storeTypes'
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
 import Modal from 'react-native-modal'
 import matchService from '../services/match'
 import { formatClock, isValidDecimal } from '../util/utilFunctions'
-import { addToTimer, toggleTimer, updateTimer } from '../reducers/features/TimerSlice'
-
+import { addToTimer, toggleTimer, updateTimer } from '../reducers/MatchesReducer'
+// import { Text, View } from './Themed'
 type TimerProps = {
   matchID: number
 }

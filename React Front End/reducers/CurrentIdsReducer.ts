@@ -1,16 +1,10 @@
 import { CurrentIDs } from '../redux-types/storeTypes'
 import { AnyAction, Reducer } from "redux"
 import {
-  SET_CURRENT_SYSTEM_EVENT_ID,
-  SET_CURRENT_TOURNAMENT_ID,
-  SET_CURRENT_POOL_ID,
-  SET_CURRENT_MATCH_ID,
-} from '../redux-types/actionTypes'
-import {
-  SetCurrentSystemEventIDAction,
-  SetCurrentTournamentIDAction,
-  SetCurrentPoolIDAction,
-  SetCurrentMatchIDAction,
+  SetCurrentSystemEventIDAction, SET_CURRENT_SYSTEM_EVENT_ID,
+  SetCurrentTournamentIDAction, SET_CURRENT_TOURNAMENT_ID,
+  SetCurrentPoolIDAction, SET_CURRENT_POOL_ID,
+  SetCurrentMatchIDAction, SET_CURRENT_MATCH_ID,
 } from '../redux-types/actionTypes'
 
 const currentIDsReducer: Reducer<CurrentIDs, AnyAction> = (state = {}, action) => {

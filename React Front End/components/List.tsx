@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { GestureResponderEvent, useColorScheme, StyleSheet, View, FlatList } from 'react-native'
-import { Button, SearchBar } from 'react-native-elements'
+import { GestureResponderEvent, StyleSheet } from 'react-native'
+import { Button } from 'react-native-elements'
 import { useAppSelector } from '../hooks/reduxHooks'
 import { Match, Pool, RootType, SystemEvent, Tournament } from '../redux-types/storeTypes'
 import { checkForParentKeyName, getParentKeyName } from '../util/utilFunctions'
 import MatchSelectionButton from './MatchSelectionButton'
+
+import { View, FlatList, SearchBar} from './Themed'
 
 export type ListProps<T extends RootListItem> = {
   listNameAtRoot: keyof RootType,
@@ -59,20 +61,14 @@ export default function List<T extends RootListItem>({ listNameAtRoot, onPressFa
 
   const itemButton = (item: T) => <Button {...getItemData(item)} />
 
-  const theme = useColorScheme()
-
   return (
     <View style={styles.container}>
       <SearchBar
-        containerStyle={[styles.searchBar, {
-          backgroundColor: theme === 'light' ? 'white' : 'black'
-        }]}
-        inputContainerStyle={styles.input}
+        inputStyle={{ color: "#111" }}
+        containerStyle={styles.searchBar}
         onChangeText={updateSearch}
         placeholder="Click Here to Search"
         value={searchTerm}
-        lightTheme={true}
-        round={true}
       />
       <FlatList
         data={filtered}
@@ -107,9 +103,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5
   },
   searchBar: {
-    marginTop: '5%',
-  },
-  input: {
-    backgroundColor: '#e4e4e4'
+    marginTop: '3%',
   }
 })

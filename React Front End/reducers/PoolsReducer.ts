@@ -1,8 +1,10 @@
 import { AnyAction, Reducer } from "redux"
 import { Pool } from "../redux-types/storeTypes"
 import { addItems } from "../util/utilFunctions"
-import { AddPoolsAction, SetPoolsAction } from "../redux-types/actionTypes"
-import { ADD_POOLS, SET_POOLS } from "../redux-types/actionTypes"
+import {
+  ADD_POOLS, AddPoolsAction,
+  SET_POOLS, SetPoolsAction,
+} from "../redux-types/actionTypes"
 
 const poolsReducer: Reducer<Pool[], AnyAction> = (state = [], action) => {
   switch (action.type) {

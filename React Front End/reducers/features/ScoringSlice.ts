@@ -1,14 +1,12 @@
-import { INCREASE_SCORE, DECREASE_SCORE, ISSUE_PENALTY, ISSUE_WARNING } from './../../redux-types/actionTypes'
-import { ScoringActionType } from './../../redux-types/actionTypes'
-import {
-  IncreaseScoreAction,
-  DecreaseScoreAction,
-  IssueWarningAction,
-  IssuePenaltyAction
-} from '../../redux-types/actionTypes'
 import { Scoring } from '../../redux-types/storeTypes'
-import { matches } from '../MatchesReducer'
-import { matchScoring } from '../MatchReducer'
+import {
+  IncreaseScoreAction, INCREASE_SCORE,
+  DecreaseScoreAction, DECREASE_SCORE,
+  IssueWarningAction, ISSUE_WARNING,
+  IssuePenaltyAction, ISSUE_PENALTY,
+  ScoringActionType,
+} from '../../redux-types/actionTypes'
+
 
 export default function scoringReducer(state: Scoring, action: ScoringActionType) {
   switch (action.type) {
@@ -76,4 +74,11 @@ export function createIssuePenaltyAction(): IssuePenaltyAction {
   return {
     type: ISSUE_PENALTY
   }
+}
+
+export const scoringActionCreator = {
+  createIncreaseScoreAction,
+  createDecreaseScoreAction,
+  createIssueWarningAction,
+  createIssuePenaltyAction,
 }

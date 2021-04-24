@@ -5,7 +5,7 @@ import { AppThunk } from '../store'
 import matchService from "../services/match"
 import Button from './Button'
 import { Icon } from "react-native-elements"
-import { undo } from "../reducers/MatchReducer"
+import { undo } from "../reducers/MatchesReducer"
 
 export type UndoButtonProps = {
   matchID: number

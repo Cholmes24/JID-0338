@@ -1,8 +1,11 @@
-import { AddFightersAction, SetFightersAction } from './../redux-types/actionTypes'
-import { ADD_FIGHTERS, SET_FIGHTERS } from './../redux-types/actionTypes'
 import { AnyAction, Reducer } from "redux"
 import { Fighter } from "../redux-types/storeTypes"
 import { addItems } from '../util/utilFunctions'
+import {
+  AddFightersAction, ADD_FIGHTERS,
+  SetFightersAction, SET_FIGHTERS,
+} from './../redux-types/actionTypes'
+
 
 const fightersReducer: Reducer<Fighter[], AnyAction> = (state = [], action) => {
   switch (action.type) {

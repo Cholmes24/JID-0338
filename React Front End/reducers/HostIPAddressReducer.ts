@@ -1,6 +1,9 @@
-import { SetHostIPAddess, SET_HOST_IP_ADDRESS } from './../redux-types/actionTypes'
 import { AnyAction, Reducer } from "redux"
 import ipAddress from 'ip-address'
+import {
+  SET_HOST_IP_ADDRESS, SetHostIPAddess,
+} from './../redux-types/actionTypes'
+
 
 const HostIPAddressReducer: Reducer<ipAddress.Address6 | null, AnyAction> = (state = null, action) => {
   switch (action.type) {

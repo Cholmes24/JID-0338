@@ -1,8 +1,10 @@
-import { AddSystemEvents, SetSystemEvents } from './../redux-types/actionTypes'
-import { ADD_SYSTEM_EVENTS,  SET_SYSTEM_EVENTS } from './../redux-types/actionTypes'
 import { AnyAction, Reducer } from "redux"
 import { SystemEvent } from "../redux-types/storeTypes"
 import { addItems } from "../util/utilFunctions"
+import {
+  ADD_SYSTEM_EVENTS, AddSystemEvents,
+  SET_SYSTEM_EVENTS, SetSystemEvents
+} from './../redux-types/actionTypes'
 
 const systemEventsReducer: Reducer<SystemEvent[], AnyAction> = (state = [], action) => {
   switch (action.type) {

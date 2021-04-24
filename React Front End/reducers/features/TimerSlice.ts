@@ -1,17 +1,19 @@
-import { TOGGLE_TIMER, ADD_TO_TIMER, UPDATE_TIMER } from './../../redux-types/actionTypes';
-import { AddToTimerAction, TimerActionType, ToggleTimerAction, UpdateTimerAction } from '../../redux-types/actionTypes'
 import { Timer } from '../../redux-types/storeTypes'
-import { matches } from '../MatchesReducer'
-import { matchTiming } from '../MatchReducer'
+import {
+  AddToTimerAction, ADD_TO_TIMER,
+  ToggleTimerAction, TOGGLE_TIMER,
+  UpdateTimerAction, UPDATE_TIMER,
+  TimerActionType,
+ } from '../../redux-types/actionTypes'
 
 export default function timerReducer(state: Timer, action: TimerActionType) {
   switch (action.type) {
     case TOGGLE_TIMER:
-      return executeTogglingTimer(state, action)
+      return toggleTimer(state, action)
     case ADD_TO_TIMER:
-      return executeAddingToTimer(state, action)
+      return addToTimer(state, action)
     case UPDATE_TIMER:
-      return executeUpdatingTimer(state, action)
+      return updateTimer(state, action)
     default:
       return state
   }
@@ -21,7 +23,7 @@ const calculateTimeRemaining = (currentTime: number, state: Timer) => (
   Math.max(0, state.timeRemainingAtLastStop - (state.isRunning ? (currentTime - state.timeOfLastStart) : 0))
 )
 
-function executeTogglingTimer(state: Timer, action: ToggleTimerAction): Timer {
+function toggleTimer(state: Timer, action: ToggleTimerAction): Timer {
   if (state.timeRemaining <= 0) {
     return state
   } else if (state.isRunning) {
@@ -41,7 +43,7 @@ function executeTogglingTimer(state: Timer, action: ToggleTimerAction): Timer {
   }
 }
 
-function executeAddingToTimer(state: Timer, action: AddToTimerAction): Timer {
+function addToTimer(state: Timer, action: AddToTimerAction): Timer {
   if (state.timeRemaining <= 0) {
     return {
       ...state,
@@ -57,7 +59,7 @@ function executeAddingToTimer(state: Timer, action: AddToTimerAction): Timer {
   }
 }
 
-function executeUpdatingTimer(state: Timer, action: UpdateTimerAction): Timer {
+function updateTimer(state: Timer, action: UpdateTimerAction): Timer {
   const timeRemaining = calculateTimeRemaining(action.payload.currentTime, state)
   return {
     ...state,
@@ -66,25 +68,32 @@ function executeUpdatingTimer(state: Timer, action: UpdateTimerAction): Timer {
   }
 }
 
-export function toggleTimer(matchID: number, currentTime: number) {
-  return matches(matchTiming({
+export function createToggleTimerAction(currentTime: number): ToggleTimerAction {
+  return {
     type: TOGGLE_TIMER,
     payload: { currentTime },
-  }), matchID)
+  }
 }
 
-export function addToTimer(matchID: number, currentTime: number, amountToAdd: number) {
-  return matches(matchTiming({
+export function createAddToTimerAction(currentTime: number, amountToAdd: number): AddToTimerAction {
+  return {
     type: ADD_TO_TIMER,
     payload: {
       currentTime,
       amountToAdd,
     },
-  }), matchID)
+  }
 }
 
-export function updateTimer(matchID: number, currentTime: number) {
-  return matches(matchTiming({
+export function createUpdateTimerAction(currentTime: number): UpdateTimerAction {
+  return {
     type: UPDATE_TIMER,
     payload: { currentTime },
-  }), matchID)}
+  }
+}
+
+export const timingActionCreator = {
+  createToggleTimerAction,
+  createAddToTimerAction,
+  createUpdateTimerAction,
+}
