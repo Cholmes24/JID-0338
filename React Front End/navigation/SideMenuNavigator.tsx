@@ -1,4 +1,3 @@
-import { createDrawerNavigator } from '@react-navigation/drawer'
 import * as React from 'react'
 import useColorScheme from '../hooks/useColorScheme'
 import TournamentsScreen from '../screens/TournamentsScreen'
@@ -7,15 +6,18 @@ import HomeScreen from '../screens/HomeScreen'
 
 import { Text } from '../components/Themed'
 import { SideMenuParamList } from '../types'
-import { DrawerActions, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { StyleProp, StyleSheet, TextStyle } from 'react-native'
-import { DrawerHeaderOptions } from '@react-navigation/drawer/lib/typescript/src/types'
 import MatchScreen from '../screens/MatchScreen'
 import SystemEventsScreen from '../screens/SystemEventsScreen'
 import MatchesScreen from '../screens/MatchesScreen'
 import { Icon } from 'react-native-elements'
+import createStackNavigator, {
+  stackHeaderOptions,
+  StackHeaderOptions,
+} from '../hooks/createStackNavigator'
 
-const SideMenu = createDrawerNavigator<SideMenuParamList>()
+const SideMenu = createStackNavigator<SideMenuParamList>()
 
 export default function SideMenuNavigator() {
   const colorScheme = useColorScheme()
@@ -30,22 +32,22 @@ export default function SideMenuNavigator() {
       <SideMenu.Screen
         name="Events"
         component={SystemEventsScreen}
-        options={headerOptions(colorScheme, 'Events')}
+        options={headerOptions(colorScheme, 'Events', undefined, 'home')}
       />
       <SideMenu.Screen
         name="Tournaments"
         component={TournamentsScreen}
-        options={headerOptions(colorScheme, 'Tournaments')}
+        options={headerOptions(colorScheme, 'Tournaments', undefined, 'home')}
       />
       <SideMenu.Screen
         name="Pools"
         component={PoolsScreen}
-        options={headerOptions(colorScheme, 'Pools')}
+        options={headerOptions(colorScheme, 'Pools', undefined, 'home')}
       />
       <SideMenu.Screen
         name="Matches"
         component={MatchesScreen}
-        options={headerOptions(colorScheme, 'Matches')}
+        options={headerOptions(colorScheme, 'Matches', undefined, 'home')}
       />
       <SideMenu.Screen
         name="Match"
@@ -58,12 +60,22 @@ export default function SideMenuNavigator() {
 
 function headerOptions(
   colorScheme: 'light' | 'dark',
-  title: string | JSX.Element,
+  title: string,
   leftButtonType: 'back' | 'hamburger' | 'none' = 'back',
   right?: string
-): DrawerHeaderOptions {
+): StackHeaderOptions {
   const navigation = useNavigation()
   const iconColor = colorScheme === 'dark' ? 'white' : 'black'
+  const headerRight = () =>
+    right === 'home' && (
+      <Icon
+        type="feather"
+        name="home"
+        color={iconColor}
+        style={styles.featherButton}
+        onPress={() => navigation.navigate('Home')}
+      />
+    )
 
   const headerLeft = () => {
     switch (leftButtonType) {
@@ -71,10 +83,10 @@ function headerOptions(
         return (
           <Icon
             type="feather"
-            name="menu"
+            name="home"
             color={iconColor}
             style={styles.featherButton}
-            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer)}
+            onPress={() => navigation.navigate('Home')}
           />
         )
       case 'back':
@@ -92,13 +104,11 @@ function headerOptions(
     }
   }
 
-  return {
-    headerTitleAllowFontScaling: true,
-    headerTitleAlign: 'center',
-    headerRight: () => wrapInComponent(right),
-    headerTitle: () => wrapInComponent(title, styles.title),
-    headerLeft,
-  }
+  return stackHeaderOptions({
+    left: headerLeft,
+    center: () => wrapInComponent(title, styles.title),
+    right: headerRight,
+  })
 }
 
 function wrapInComponent(toWrap?: string | JSX.Element, style?: StyleProp<TextStyle>) {
