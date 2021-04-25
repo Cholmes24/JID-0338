@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet } from 'react-native'
-import { View } from '../components/Themed'
+import { Keyboard, StyleSheet } from 'react-native'
+import { Text, View } from '../components/Themed'
 import { Button } from 'react-native-elements'
 import UserCard from '../components/UserCard'
 import matchService from '../services/match'
@@ -15,25 +15,42 @@ import { setFighters } from '../reducers/FightersReducer'
 import { setMatches } from '../reducers/MatchesReducer'
 import { setSystemEvents } from '../reducers/SystemEventsReducer'
 import CodeEntry from '../components/CodeEntry'
+import { TextInput } from 'react-native-gesture-handler'
+import authService from '../services/authService'
 
 export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
   const dispatch = useAppDispatch()
   const currentMatchID = useAppSelector((state) => state.currentIDs.matchID)
   const currentMatches = useAppSelector((state) => state.matches)
-  const hostIP = true // useAppSelector(state => state.hostIPAddress)
   const [hasRecentMatch, setHasRecentMatch] = useState(false)
 
-  useEffect(() => {
-    setHasRecentMatch(currentMatches.find((m) => m.ID === currentMatchID) !== undefined)
-  }, [currentMatchID, currentMatches])
+  const [hostIP, setHostIP] = useState('')
+  const [accessCode, setAccessCode] = useState('')
 
   useEffect(() => {
-    if (hostIP) {
+    if (hostIP !== '') {
+      setHasRecentMatch(currentMatches.find((m) => m.ID === currentMatchID) !== undefined)
+    }
+  }, [currentMatchID, currentMatches, hostIP])
+
+  useEffect(() => {
+    if (hostIP !== '') {
       dispatch(thunkSystemEvents())
         .then(() => dispatch(thunkCurrentMatch()))
         .then((match) => dispatch(thunkCurrentFighters(match)))
+        .then(() => Keyboard.dismiss())
     }
   }, [hostIP])
+
+  async function setIP() {
+    const url = accessCode
+    const tokenAccepted = await authService.requestToken(accessCode, url)
+    if (tokenAccepted) {
+      setHostIP(accessCode)
+    }
+  }
+
+  const handleTextChange = (input: string) => setAccessCode(input)
 
   const thunkSystemEvents = (): AppThunk<Promise<void>> => async (dispatch) => {
     const systemEvents = await systemEventsService.getAll()
@@ -71,16 +88,23 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
   return (
     <View style={styles.container}>
       <View style={styles.userCard}>
-        <CodeEntry />
+        {/* <CodeEntry /> */}
+        <TextInput style={styles.textInput} value={accessCode} onChangeText={handleTextChange} />
+        <Button title="Set IP" style={styles.enterButton} onPress={setIP} />
         {/* <UserCard firstName={'longFirstName'} lastName={'longLastName'} /> */}
         {/* <ConnectionChecker /> */}
       </View>
       <View style={styles.buttonWrapper}>
-        <Button
-          buttonStyle={styles.entry}
-          title="Events"
-          onPress={() => navigation.navigate('Events')}
-        />
+        {hostIP && hostIP !== '' ? (
+          <Button
+            buttonStyle={styles.entry}
+            title="Events"
+            onPress={() => navigation.navigate('Events')}
+          />
+        ) : (
+          <Text style={styles.errorText}>Cannot access server</Text>
+        )}
+
         {mostRecentMatchButton()}
       </View>
     </View>
@@ -96,13 +120,17 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 2,
-    alignSelf: 'stretch',
+    // alignSelf: 'stretch',
     textAlign: 'center',
+    // alignItems: 'center',
+    justifyContent: 'center',
     paddingBottom: 5,
   },
   buttonWrapper: {
     flex: 3,
     textAlign: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
     width: '100%',
   },
   entry: {
@@ -113,5 +141,27 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignSelf: 'center',
     paddingHorizontal: 5,
+    textAlign: 'center',
+  },
+  textInput: {
+    width: '95%',
+    margin: 20,
+    paddingHorizontal: 10,
+    backgroundColor: '#CECECE',
+    fontSize: 28,
+    borderRadius: 8,
+    // flex: 1,
+  },
+  enterButton: {
+    width: '95%',
+    borderRadius: 8,
+    // flex: 1,
+  },
+  errorText: {
+    borderRadius: 15,
+    // paddingHorizontal: 5,
+    textAlign: 'center',
+    fontSize: 35,
+    paddingBottom: 100,
   },
 })

@@ -91,7 +91,6 @@ export interface RootType {
   pools: Pool[]
   matches: Match[]
   currentIDs: CurrentIDs
-  // hostIPAddress: ipAddress.Address6 | null,
 }
 
 type RoundsType = 'Finals' | true | false

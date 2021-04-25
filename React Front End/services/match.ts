@@ -1,4 +1,5 @@
-import axios from 'axios'
+import Keychain from 'react-native-keychain'
+import axios, { AxiosRequestConfig } from 'axios'
 import { Match, MatchScore, Timer } from '../redux-types/storeTypes'
 
 const baseUrl = '/api/match'
@@ -38,7 +39,6 @@ const getFighterNumber = (key: FighterScoringKey) => {
 export function mapMatchFields(matchInDB: MatchInDB): Match {
   const { fighter1ID, fighter2ID, tournamentID } = matchInDB
   const timer: Timer = {
-    // maxTime: 180000,
     timeRemaining: matchInDB.matchTime * 1000,
     timeRemainingAtLastStop: matchInDB.matchTime * 1000,
   } as Timer
@@ -68,7 +68,21 @@ export function mapMatchFields(matchInDB: MatchInDB): Match {
   } as Match
 }
 
-type MatchMethod = 'increase_score_fighter' | 'decrease_score_fighter' | 'penalty_fighter' | 'warning_fighter'
+type MatchMethod =
+  | 'increase_score_fighter'
+  | 'decrease_score_fighter'
+  | 'penalty_fighter'
+  | 'warning_fighter'
+
+async function generateConfig(): Promise<AxiosRequestConfig> {
+  return {
+    headers: true
+      ? {}
+      : {
+          Authorization: await Keychain.getGenericPassword(),
+        },
+  }
+}
 
 function makeUrl(matchID: number, method?: MatchMethod, fighter?: FighterScoringKey) {
   const suffix = method && fighter ? `/${method}${getFighterNumber(fighter)}` : ''
@@ -81,33 +95,58 @@ async function getMatch(matchID: number) {
 }
 
 async function increaseScore(key: FighterScoringKey, matchID: number) {
-  const response = await axios.post(makeUrl(matchID, 'increase_score_fighter', key))
+  const response = await axios.post(
+    makeUrl(matchID, 'increase_score_fighter', key),
+    undefined,
+    await generateConfig()
+  )
   return mapMatchFields(response.data)
 }
 
 async function decreaseScore(key: FighterScoringKey, matchID: number) {
-  const response = await axios.post(makeUrl(matchID, 'decrease_score_fighter', key))
+  const response = await axios.post(
+    makeUrl(matchID, 'decrease_score_fighter', key),
+    undefined,
+    await generateConfig()
+  )
   return mapMatchFields(response.data)
 }
 
 async function issueWarning(key: FighterScoringKey, matchID: number) {
-  const response = await axios.post(makeUrl(matchID, 'warning_fighter', key))
+  const response = await axios.post(
+    makeUrl(matchID, 'warning_fighter', key),
+    undefined,
+    await generateConfig()
+  )
   return mapMatchFields(response.data)
 }
 
 async function issuePenalty(key: FighterScoringKey, matchID: number) {
-  const response = await axios.post(makeUrl(matchID, 'penalty_fighter', key))
+  const response = await axios.post(
+    makeUrl(matchID, 'penalty_fighter', key),
+    undefined,
+    await generateConfig()
+  )
   return mapMatchFields(response.data)
 }
 
 async function updateTimer(timeInSeconds: number, matchID: number) {
-  const response = await axios.post(`${baseUrl}/set_match_time?matchID=${matchID}`, {
-    matchTime: timeInSeconds,
-  })
+  const response = await axios.post(
+    `${baseUrl}/set_match_time?matchID=${matchID}`,
+    {
+      matchTime: timeInSeconds,
+    },
+    await generateConfig()
+  )
   return mapMatchFields(response.data)
 }
 
-async function undo(matchID: number, fighter1ID: number, fighter2ID: number, stateAfterUndo: MatchScore) {
+async function undo(
+  matchID: number,
+  fighter1ID: number,
+  fighter2ID: number,
+  stateAfterUndo: MatchScore
+) {
   const dataToSend = {
     fighter1ID: fighter1ID,
     fighter1Score: stateAfterUndo.fighter1Scoring.points,

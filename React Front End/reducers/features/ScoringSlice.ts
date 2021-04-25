@@ -14,67 +14,73 @@ import {
 export default function scoringReducer(state: Scoring, action: ScoringActionType) {
   switch (action.type) {
     case INCREASE_SCORE:
-      return determineIncreasedScore(state, action)
+      return increaseScore(state, action)
     case DECREASE_SCORE:
-      return determineDecreasedScore(state, action)
+      return decreaseScore(state, action)
     case ISSUE_WARNING:
-      return determineWarningIssued(state, action)
+      return issueWarning(state, action)
     case ISSUE_PENALTY:
-      return determinePenaltyIssued(state, action)
+      return issuePenalty(state, action)
     default:
       return state
   }
 }
 
-function determineIncreasedScore(state: Scoring, action: IncreaseScoreAction): Scoring {
+function increaseScore(state: Scoring, action: IncreaseScoreAction): Scoring {
   return {
     ...state,
-    points: state.points + 1,
+    points: action.payload || state.points + 1,
   }
 }
 
-function determineDecreasedScore(state: Scoring, action: DecreaseScoreAction): Scoring {
+function decreaseScore(state: Scoring, action: DecreaseScoreAction): Scoring {
+  const points =
+    action.payload && action.payload >= 0 ? action.payload : Math.max(state.points - 1, 0)
   return {
     ...state,
-    points: Math.max(state.points - 1, 0),
+    points,
   }
 }
 
-function determineWarningIssued(state: Scoring, action: IssueWarningAction): Scoring {
+function issueWarning(state: Scoring, action: IssueWarningAction): Scoring {
   return {
     ...state,
-    numWarnings: state.numWarnings + 1,
+    numWarnings: action.payload || state.numWarnings + 1,
   }
 }
 
-function determinePenaltyIssued(state: Scoring, action: IssuePenaltyAction): Scoring {
+function issuePenalty(state: Scoring, action: IssuePenaltyAction): Scoring {
   return {
     ...state,
-    numPenalties: state.numPenalties + 1,
+    numPenalties: action.payload || state.numPenalties + 1,
   }
 }
 
-export function createIncreaseScoreAction(): IncreaseScoreAction {
+export function createIncreaseScoreAction(newScore: number): IncreaseScoreAction {
   return {
     type: INCREASE_SCORE,
+    payload: newScore,
   }
 }
 
-export function createDecreaseScoreAction(): DecreaseScoreAction {
+export function createDecreaseScoreAction(newScore: number): DecreaseScoreAction {
   return {
     type: DECREASE_SCORE,
+    payload: newScore,
   }
 }
 
-export function createIssueWarningAction(): IssueWarningAction {
+export function createIssueWarningAction(newNumWarnings: number): IssueWarningAction {
   return {
     type: ISSUE_WARNING,
+    payload: newNumWarnings,
   }
 }
 
-export function createIssuePenaltyAction(): IssuePenaltyAction {
+export function createIssuePenaltyAction(newNumPenalties: number): IssuePenaltyAction {
   return {
     type: ISSUE_PENALTY,
+    payload: newNumPenalties,
   }
 }
 

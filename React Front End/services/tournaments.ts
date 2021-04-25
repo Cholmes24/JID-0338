@@ -7,7 +7,6 @@ type TournamentInDb = {
   tournamentID: number
 }
 
-//TODO: complete/remove this function making sure relevant fields are accounted for
 function mapTournamentField(tournamentInDb: TournamentInDb, systemEventID: number): Tournament {
   return {
     name: `Tournament ${tournamentInDb.tournamentID}`,

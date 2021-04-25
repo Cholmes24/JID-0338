@@ -87,14 +87,18 @@ export default function ScoreCounter({ matchID, fighterScoringKey, color }: Scor
   const thunkIncrease = (): AppThunk => async (dispatch) => {
     const updatedMatch = await matchService.increaseScore(fighterScoringKey, matchID)
     if (updatedMatch.present !== match.present) {
-      dispatch(increaseScore(matchID, fighterScoringKey))
+      dispatch(
+        increaseScore(matchID, fighterScoringKey, updatedMatch.present[fighterScoringKey].points)
+      )
     }
   }
   const thunkDecrease = (): AppThunk => async (dispatch) => {
     if (score > 0) {
       const updatedMatch = await matchService.decreaseScore(fighterScoringKey, matchID)
       if (updatedMatch.present !== match.present) {
-        dispatch(decreaseScore(matchID, fighterScoringKey))
+        dispatch(
+          decreaseScore(matchID, fighterScoringKey, updatedMatch.present[fighterScoringKey].points)
+        )
       }
     }
   }

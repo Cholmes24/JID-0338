@@ -41,14 +41,26 @@ export default function FighterColumn(props: FighterColumnProps) {
   const thunkIssueWarning = (): AppThunk => async (dispatch) => {
     const updatedMatch = await matchService.issueWarning(fighterScoringKey, matchID)
     if (updatedMatch.present !== match.present) {
-      dispatch(issueWarning(matchID, fighterScoringKey))
+      dispatch(
+        issueWarning(
+          matchID,
+          fighterScoringKey,
+          updatedMatch.present[fighterScoringKey].numWarnings
+        )
+      )
     }
   }
 
   const thunkIssuePenalty = (): AppThunk => async (dispatch) => {
     const updatedMatch = await matchService.issuePenalty(fighterScoringKey, matchID)
     if (updatedMatch.present !== match.present) {
-      dispatch(issuePenalty(matchID, fighterScoringKey))
+      dispatch(
+        issuePenalty(
+          matchID,
+          fighterScoringKey,
+          updatedMatch.present[fighterScoringKey].numPenalties
+        )
+      )
     }
   }
 

@@ -39,7 +39,7 @@ export function addItemsWithMergeCustomizer<T extends { ID: number }>(
 }
 
 export function isValidDecimal(input: string): boolean {
-  return RegExp(/\d*((\.d+)|(\d\.?))/).test(input)
+  return RegExp(/^\d*((\.\d+)|(\d\.?))$/).test(input)
 }
 
 export function formatClock(ms: number) {
@@ -70,4 +70,49 @@ export function getParentKeyName(key: keyof RootType) {
     default:
       return undefined
   }
+}
+
+function singleToAlphanum(num: number) {
+  return String.fromCharCode(num + (num <= 9 ? 48 : 55))
+}
+
+function toAlphanumeric(num: number) {
+  const modSpace = 36
+  const firstDiv = Math.trunc(num / modSpace)
+  const firstMod = num % modSpace
+
+  const secondDiv = Math.trunc(firstDiv / modSpace)
+  const secondMod = firstDiv % modSpace
+
+  const thirdDiv = Math.trunc(secondDiv / modSpace)
+  const thirdMod = secondDiv % modSpace
+  if (thirdDiv < 0 || thirdDiv > 35) {
+    throw new Error('Invalid IP Address')
+  }
+
+  return [thirdMod, secondMod, firstMod].map(singleToAlphanum).join('')
+}
+
+function singleAlphanumToNum(char: string) {
+  const code = char.charCodeAt(0)
+  return code >= 65 ? code - 55 : code - 48
+}
+
+export const conversion = {
+  toAlphanumeric,
+  singleToAlphanum,
+  singleAlphanumToNum,
+}
+
+export function convertIPAddress(IP: string) {
+  const cleaned = IP.toLocaleLowerCase().trim()
+  if (cleaned.length < 7) {
+    return ''
+  }
+
+  const prefix = cleaned.substring(0, 7)
+  const withPrefix = prefix === 'http://' ? cleaned : 'http://' + cleaned
+  const withTrailingSlash =
+    withPrefix.charAt(withPrefix.length - 1) === '/' ? withPrefix : withPrefix + '/'
+  return withTrailingSlash
 }

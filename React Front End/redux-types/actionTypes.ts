@@ -32,18 +32,22 @@ export const ISSUE_PENALTY = 'ISSUE_PENALTY'
 
 export interface IncreaseScoreAction extends Action {
   type: typeof INCREASE_SCORE
+  payload: number
 }
 
 export interface DecreaseScoreAction extends Action {
   type: typeof DECREASE_SCORE
+  payload: number
 }
 
 export interface IssueWarningAction extends Action {
   type: typeof ISSUE_WARNING
+  payload: number
 }
 
 export interface IssuePenaltyAction extends Action {
   type: typeof ISSUE_PENALTY
+  payload: number
 }
 
 export type ScoringActionType =
@@ -217,11 +221,3 @@ export type CurrentIDsActionType =
   | SetCurrentTournamentIDAction
   | SetCurrentPoolIDAction
   | SetCurrentMatchIDAction
-
-export const SET_HOST_IP_ADDRESS = 'SET_HOST_IP_ADDRESS'
-
-export interface SetHostIPAddess extends Action {
-  type: typeof SET_HOST_IP_ADDRESS
-  payload: string
-}
-export type HostIPActionType = SetHostIPAddess

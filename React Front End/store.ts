@@ -9,7 +9,6 @@ import fightersReducer from './reducers/FightersReducer'
 import systemEventsReducer from './reducers/SystemEventsReducer'
 import currentIDsReducer from './reducers/CurrentIDsReducer'
 import poolsReducer from './reducers/PoolsReducer'
-import HostIPAddressReducer from './reducers/HostIPAddressReducer'
 
 const persistConfig = {
   key: 'root',
@@ -23,7 +22,6 @@ const rootReducer = combineReducers({
   matches: matchesReducer,
   pools: poolsReducer,
   currentIDs: currentIDsReducer,
-  // hostIPAddress: HostIPAddressReducer,
 })
 
 const composedEnhancer = composeWithDevTools(

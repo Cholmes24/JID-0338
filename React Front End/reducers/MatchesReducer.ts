@@ -118,30 +118,42 @@ export function addMatches(matches: Match[]): AddMatchesAction {
 
 type FighterScoringKey = 'fighter1Scoring' | 'fighter2Scoring'
 
-export function increaseScore(matchID: number, fighter: FighterScoringKey) {
+export function increaseScore(matchID: number, fighter: FighterScoringKey, newScore: number) {
   return matches(
-    matchActionCreator.matchScoring(scoringActionCreator.createIncreaseScoreAction(), fighter),
+    matchActionCreator.matchScoring(
+      scoringActionCreator.createIncreaseScoreAction(newScore),
+      fighter
+    ),
     matchID
   )
 }
 
-export function decreaseScore(matchID: number, fighter: FighterScoringKey) {
+export function decreaseScore(matchID: number, fighter: FighterScoringKey, newScore: number) {
   return matches(
-    matchActionCreator.matchScoring(scoringActionCreator.createDecreaseScoreAction(), fighter),
+    matchActionCreator.matchScoring(
+      scoringActionCreator.createDecreaseScoreAction(newScore),
+      fighter
+    ),
     matchID
   )
 }
 
-export function issueWarning(matchID: number, fighter: FighterScoringKey) {
+export function issueWarning(matchID: number, fighter: FighterScoringKey, newNumWarnings: number) {
   return matches(
-    matchActionCreator.matchScoring(scoringActionCreator.createIssueWarningAction(), fighter),
+    matchActionCreator.matchScoring(
+      scoringActionCreator.createIssueWarningAction(newNumWarnings),
+      fighter
+    ),
     matchID
   )
 }
 
-export function issuePenalty(matchID: number, fighter: FighterScoringKey) {
+export function issuePenalty(matchID: number, fighter: FighterScoringKey, newNumPenalties: number) {
   return matches(
-    matchActionCreator.matchScoring(scoringActionCreator.createIssuePenaltyAction(), fighter),
+    matchActionCreator.matchScoring(
+      scoringActionCreator.createIssuePenaltyAction(newNumPenalties),
+      fighter
+    ),
     matchID
   )
 }
