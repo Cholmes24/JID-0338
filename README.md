@@ -76,7 +76,7 @@
 
     * Acquire MySQL, preferably a version below 8.0.
 
-    * MySQL Workbench CE: any available version. 
+    * Acquire any available version of MySQL Workbench CE.
  
 
   * Python: https://www.python.org/downloads/ 
