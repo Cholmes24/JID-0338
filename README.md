@@ -1,8 +1,8 @@
 # JID-0338
 
-### Release Notes HEMA ScoreCut v1.0
+## Release Notes HEMA ScoreCut v1.0
 
-**NEW FEATURES** 
+### NEW FEATURES 
 
 Adding and removing points (mobile) 
  
@@ -23,7 +23,7 @@ Database tracks changes to timer (desktop and mobile)
 
  
 
-**BUG FIXES**
+### BUG FIXES
 
 Mobile Application: 
 
@@ -41,7 +41,7 @@ If the user assigns a point to one competitor and no points to the other competi
 
  
 
-**KNOWN BUGS**  
+### KNOWN BUGS  
 
 The desktop application has links that does not allow for the user to navigate to the application. 
 
@@ -53,9 +53,9 @@ No login feature that can track which referee makes which changes to a match.
 
  
 
-**Install Guide**   
+## Install Guide   
 
-Pre-requisites 
+### Pre-requisites 
 
 Network Connectivity: 
 
@@ -96,7 +96,7 @@ Download the mysql connector using the command:
 pip install mysql-connector-python  
  
 
-Download instructions:  
+### Download instructions:  
 
 Desktop Application: 
 
