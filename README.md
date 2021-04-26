@@ -56,19 +56,19 @@ No login feature that can track which referee makes which changes to a match.
 
 ### Pre-requisites 
 
-Network Connectivity: 
+  * **Network Connectivity:** 
 
-A LAN Connection that mutually connects to the chosen desktop machine and the relevant mobile devices. 
+    * A LAN Connection that mutually connects to the chosen desktop machine and the relevant mobile devices. 
  
 
-Desktop Application: 
+**Desktop Application:** 
 
 The user must have a Windows machine or a machine that utilizes a virtual machine that can host a Windows operating system.  
 
 Command prompt and executing ipconfig command to find ipv4 router IP address. 
  
 
-Mobile Application: 
+**Mobile Application:** 
 
 The user must have an iOS or Android mobile phone. 
  
