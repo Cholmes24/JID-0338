@@ -22,13 +22,13 @@
 
 ### BUG FIXES
 
-  * **Mobile Application:**
+  * Mobile Application:
 
     * Constant updating of the current timestamps of all matches no longer causes a memory leak due to the flood of excess time updates every 80 milliseconds to the database. 
 
     * Selecting a match no longer inhibits users from returning to the match selection screen to select a different match. 
 
-  * **Desktop Application:**
+  * Desktop Application:
 
     * Warnings produced on startup unrelated to the current instance of the application have been removed. 
 
