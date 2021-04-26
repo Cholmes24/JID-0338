@@ -201,7 +201,7 @@
 
                 default-authentication plugin=mysql_native_password
 
-                character-set-server = utf8
+                character-set-server=utf8
 
   * Errors when trying to run a pip command 
 
