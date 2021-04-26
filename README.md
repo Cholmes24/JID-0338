@@ -1,7 +1,7 @@
 # Release Notes and Installation Guide for HEMA ScoreCut v1.0
 
 ## Release Notes
-### New Features 
+### NEW FEATURES 
 
   * Adding and removing points (mobile) 
  
@@ -22,7 +22,7 @@
 
  
 
-### Bug Fixes
+### BUG FIXES
 
 **Mobile Application:**
 
@@ -40,7 +40,7 @@
 
  
 
-### Known Bugs  
+### KNOWN BUGS  
 
   * The desktop application contains links that do not allow for the user to navigate to the application. 
 
