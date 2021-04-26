@@ -121,78 +121,77 @@
 
 ### BUILD: 
 
-MySQL Server:  
+  * MySQL Server:  
 
-Open your preferred database viewing tool such as MySQL Workbench 
+    * Open your preferred database viewing tool such as MySQL Workbench 
 
-Click on the Local instance router and log in 
+    * Click on the Local instance router and log in 
 
-Once connected, ensure the server is running by navigating on the toolbar to the Server → Server Status.  
+    * Once connected, ensure the server is running by navigating on the toolbar to the Server → Server Status.  
 
-If not connected, navigate to Server → Startup/Shutdown and start the server. 
+    * If not connected, navigate to Server → Startup/Shutdown and start the server. 
 
-Once the server is confirmed to be running, navigate to File → Open SQL Script.  
+    * Once the server is confirmed to be running, navigate to File → Open SQL Script.  
 
-Select ‘SQL Init Script.sql.’  
+    * Select ‘SQL Init Script.sql.’  
 
-Execute the contents of the file to build the scorecardv5 database structure. (If using MySQL Workbench, click the lightning bolt symbol located at the top of the SQL prompt.) 
+    * Execute the contents of the file to build the scorecardv5 database structure. (If using MySQL Workbench, click the lightning bolt symbol located at the top of the SQL prompt.) 
  
 
 ### INSTALLATION:  
 
-Desktop Application: 
+  * Desktop Application: 
 
-Double click on the HEMAScoreCardClientInstaller.exe that has been downloaded from GitHub. 
+    * Double click on the HEMAScoreCardClientInstaller.exe that has been downloaded from GitHub. 
 
-If a Windows Security popup appears, click More Info → Run Anyway. 
+    * If a Windows Security popup appears, click More Info → Run Anyway. 
 
-Continue through the steps of the installation setup. Once complete, you should have access to HEMAScorecardClient.exe. 
+    * Continue through the steps of the installation setup. Once complete, you should have access to HEMAScorecardClient.exe. 
 
-Mobile Application: 
+  * Mobile Application: 
 
-Install npm on your machine using the instructions found at https://www.npmjs.com/get-npm.  
+    * Install npm on your machine using the instructions found at https://www.npmjs.com/get-npm.  
 
-Install yarn by typing in the command npm install yarn 
+    * Install yarn by typing in the command npm install yarn 
 
-Navigate to the JID-0338/React Front End folder in the command line and type in the command yarn 
+    * Navigate to the JID-0338/React Front End folder in the command line and type in the command yarn 
 
-Install the expo client by using the command  
-npm install -g expo-cli  
+    * Install the expo client by using the command: npm install -g expo-cli  
 
  
 
 ### RUNNING APPLICATION:   
 
-Python Connection Handler: 
+  * Python Connection Handler: 
 
-Open a command prompt window and navigate to the directory where the interfacedbAPIv2.py file is located. 
+    * Open a command prompt window and navigate to the directory where the interfacedbAPIv2.py file is located. 
 
-Run the file with the command:  
+    * Run the file with the command:  
 python interfacedbAPIv2.py 
  
 
-Desktop Application: 
+  * Desktop Application: 
 
-Double click HEMAScorecardClient.exe (or click the desktop shortcut) to run the application. 
+    * Double click HEMAScorecardClient.exe (or click the desktop shortcut) to run the application. 
  
 
-Mobile Application: 
+  * Mobile Application: 
 
-Navigate to the JID-0338/React Front End folder in the command line and run the command expo start 
+    * Navigate to the JID-0338/React Front End folder in the command line and run the command expo start 
 
-This will open a window in the browser that contains a QR code.  
+    * This will open a window in the browser that contains a QR code.  
 
-Scan this code with the camera on your mobile device and the app will begin in Expo Go. 
+    * Scan this code with the camera on your mobile device and the app will begin in Expo Go. 
 
  
 
 ### TROUBLESHOOTING:   
 
-"Authentication Plugin: caching-sha2_password cannot be loaded" error 
+  * "Authentication Plugin: caching-sha2_password cannot be loaded" error 
 
-This is a common error that can occur if the user types pip install mysql-connector instead of pip install mysql-connector-python. Ensure to use the latter. 
+    * This is a common error that can occur if the user types pip install mysql-connector instead of pip install mysql-connector-python. Ensure to use the latter. 
 
-If that does not fix the problem, then try: 
+    * If that does not fix the problem, then try: 
 
 Locate the my.ini file which should be located in the ProgramData\MySQL\MySQL Server 5.7 on your main drive. 
 
@@ -212,11 +211,11 @@ Line: default-authentication plugin=mysql_native_password
 
 Line: character-set-server = utf8 
 
-Errors when trying to run a pip command 
+  * Errors when trying to run a pip command 
 
-You may not have acquired the most up-to-date version of Python. Please refer to https://pip.pypa.io/en/stable/installing/ to install pip. 
+    * You may not have acquired the most up-to-date version of Python. Please refer to https://pip.pypa.io/en/stable/installing/ to install pip. 
 
-Errors while connecting with the mobile application 
+  * Errors while connecting with the mobile application 
 
-Ensure to complete the steps to run the Python Connection Handler and start up MySQL Server before attempting to connect with the mobile application. 
+    * Ensure to complete the steps to run the Python Connection Handler and start up MySQL Server before attempting to connect with the mobile application. 
  
