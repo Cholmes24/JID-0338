@@ -59,16 +59,16 @@
     * A LAN Connection that mutually connects to the chosen desktop machine and the relevant mobile devices. 
  
 
-Desktop Application: 
+  * Desktop Application: 
 
-  * The user must have a Windows machine or a machine that utilizes a virtual machine that can host a Windows operating system.  
+    * The user must have a Windows machine or a machine that utilizes a virtual machine that can host a Windows operating system.  
 
-  * Command prompt and executing ipconfig command to find ipv4 router IP address. 
+    * Command prompt and executing ipconfig command to find ipv4 router IP address. 
  
 
-Mobile Application: 
+  * Mobile Application: 
 
-The user must have an iOS or Android mobile phone. 
+    * The user must have an iOS or Android mobile phone. 
  
 
 ### DEPENDENCIES 
