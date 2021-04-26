@@ -24,31 +24,31 @@
 
 ### Bug Fixes
 
-Mobile Application: 
+**Mobile Application:**
 
-Constant updating of the current timestamps of all matches no longer causes a memory leak due to the flood of excess time updates every 80 milliseconds to the database. 
+  * Constant updating of the current timestamps of all matches no longer causes a memory leak due to the flood of excess time updates every 80 milliseconds to the database. 
 
-Selecting a match no longer inhibits users from returning to the match selection screen to select a different match. 
+  * Selecting a match no longer inhibits users from returning to the match selection screen to select a different match. 
 
-Desktop Application: 
+**Desktop Application:**
 
-Warnings produced on startup unrelated to the current instance of the application have been removed. 
+  * Warnings produced on startup unrelated to the current instance of the application have been removed. 
 
-CSV exporter no longer crashes the application. 
+  * CSV exporter no longer crashes the application. 
 
-If the user assigns a point to one competitor and no points to the other competitor, the page correctly refreshes. 
+  * If the user assigns a point to one competitor and no points to the other competitor, the page correctly refreshes. 
 
  
 
 ### Known Bugs  
 
-The desktop application has links that does not allow for the user to navigate to the application. 
+  * The desktop application contains links that do not allow for the user to navigate to the application. 
 
-Desktop version is periodically unable to recognize when warnings are undone from the mobile app. 
+  * Desktop version is periodically unable to recognize when warnings are undone from the mobile app. 
 
-Desktop version is periodically unable to recognize when time is added to the timer on mobile app. 
+  * Desktop version is periodically unable to recognize when time is added to the timer on mobile app. 
 
-No login feature that can track which referee makes which changes to a match. 
+  * No official login feature that track names of which referee makes changes to a match. 
 
  
 
@@ -56,19 +56,19 @@ No login feature that can track which referee makes which changes to a match.
 
 ### Pre-requisites 
 
-  * **Network Connectivity:** 
+Network Connectivity: 
 
-    * A LAN Connection that mutually connects to the chosen desktop machine and the relevant mobile devices. 
+A LAN Connection that mutually connects to the chosen desktop machine and the relevant mobile devices. 
  
 
-**Desktop Application:** 
+Desktop Application: 
 
 The user must have a Windows machine or a machine that utilizes a virtual machine that can host a Windows operating system.  
 
 Command prompt and executing ipconfig command to find ipv4 router IP address. 
  
 
-**Mobile Application:** 
+Mobile Application: 
 
 The user must have an iOS or Android mobile phone. 
  
