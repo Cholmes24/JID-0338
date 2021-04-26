@@ -91,7 +91,7 @@
 
   * Desktop Application: 
 
-    * Navigate to the JID-0338 GitHub repository and select the PHPDesktop folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/PHPDesktop 
+    * Navigate to the JID-0338 GitHub repository and select the [PHPDesktop folder](https://github.com/Cholmes24/JID-0338/tree/master/PHPDesktop) 
 
     * Download the HEMAScorecardClientInstaller.exe from GitHub. 
 
