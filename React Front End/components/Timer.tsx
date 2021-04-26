@@ -33,11 +33,11 @@ export default function Timer({ matchID }: TimerProps) {
 
   const toggleModal = () => setIsModalVisible(!isModalVisible)
 
-  const refreshRate = 85 // in ms
+  const refreshRate = 65 // in ms
 
   useEffect(() => {
     update()
-  }, [matchID])
+  }, [matchID, isModalVisible])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -139,6 +139,7 @@ const buttonDefaults = {
 const styles = StyleSheet.create({
   addTray: {
     flexDirection: 'row',
+    paddingTop: 15,
   },
   addBox: {
     fontSize: 30,

@@ -23,30 +23,29 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
   const currentMatchID = useAppSelector((state) => state.currentIDs.matchID)
   const currentMatches = useAppSelector((state) => state.matches)
   const [hasRecentMatch, setHasRecentMatch] = useState(false)
-
-  const [hostIP, setHostIP] = useState('')
+  const [connected, setConnected] = useState(false)
   const [accessCode, setAccessCode] = useState('')
 
   useEffect(() => {
-    if (hostIP !== '') {
+    if (connected) {
       setHasRecentMatch(currentMatches.find((m) => m.ID === currentMatchID) !== undefined)
     }
-  }, [currentMatchID, currentMatches, hostIP])
+  }, [currentMatchID, currentMatches, connected])
 
   useEffect(() => {
-    if (hostIP !== '') {
+    if (connected) {
       dispatch(thunkSystemEvents())
         .then(() => dispatch(thunkCurrentMatch()))
         .then((match) => dispatch(thunkCurrentFighters(match)))
         .then(() => Keyboard.dismiss())
     }
-  }, [hostIP])
+  }, [connected])
 
   async function setIP() {
     const url = accessCode
     const tokenAccepted = await authService.requestToken(accessCode, url)
     if (tokenAccepted) {
-      setHostIP(accessCode)
+      setConnected(true)
     }
   }
 
@@ -77,7 +76,7 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
   }
 
   const mostRecentMatchButton = () =>
-    currentMatchID && hasRecentMatch ? (
+    connected && currentMatchID && hasRecentMatch ? (
       <Button
         buttonStyle={styles.entry}
         title="Most Recent Match"
@@ -87,22 +86,25 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.userCard}>
-        {/* <CodeEntry /> */}
-        <TextInput style={styles.textInput} value={accessCode} onChangeText={handleTextChange} />
-        <Button title="Set IP" style={styles.enterButton} onPress={setIP} />
-        {/* <UserCard firstName={'longFirstName'} lastName={'longLastName'} /> */}
-        {/* <ConnectionChecker /> */}
-      </View>
+      {connected ?  (
+        <View style={styles.userCard}>
+          <UserCard firstName={'longFirstName'} lastName={'longLastName'} />
+        </View>
+      ): (
+        <View style={styles.userCard}>
+          <TextInput style={styles.textInput} value={accessCode} onChangeText={handleTextChange} />
+          <Button title="Set IP" style={styles.enterButton} onPress={setIP} />
+        </View>
+      )}
       <View style={styles.buttonWrapper}>
-        {hostIP && hostIP !== '' ? (
+        {connected ? (
           <Button
             buttonStyle={styles.entry}
             title="Events"
             onPress={() => navigation.navigate('Events')}
           />
         ) : (
-          <Text style={styles.errorText}>Cannot access server</Text>
+          <Text style={styles.errorText}>Enter the access code to connect</Text>
         )}
 
         {mostRecentMatchButton()}
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     // paddingHorizontal: 5,
     textAlign: 'center',
-    fontSize: 35,
+    fontSize: 30,
     paddingBottom: 100,
   },
 })
