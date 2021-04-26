@@ -176,7 +176,7 @@
 
   * Mobile Application: 
 
-    * Navigate to the JID-0338/React Front End folder in the command line and run the command expo start 
+    * Navigate to the JID-0338/React Front End folder in the command line and run the command `expo start`
 
     * This will open a window in the browser that contains a QR code.  
 
@@ -186,9 +186,9 @@
 
 ### TROUBLESHOOTING:   
 
-  * "Authentication Plugin: caching-sha2_password cannot be loaded" error 
+  * Common error `Authentication Plugin: caching-sha2_password cannot be loaded`
 
-    * This is a common error that can occur if the user types pip install mysql-connector instead of pip install mysql-connector-python. Ensure to use the latter. 
+    * This error can occur if the user types pip install mysql-connector instead of `pip install mysql-connector-python`. Ensure to use the latter. 
 
     * If that does not fix the problem, then locate the my.ini file which should be located in the ProgramData\MySQL\MySQL Server 5.7 on your main drive. 
 
