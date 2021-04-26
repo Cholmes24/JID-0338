@@ -187,7 +187,7 @@
 
        * If that does not fix the problem, then locate the my.ini file which should be in the ProgramData\MySQL\MySQL Server 5.7 on your main drive. 
 
-       * Open the my.ini configuration file and change the following lines under the corresponding headers to ensure the character set and authentication plug settings match.
+       * Open the my.ini configuration file and change the following lines under the corresponding headers to ensure the character set and authentication plugin settings match.
 
             Header: `[client]`
 
