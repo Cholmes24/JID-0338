@@ -89,7 +89,7 @@
     * Acquire the latest version of Python 3.xx 
  
 
-  * Download the mysql connector using the command: pip install mysql-connector-python  
+  * Download the mysql connector using the command `pip install mysql-connector-python`
  
 
 ### DOWNLOAD:  
