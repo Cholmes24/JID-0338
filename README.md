@@ -205,7 +205,7 @@
 
   * Errors when trying to run a pip command 
 
-    * You may not have acquired the most up-to-date version of Python, which includes [pip](https://pip.pypa.io/en/stable/installing/) 
+    * You may not have acquired the most up-to-date version of Python, which includes [pip](https://pip.pypa.io/en/stable/installing/). 
 
   * Errors while connecting with the mobile application 
 
