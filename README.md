@@ -195,19 +195,19 @@ python interfacedbAPIv2.py
 
     * Open the configuration file and add the lines that follow underneath the corresponding headers: 
 
-        Header: [client] 
+        Header: `[client]` 
 
         `default-character-set=utf8` 
 
-        Header: [mysql] 
+        Header: `[mysql]`
 
         `default-character-set=utf8`
 
-Header: [mysqld]  
+        Header: [mysqld]  
 
-Line: default-authentication plugin=mysql_native_password 
+        `default-authentication plugin=mysql_native_password`
 
-Line: character-set-server = utf8 
+        `character-set-server = utf8`
 
   * Errors when trying to run a pip command 
 
