@@ -76,11 +76,11 @@
 
     * Note: With in the MySQL installer, select the following MySQL products: 
 
-    * MySQL Server: preferably a version below 8.0, but 8.0 can work with extra steps. 
+         MySQL Server: preferably a version below 8.0, but 8.0 can work with extra steps. 
 
-    * Click next for all prompts and in the server installation under the type and Networking prompt, under the connectivity header ensure that the port is 3306. 
+             Click next for all prompts and in the server installation under the type and Networking prompt, under the connectivity header ensure that the port is 3306. 
 
-    * MySQL Workbench CE: any available version. 
+         MySQL Workbench CE: any available version. 
  
 
   * Python: https://www.python.org/downloads/ 
