@@ -1,6 +1,6 @@
-import Keychain from 'react-native-keychain'
 import axios, { AxiosRequestConfig } from 'axios'
 import { Match, MatchScore, Timer } from '../redux-types/storeTypes'
+import localStorage from '../util/network'
 
 const baseUrl = '/api/match'
 
@@ -76,11 +76,11 @@ type MatchMethod =
 
 async function generateConfig(): Promise<AxiosRequestConfig> {
   return {
-    headers: true
-      ? {}
-      : {
-          Authorization: await Keychain.getGenericPassword(),
-        },
+    headers: axios.defaults.baseURL
+      ? {
+          Authorization: await localStorage.getSecureValue(axios.defaults.baseURL),
+        }
+      : {},
   }
 }
 

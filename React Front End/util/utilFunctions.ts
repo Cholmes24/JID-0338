@@ -86,11 +86,17 @@ function toAlphanumeric(num: number) {
 
   const thirdDiv = Math.trunc(secondDiv / modSpace)
   const thirdMod = secondDiv % modSpace
-  if (thirdDiv < 0 || thirdDiv > 35) {
+
+  const fourthDiv = Math.trunc(thirdDiv / modSpace)
+  const fourthMod = thirdDiv % modSpace
+
+  const fifthDiv = Math.trunc(fourthDiv / modSpace)
+  const fifthMod = fourthDiv % modSpace
+  if (fifthDiv < 0 || fifthDiv > 35) {
     throw new Error('Invalid IP Address')
   }
 
-  return [thirdMod, secondMod, firstMod].map(singleToAlphanum).join('')
+  return [fifthMod, fourthMod, thirdMod, secondMod, firstMod].map(singleToAlphanum).join('')
 }
 
 function singleAlphanumToNum(char: string) {

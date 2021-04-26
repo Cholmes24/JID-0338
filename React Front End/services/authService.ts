@@ -1,7 +1,7 @@
 import { Address4 } from 'ip-address'
 import axios from 'axios'
-import Keychain from 'react-native-keychain'
 import { convertIPAddress } from '../util/utilFunctions'
+import localStorage from '../util/network'
 
 async function requestToken(accessCode: string, ip: string) {
   const url = convertIPAddress(ip)
@@ -24,7 +24,7 @@ async function requestToken(accessCode: string, ip: string) {
 
     const token = `bearer ${response.data}`
     console.log(ip, url, token)
-    const t = await Keychain.setGenericPassword(url, token)
+    const t = await localStorage.setSecureValue(url, token)
     return Boolean(t)
   } else {
     return false
