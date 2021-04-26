@@ -88,7 +88,7 @@
     * Acquire the latest version of Python 3.xx 
  
 
-  * Download the mysql connector using the command `pip install mysql-connector-python`
+  * Download the mysql connector using the command `pip install mysql-connector-python`<br/><br/>
  
 
 ### DOWNLOAD INSTRUCTIONS  
@@ -111,11 +111,11 @@
 
     * Open a command prompt and use the command `pip install flask` 
 
-  * Mobile Application (via Expo Go) 
+  * Mobile Application (via Expo Go):
 
     * Download either Expo Go from the Apple App Store or Expo from the Google Play Store. 
 
-    * Navigate to the JID-0338 GitHub repository and select the React Front End folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/React%20Front%20End. Download this folder. 
+    * Navigate to the JID-0338 GitHub repository and select the React Front End folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/React%20Front%20End. Download this folder.<br/><br/>
  
 
 ### BUILD INSTRUCTIONS 
@@ -134,7 +134,7 @@
 
     * Select ‘SQL Init Script.sql.’  
 
-    * Execute the contents of the file to build the scorecardv5 database structure. (If using MySQL Workbench, click the lightning bolt symbol located at the top of the SQL prompt.) 
+    * Execute the contents of the file to build the scorecardv5 database structure. (If using MySQL Workbench, click the lightning bolt symbol located at the top of the SQL prompt.)<br/><br/>
  
 
 ### INSTALLATION INSTRUCTIONS  
@@ -155,7 +155,7 @@
 
     * Navigate to the JID-0338/React Front End folder in the command line and type in the command `yarn`
 
-    * Install the expo client by using the command `npm install -g expo-cli`  
+    * Install the expo client by using the command `npm install -g expo-cli`<br/><br/>  
 
  
 
@@ -179,7 +179,7 @@
 
     * This will open a window in the browser that contains a QR code.  
 
-    * Scan this code with the camera on your mobile device and the app will begin in Expo Go. 
+    * Scan this code with the camera on your mobile device and the app will begin in Expo Go.<br/><br/>
 
  
 
