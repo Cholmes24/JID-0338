@@ -74,9 +74,9 @@
 
   * MySQL: 
 
-    * Acquire MySQL, preferably a version below 8.0  https://dev.mysql.com/downloads/mysql/ 
+    * Acquire [MySQL](https://dev.mysql.com/downloads/mysql/), preferably a version below 8.0
 
-    * Acquire any available version of MySQL Workbench CE https://dev.mysql.com/downloads/workbench/
+    * Acquire any available version of [MySQL Workbench CE](https://dev.mysql.com/downloads/workbench/)
  
 
   * Python: https://www.python.org/downloads/ 
