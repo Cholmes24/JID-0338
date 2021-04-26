@@ -195,13 +195,13 @@ python interfacedbAPIv2.py
 
     * Open the configuration file and add the lines that follow underneath the corresponding headers: 
 
-    *Header: [client] 
+    Header: [client] 
 
-    *default-character-set=utf8 
+    `default-character-set=utf8` 
 
-Header: [mysql] 
+    Header: [mysql] 
 
-Line: default-character-set=utf8 
+    `default-character-set=utf8`
 
 Header: [mysqld]  
 
