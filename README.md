@@ -52,7 +52,7 @@
 
 ## Install Guide   
 
-### PRE-REQUESITES 
+### PRE-REQUISITES 
 
   * Network Connectivity: 
 
