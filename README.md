@@ -1,6 +1,6 @@
 # JID-0338
 
-<font size="20">**Release Notes HEMA ScoreCut v1.0**</font>
+### Release Notes HEMA ScoreCut v1.0
 
 **NEW FEATURES** 
 
