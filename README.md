@@ -68,9 +68,7 @@
 
   * Mobile Application: 
 
-    * The user must have an iOS or Android mobile phone. 
- 
-\
+    * The user must have an iOS or Android mobile phone. \\
 
 ### DEPENDENCIES 
 
