@@ -110,7 +110,7 @@
 
   * Python Flask: 
 
-    * Open a command prompt and use the command: pip install flask 
+    * Open a command prompt and use the command `pip install flask` 
 
   * Mobile Application (via Expo Go) 
 
@@ -152,11 +152,11 @@
 
     * Install npm on your machine using the instructions found at https://www.npmjs.com/get-npm.  
 
-    * Install yarn by typing in the command npm install yarn 
+    * Install yarn by typing in the command `npm install yarn`
 
-    * Navigate to the JID-0338/React Front End folder in the command line and type in the command yarn 
+    * Navigate to the JID-0338/React Front End folder in the command line and type in the command `yarn`
 
-    * Install the expo client by using the command: npm install -g expo-cli  
+    * Install the expo client by using the command `npm install -g expo-cli`  
 
  
 
@@ -166,8 +166,7 @@
 
     * Open a command prompt window and navigate to the directory where the interfacedbAPIv2.py file is located. 
 
-    * Run the file with the command:  
-python interfacedbAPIv2.py 
+    * Run the file with the command `python interfacedbAPIv2.py` 
  
 
   * Desktop Application: 
