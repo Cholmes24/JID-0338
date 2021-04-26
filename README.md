@@ -74,14 +74,14 @@
 
   * MySQL: 
 
-    * Acquire [MySQL](https://dev.mysql.com/downloads/mysql/), preferably a version below 8.0
+    * Acquire [MySQL](https://dev.mysql.com/downloads/mysql/), preferably a version below 8.0.
 
-    * Acquire any available version of [MySQL Workbench CE](https://dev.mysql.com/downloads/workbench/)
+    * Acquire any available version of [MySQL Workbench CE](https://dev.mysql.com/downloads/workbench/).
  
 
   * Python: 
 
-    * Acquire the latest version of [Python 3.xx](https://www.python.org/downloads/) 
+    * Acquire the latest version of [Python 3.xx](https://www.python.org/downloads/).
  
 
   * Download the mysql connector using the command `pip install mysql-connector-python`<br/><br/>
@@ -91,7 +91,7 @@
 
   * Desktop Application: 
 
-    * Navigate to the JID-0338 GitHub repository and select the [PHPDesktop folder](https://github.com/Cholmes24/JID-0338/tree/master/PHPDesktop) 
+    * Navigate to the JID-0338 GitHub repository and select the [PHPDesktop folder](https://github.com/Cholmes24/JID-0338/tree/master/PHPDesktop). 
 
     * Download the HEMAScorecardClientInstaller.exe from GitHub. 
 
@@ -99,7 +99,7 @@
 
   * Python Connection Handler: 
 
-    * Navigate to the JID-0338 GitHub repository and select the [Web API Server folder](https://github.com/Cholmes24/JID-0338/tree/master/Web%20API%20Server) 
+    * Navigate to the JID-0338 GitHub repository and select the [Web API Server folder](https://github.com/Cholmes24/JID-0338/tree/master/Web%20API%20Server). 
 
     * Download the interfacedbAPIv2.py file. 
 
@@ -118,9 +118,9 @@
 
   * MySQL Server:  
 
-    * Open your preferred database viewing tool such as MySQL Workbench 
+    * Open your preferred database viewing tool such as MySQL Workbench. 
 
-    * Click on the Local instance router and log in 
+    * Click on the Local instance router and log in. 
 
     * Once connected, ensure the server is running by navigating on the toolbar to the Server → Server Status.  
 
@@ -130,7 +130,7 @@
 
     * Select ‘SQL Init Script.sql.’  
 
-    * Execute the contents of the file to build the scorecardv5 database structure. (If using MySQL Workbench, click the lightning bolt symbol located at the top of the SQL prompt.)<br/><br/>
+    * Execute the contents of the file to build the scorecardv5 database structure (If using MySQL Workbench, click the lightning bolt symbol located at the top of the SQL prompt).<br/><br/>
  
 
 ### INSTALLATION INSTRUCTIONS  
@@ -185,7 +185,7 @@
 
        > Authentication Plugin: caching-sha2_password cannot be loaded
 
-       * If that does not fix the problem, then locate the my.ini file which should be located in the ProgramData\MySQL\MySQL Server 5.7 on your main drive. 
+       * If that does not fix the problem, then locate the my.ini file which should be in the ProgramData\MySQL\MySQL Server 5.7 on your main drive. 
 
        * Open the configuration file and add the lines that follow underneath the corresponding headers: 
 
