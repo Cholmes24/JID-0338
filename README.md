@@ -191,15 +191,13 @@ python interfacedbAPIv2.py
 
     * This is a common error that can occur if the user types pip install mysql-connector instead of pip install mysql-connector-python. Ensure to use the latter. 
 
-    * If that does not fix the problem, then try: 
+    * If that does not fix the problem, then locate the my.ini file which should be located in the ProgramData\MySQL\MySQL Server 5.7 on your main drive. 
 
-Locate the my.ini file which should be located in the ProgramData\MySQL\MySQL Server 5.7 on your main drive. 
+    * Open the configuration file and add the lines that follow underneath the corresponding headers: 
 
-Open the configuration file and add the lines that follow underneath the corresponding headers: 
+    *Header: [client] 
 
-Header: [client] 
-
-default-character-set=utf8 
+    *default-character-set=utf8 
 
 Header: [mysql] 
 
