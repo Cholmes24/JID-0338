@@ -1,5 +1,3 @@
-# Release Notes and Installation Guide for HEMA ScoreCut v1.0
-
 ## Release Notes
 ### NEW FEATURES 
 
