@@ -1,4 +1,4 @@
-## Release Notes
+## Release Notes HEMA ScoreCut v1.0
 ### NEW FEATURES 
 
   * Adding and removing points (mobile) 
@@ -50,7 +50,7 @@
 
  
 
-## Install Guide   
+## Install Guide HEMA ScoreCut v1.0  
 
 ### PRE-REQUISITES 
 
