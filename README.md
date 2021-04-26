@@ -79,9 +79,9 @@
     * Acquire any available version of [MySQL Workbench CE](https://dev.mysql.com/downloads/workbench/)
  
 
-  * Python: https://www.python.org/downloads/ 
+  * Python: 
 
-    * Acquire the latest version of Python 3.xx. 
+    * Acquire the latest version of [Python 3.xx](https://www.python.org/downloads/) 
  
 
   * Download the mysql connector using the command `pip install mysql-connector-python`<br/><br/>
@@ -99,7 +99,7 @@
 
   * Python Connection Handler: 
 
-    * Navigate to the JID-0338 GitHub repository and select the Web API Server folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/Web%20API%20Server 
+    * Navigate to the JID-0338 GitHub repository and select the [Web API Server folder](https://github.com/Cholmes24/JID-0338/tree/master/Web%20API%20Server) 
 
     * Download the interfacedbAPIv2.py file. 
 
@@ -111,7 +111,7 @@
 
     * Download either Expo Go from the Apple App Store or Expo from the Google Play Store. 
 
-    * Navigate to the JID-0338 GitHub repository and select the React Front End folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/React%20Front%20End. Download this folder.<br/><br/>
+    * Navigate to the JID-0338 GitHub repository and select the [React Front End folder](https://github.com/Cholmes24/JID-0338/tree/master/React%20Front%20End). Download this folder.<br/><br/>
  
 
 ### BUILD INSTRUCTIONS 
@@ -145,11 +145,11 @@
 
   * Mobile Application: 
 
-    * Install npm on your machine using the instructions found at https://www.npmjs.com/get-npm.  
+    * Install [npm](https://www.npmjs.com/get-npm) on your machine.  
 
     * Install yarn by typing in the command `npm install yarn`
 
-    * Navigate to the JID-0338/React Front End folder in the command line and type in the command `yarn`
+    * Navigate to the downloaded JID-0338/React Front End folder in the command line and type in the command `yarn`
 
     * Install the expo client by using the command `npm install -g expo-cli`<br/><br/>  
 
@@ -171,7 +171,7 @@
 
   * Mobile Application: 
 
-    * Navigate to the JID-0338/React Front End folder in the command line and run the command `expo start`
+    * Navigate to the downloaded JID-0338/React Front End folder in the command line and run the command `expo start`
 
     * This will open a window in the browser that contains a QR code.  
 
@@ -205,7 +205,7 @@
 
   * Errors when trying to run a pip command 
 
-    * You may not have acquired the most up-to-date version of Python. Please refer to https://pip.pypa.io/en/stable/installing/ to install pip. 
+    * You may not have acquired the most up-to-date version of Python, which includes [pip](https://pip.pypa.io/en/stable/installing/) 
 
   * Errors while connecting with the mobile application 
 
