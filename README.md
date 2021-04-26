@@ -22,19 +22,19 @@
 
 ### BUG FIXES
 
-**Mobile Application:**
+  * **Mobile Application:**
 
-  * Constant updating of the current timestamps of all matches no longer causes a memory leak due to the flood of excess time updates every 80 milliseconds to the database. 
+    * Constant updating of the current timestamps of all matches no longer causes a memory leak due to the flood of excess time updates every 80 milliseconds to the database. 
 
-  * Selecting a match no longer inhibits users from returning to the match selection screen to select a different match. 
+    * Selecting a match no longer inhibits users from returning to the match selection screen to select a different match. 
 
-**Desktop Application:**
+  * **Desktop Application:**
 
-  * Warnings produced on startup unrelated to the current instance of the application have been removed. 
+    * Warnings produced on startup unrelated to the current instance of the application have been removed. 
 
-  * CSV exporter no longer crashes the application. 
+    * CSV exporter no longer crashes the application. 
 
-  * If the user assigns a point to one competitor and no points to the other competitor, the page correctly refreshes. 
+    * If the user assigns a point to one competitor and no points to the other competitor, the page correctly refreshes. 
 
  
 
@@ -92,7 +92,7 @@
   * Download the mysql connector using the command `pip install mysql-connector-python`
  
 
-### DOWNLOAD:  
+### DOWNLOAD INSTRUCTIONS  
 
   * Desktop Application: 
 
@@ -119,7 +119,7 @@
     * Navigate to the JID-0338 GitHub repository and select the React Front End folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/React%20Front%20End. Download this folder. 
  
 
-### BUILD: 
+### BUILD INSTRUCTIONS 
 
   * MySQL Server:  
 
@@ -138,7 +138,7 @@
     * Execute the contents of the file to build the scorecardv5 database structure. (If using MySQL Workbench, click the lightning bolt symbol located at the top of the SQL prompt.) 
  
 
-### INSTALLATION:  
+### INSTALLATION INSTRUCTIONS  
 
   * Desktop Application: 
 
@@ -160,7 +160,7 @@
 
  
 
-### RUNNING APPLICATION:   
+### RUNNING APPLICATION   
 
   * Python Connection Handler: 
 
@@ -184,7 +184,7 @@
 
  
 
-### TROUBLESHOOTING:   
+### TROUBLESHOOTING   
 
   * Common error `Authentication Plugin: caching-sha2_password cannot be loaded`
 
