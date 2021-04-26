@@ -1,8 +1,7 @@
-# JID-0338
+# Release Notes and Installation Guide for HEMA ScoreCut v1.0
 
-## Release Notes HEMA ScoreCut v1.0
-
-### NEW FEATURES 
+## Release Notes
+### New Features 
 
 Adding and removing points (mobile) 
  
@@ -23,7 +22,7 @@ Database tracks changes to timer (desktop and mobile)
 
  
 
-### BUG FIXES
+### Bug Fixes
 
 Mobile Application: 
 
@@ -41,7 +40,7 @@ If the user assigns a point to one competitor and no points to the other competi
 
  
 
-### KNOWN BUGS  
+### Known Bugs  
 
 The desktop application has links that does not allow for the user to navigate to the application. 
 
