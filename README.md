@@ -3,22 +3,22 @@
 ## Release Notes
 ### New Features 
 
-Adding and removing points (mobile) 
+ Adding and removing points (mobile) 
  
 
-Adding and removing warnings and penalties (mobile) 
+ Adding and removing warnings and penalties (mobile) 
  
 
-Customizable timer (mobile) 
+ Customizable timer (mobile) 
  
 
-Undo functionality for warnings and penalties (desktop and mobile) 
+ Undo functionality for warnings and penalties (desktop and mobile) 
  
 
-Removed required dependencies on Docker by converting to executable (desktop) 
+ Removed required dependencies on Docker by converting to executable (desktop) 
  
 
-Database tracks changes to timer (desktop and mobile) 
+ Database tracks changes to timer (desktop and mobile) 
 
  
 
