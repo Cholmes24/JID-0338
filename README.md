@@ -74,18 +74,14 @@
 
   * MySQL: https://dev.mysql.com/downloads/mysql/ 
 
-    * Note: With in the MySQL installer, select the following MySQL products: 
+    * Acquire MySQL, preferably a version below 8.0.
 
-         MySQL Server: preferably a version below 8.0, but 8.0 can work with extra steps. 
-
-             Click next for all prompts and in the server installation under the type and Networking prompt, under the connectivity header ensure that the port is 3306. 
-
-         MySQL Workbench CE: any available version. 
+    * MySQL Workbench CE: any available version. 
  
 
   * Python: https://www.python.org/downloads/ 
 
-    * Acquire the latest version of Python 3.xx 
+    * Acquire the latest version of Python 3.xx. 
  
 
   * Download the mysql connector using the command `pip install mysql-connector-python`<br/><br/>
