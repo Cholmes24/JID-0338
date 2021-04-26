@@ -52,7 +52,7 @@
 
 ## Install Guide   
 
-### Pre-requisites 
+  * ### PRE-REQUESITES 
 
 Network Connectivity: 
 
@@ -71,7 +71,7 @@ Mobile Application:
 The user must have an iOS or Android mobile phone. 
  
 
-Dependent libraries that must be installed 
+  * DEPENDENCIES 
 
 MySQL: https://dev.mysql.com/downloads/mysql/ 
 
@@ -93,7 +93,7 @@ Download the mysql connector using the command:
 pip install mysql-connector-python  
  
 
-### Download instructions:  
+  * ### DOWNLOAD:  
 
 Desktop Application: 
 
@@ -121,7 +121,7 @@ Download either Expo Go from the Apple App Store or Expo from the Google Play St
 Navigate to the JID-0338 GitHub repository and select the React Front End folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/React%20Front%20End. Download this folder. 
  
 
-Build instructions: 
+  * BUILD: 
 
 MySQL Server:  
 
@@ -140,7 +140,7 @@ Select ‘SQL Init Script.sql.’
 Execute the contents of the file to build the scorecardv5 database structure. (If using MySQL Workbench, click the lightning bolt symbol located at the top of the SQL prompt.) 
  
 
-Installation of actual application:  
+  * INSTALLATION:  
 
 Desktop Application: 
 
@@ -163,7 +163,7 @@ npm install -g expo-cli
 
  
 
-Run instructions:   
+  * RUNNING APPLICATION:   
 
 Python Connection Handler: 
 
@@ -188,7 +188,7 @@ Scan this code with the camera on your mobile device and the app will begin in E
 
  
 
-Troubleshooting:   
+  * Troubleshooting:   
 
 "Authentication Plugin: caching-sha2_password cannot be loaded" error 
 
