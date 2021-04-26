@@ -186,9 +186,9 @@
 
 ### TROUBLESHOOTING   
 
-  > Authentication Plugin: caching-sha2_password cannot be loaded
-
    * This error can occur if the user types pip install mysql-connector instead of `pip install mysql-connector-python`. Ensure to use the latter. 
+
+   > Authentication Plugin: caching-sha2_password cannot be loaded
 
    * If that does not fix the problem, then locate the my.ini file which should be located in the ProgramData\MySQL\MySQL Server 5.7 on your main drive. 
 
