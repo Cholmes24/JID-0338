@@ -63,7 +63,7 @@
 
     * The user must have a Windows machine or a machine that utilizes a virtual machine that can host a Windows operating system.  
 
-    * Command prompt and executing ipconfig command to find ipv4 router IP address. 
+    * Access to command prompt and ability to execute ipconfig command to find IPv4 router IP address. 
  
 
   * Mobile Application: 
@@ -73,24 +73,23 @@
 
 ### DEPENDENCIES 
 
-MySQL: https://dev.mysql.com/downloads/mysql/ 
+  * MySQL: https://dev.mysql.com/downloads/mysql/ 
 
-Note: With in the MySQL installer, select the following MySQL products: 
+    * Note: With in the MySQL installer, select the following MySQL products: 
 
- MySQL Server: preferably a version below 8.0, but 8.0 can work with extra steps. 
+     * MySQL Server: preferably a version below 8.0, but 8.0 can work with extra steps. 
 
-Click next for all prompts and in the server installation under the type and Networking prompt, under the connectivity header ensure that the port is 3306. 
+      * Click next for all prompts and in the server installation under the type and Networking prompt, under the connectivity header ensure that the port is 3306. 
 
- MySQL Workbench CE: any available version. 
+    * MySQL Workbench CE: any available version. 
  
 
-Python: https://www.python.org/downloads/ 
+  * Python: https://www.python.org/downloads/ 
 
-Acquire the latest version of Python 3.xx 
+    * Acquire the latest version of Python 3.xx 
  
 
-Download the mysql connector using the command: 
-pip install mysql-connector-python  
+  * Download the mysql connector using the command: pip install mysql-connector-python  
  
 
 ### DOWNLOAD:  
