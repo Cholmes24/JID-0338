@@ -16,7 +16,7 @@
   * Removed required dependencies on Docker by converting to executable (desktop) 
  
 
-  * Database tracks changes to timer (desktop and mobile) 
+  * Database tracks changes to timer (desktop and mobile)<br/><br/> 
 
  
 
@@ -34,7 +34,7 @@
 
     * CSV exporter no longer crashes the application. 
 
-    * If the user assigns a point to one competitor and no points to the other competitor, the page correctly refreshes. 
+    * If the user assigns a point to one competitor and no points to the other competitor, the page correctly refreshes.<br/><br/> 
 
  
 
@@ -46,7 +46,7 @@
 
   * Desktop version is periodically unable to recognize when time is added to the timer on mobile app. 
 
-  * No official login feature that track names of which referee makes changes to a match. 
+  * No official login feature that track names of which referee makes changes to a match.<br/><br/> 
 
  
 
