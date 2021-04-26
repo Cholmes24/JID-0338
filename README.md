@@ -190,9 +190,9 @@
 
        > Authentication Plugin: caching-sha2_password cannot be loaded
 
-   * If that does not fix the problem, then locate the my.ini file which should be located in the ProgramData\MySQL\MySQL Server 5.7 on your main drive. 
+       * If that does not fix the problem, then locate the my.ini file which should be located in the ProgramData\MySQL\MySQL Server 5.7 on your main drive. 
 
-   * Open the configuration file and add the lines that follow underneath the corresponding headers: 
+       * Open the configuration file and add the lines that follow underneath the corresponding headers: 
 
         Header: `[client]`
 
