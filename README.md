@@ -77,9 +77,9 @@
 
     * Note: With in the MySQL installer, select the following MySQL products: 
 
-     * MySQL Server: preferably a version below 8.0, but 8.0 can work with extra steps. 
+    * MySQL Server: preferably a version below 8.0, but 8.0 can work with extra steps. 
 
-      * Click next for all prompts and in the server installation under the type and Networking prompt, under the connectivity header ensure that the port is 3306. 
+    * Click next for all prompts and in the server installation under the type and Networking prompt, under the connectivity header ensure that the port is 3306. 
 
     * MySQL Workbench CE: any available version. 
  
@@ -94,30 +94,29 @@
 
 ### DOWNLOAD:  
 
-Desktop Application: 
+  * Desktop Application: 
 
-Navigate to the JID-0338 GitHub repository and select the PHPDesktop folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/PHPDesktop 
+    * Navigate to the JID-0338 GitHub repository and select the PHPDesktop folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/PHPDesktop 
 
-Download the HEMAScorecardClientInstaller.exe from GitHub. 
+    * Download the HEMAScorecardClientInstaller.exe from GitHub. 
 
-Download the SQLInitScript.sql from GitHub. 
+    * Download the SQLInitScript.sql from GitHub. 
 
-Python Connection Handler: 
+  * Python Connection Handler: 
 
-Navigate to the JID-0338 GitHub repository and select the Web API Server folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/Web%20API%20Server 
+    * Navigate to the JID-0338 GitHub repository and select the Web API Server folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/Web%20API%20Server 
 
-Download the interfacedbAPIv2.py file. 
+    * Download the interfacedbAPIv2.py file. 
 
-Python Flask: 
+  * Python Flask: 
 
-Open a command prompt and use the command:  
-pip install flask 
+    * Open a command prompt and use the command: pip install flask 
 
-Mobile Application (via Expo Go) 
+  * Mobile Application (via Expo Go) 
 
-Download either Expo Go from the Apple App Store or Expo from the Google Play Store. 
+    * Download either Expo Go from the Apple App Store or Expo from the Google Play Store. 
 
-Navigate to the JID-0338 GitHub repository and select the React Front End folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/React%20Front%20End. Download this folder. 
+    * Navigate to the JID-0338 GitHub repository and select the React Front End folder by clicking on this link https://github.com/Cholmes24/JID-0338/tree/master/React%20Front%20End. Download this folder. 
  
 
 ### BUILD: 
