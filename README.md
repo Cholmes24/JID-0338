@@ -241,13 +241,9 @@
        MatchesScreen.tsx: line 11
        
        
-       For instance:
-
-       `import { setCurrentTournamentID } from '../reducers/CurrentIdsReducer'`
+      * For instance: `import { setCurrentTournamentID } from '../reducers/CurrentIdsReducer'`
        
-       should be changed to:
-       
-       `import { setCurrentTournamentID } from '../reducers/CurrentIDsReducer'`
+       should be changed to: `import { setCurrentTournamentID } from '../reducers/CurrentIDsReducer'`
 
 
 
