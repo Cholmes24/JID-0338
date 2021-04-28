@@ -160,7 +160,9 @@
 
 ### RUNNING APPLICATION   
 
-  * Python Connection Handler: 
+  * Connection Handler: 
+
+    * Connect to MySQL Server and log in with your credentials. 
 
     * Open a command prompt window and navigate to the directory where the interfacedbAPIv2.py file is located. 
 
@@ -214,10 +216,24 @@
 
     * Ensure to complete the steps to run the Python Connection Handler and start up MySQL Server before attempting to connect with the mobile application. 
 
-   * This error can occur if the is missing the correct React networking module. 
+   * This error can occur if you are missing the correct React networking module. 
 
        > Unable to resolve module @react-native-community/netinfo
 
        * To fix this error, use the following command:
          `yarn add @react-native-community/netinfo`
- 
+         
+    * This error can occur if downloading any files caused CurrentIdsReducer to be referred as CurrentIDsReducer.
+
+       > Failed building JavaScript bundle.
+       > Unable to resolve module ../reducers/CurrentIDsReducer
+
+       * To fix this error, you need to ensure that the following lines are consistent with their naming:
+         `import { setCurrentTournamentID } from '../reducers/CurrentIdsReducer'`
+         
+         store.ts: line 10
+         TournamentsScreen.tsx: line 10
+         PoolsScreen.tsx: line 6
+         SystemEventsScreen.tsx: line 10
+         MatchesScreen.tsx: line 11
+         
