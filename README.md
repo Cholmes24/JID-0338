@@ -19,7 +19,7 @@
   * Database tracks changes to timer (desktop and mobile)  
 
 
-  * Authorization tokens and access codes for user sessions<br/><br/> 
+  * Authorization tokens and access codes used to maintain user sessions<br/><br/> 
 
  
 
