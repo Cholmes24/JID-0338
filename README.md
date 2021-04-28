@@ -162,7 +162,9 @@
 
   * Connection Handler: 
 
-    * Connect to MySQL Server and log in with your credentials. 
+    * Before connecting, replace the example username and password with your credentials. This includes changing the user in config.py: line 29 and changing the DB_PASSWORD in .env.sample: line 1. Note that this is a sample .env file and we highly suggest creating your own .env file to store your environment variables. If you choose to create a new .env, be sure to change config.py: line 7 from `load_dotenv(path.join(basedir, '.env.sample'))` to `load_dotenv(path.join(basedir, '.env'))`
+
+    * Change the value of user in config.py to your username and the value of DB_PASSWORD to you password
 
     * Open a command prompt window and navigate to the directory where the app.py file is located. 
 
