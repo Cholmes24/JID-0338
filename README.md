@@ -49,7 +49,7 @@
 
   * Desktop version is periodically unable to recognize when warnings are undone from the mobile app. 
 
-  * Desktop version is periodically unable to recognize when time is added to the timer on mobile app. 
+  * Desktop version is periodically unable to recognize when time is added to the timer on mobile app. <br/><br/> 
 
  
 
