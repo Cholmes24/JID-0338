@@ -162,7 +162,7 @@
 
   * Connection Handler: 
 
-    * Before connecting, replace the sample username and password in config.py with your credentials. 
+    * Before connecting, replace the sample username and password in config.py with your credentials to the scorecardv5 database. 
 
         This includes changing the user in config.py: line 29 and changing the DB_PASSWORD in .env.sample: line 1. 
         
