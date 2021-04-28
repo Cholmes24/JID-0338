@@ -100,7 +100,7 @@
 
     * Download the SQLInitScript.sql from GitHub. 
 
-  * Python Connection Handler: 
+  * Connection Handler: 
 
     * Navigate to the JID-0338 GitHub repository and select the [Web API Server folder](https://github.com/Cholmes24/JID-0338/tree/master/Web%20API%20Server). 
 
@@ -209,13 +209,16 @@
                 character-set-server=utf8
                   
 
-  * Errors when trying to run a pip command 
+  * Errors when trying to run a pip command
+    > 'pip' is not recognized as an internal or external command
 
     * You may not have acquired the most up-to-date version of Python, which includes [pip](https://pip.pypa.io/en/stable/installing/).  
 
+
   * Errors while connecting with the mobile application 
 
-    * Ensure to complete the steps to run the Python Connection Handler and start up MySQL Server before attempting to connect with the mobile application.  
+    * Ensure to complete the steps to run the Connection Handler and start up MySQL Server *before* attempting to connect with the mobile application.  
+
 
    * This error can occur if you are missing the correct React networking module. 
 
@@ -223,6 +226,7 @@
 
        * To fix this error, use the following command:
          `yarn add @react-native-community/netinfo`  
+   
    
    * This error can occur if downloading any files caused CurrentIdsReducer to be referred as CurrentIDsReducer.
 
