@@ -162,9 +162,13 @@
 
   * Connection Handler: 
 
-    * Before connecting, replace the example username and password in config.py with your credentials. 
+    * Before connecting, replace the sample username and password in config.py with your credentials. 
 
-        This includes changing the user in config.py: line 29 and changing the DB_PASSWORD in .env.sample: line 1. Note that this is a sample .env file and we highly suggest creating your own .env file to store your environment variables. If you choose to create a new .env, be sure to change config.py: line 7 from `load_dotenv(path.join(basedir, '.env.sample'))` to `load_dotenv(path.join(basedir, '.env'))`
+        This includes changing the user in config.py: line 29 and changing the DB_PASSWORD in .env.sample: line 1. 
+        
+        Note that this is a sample .env file and we highly suggest creating your own .env file to store your environment variables. 
+        
+        If you choose to create a new .env, be sure to change config.py: line 7 from `load_dotenv(path.join(basedir, '.env.sample'))` to `load_dotenv(path.join(basedir, '.env'))`
 
     * Open a command prompt window and navigate to the directory where the app.py file is located. 
 
