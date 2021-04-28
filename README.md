@@ -102,9 +102,9 @@
 
   * Connection Handler: 
 
-    * Navigate to the JID-0338 GitHub repository and select the [Web API Server folder](https://github.com/Cholmes24/JID-0338/tree/master/Web%20API%20Server). 
+    * Navigate to the JID-0338 GitHub repository and select the [ScoreCut](https://github.com/Cholmes24/JID-0338/tree/master/Web%20API%20Server/ScoreCut). 
 
-    * Download the access_management.py, app.py, and config.py files. 
+    * Download the files in this folder, including access_management.py, app.py, and config.py. 
 
   * Python Flask: 
 
@@ -173,7 +173,7 @@
 
     * Double click HEMAScorecardClient.exe (or click the desktop shortcut) to run the application. 
 
-    * Access Code: visit the [url](http://localhost:5000/api/generate) or submit a GET request using Postman. This will generate an access code and print it on the console that is running the Connection Handler (app.py).
+    * Access Code: visit the [url](http://localhost:5000/api/generate) or submit a GET request to localhost:5000/api/generate using Postman. This will generate an access code and print it on the console that is running the Connection Handler (app.py).
 
  
 
@@ -189,7 +189,7 @@
 
     * Type in the access code that was generated and printed to the console (see Desktop Application step above).
 
-    * You should now have a live connection to the system!<br/><br/>
+    * You should now have a live connection to the system and be able to record scores!<br/><br/>
 
  
 
