@@ -207,22 +207,22 @@
                 default-authentication plugin=mysql_native_password
 
                 character-set-server=utf8
-
+<br/>
   * Errors when trying to run a pip command 
 
     * You may not have acquired the most up-to-date version of Python, which includes [pip](https://pip.pypa.io/en/stable/installing/). 
-
+<br/>
   * Errors while connecting with the mobile application 
 
     * Ensure to complete the steps to run the Python Connection Handler and start up MySQL Server before attempting to connect with the mobile application. 
-
+<br/>
    * This error can occur if you are missing the correct React networking module. 
 
        > Unable to resolve module @react-native-community/netinfo
 
        * To fix this error, use the following command:
          `yarn add @react-native-community/netinfo`
-         
+<br/>     
    * This error can occur if downloading any files caused CurrentIdsReducer to be referred as CurrentIDsReducer.
 
      > Failed building JavaScript bundle.
