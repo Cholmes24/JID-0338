@@ -39,7 +39,7 @@
 
     * If the user assigns a point to one competitor and no points to the other competitor, the page correctly refreshes.
 
-    * Tokens are now correctly checked before allowing user to change score.<br/><br/> 
+    * Tokens are now correctly checked before allowing the user to change score. Allows system to track current users.<br/><br/> 
 
  
 
@@ -50,8 +50,6 @@
   * Desktop version is periodically unable to recognize when warnings are undone from the mobile app. 
 
   * Desktop version is periodically unable to recognize when time is added to the timer on mobile app. 
-
-  * No official login feature that track names of which referee makes changes to a match.<br/><br/> 
 
  
 
