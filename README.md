@@ -102,7 +102,7 @@
 
   * Connection Handler: 
 
-    * Navigate to the JID-0338 GitHub repository and select the [ScoreCut](https://github.com/Cholmes24/JID-0338/tree/master/Web%20API%20Server/ScoreCut). 
+    * Navigate to the JID-0338 GitHub repository and select the [ScoreCut folder](https://github.com/Cholmes24/JID-0338/tree/master/Web%20API%20Server/ScoreCut). 
 
     * Download the files in this folder, including access_management.py, app.py, and config.py. 
 
