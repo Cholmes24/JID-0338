@@ -186,9 +186,11 @@
 
 ### TROUBLESHOOTING   
 
-   * This error can occur if the user types pip install mysql-connector instead of `pip install mysql-connector-python`. Ensure to use the latter. 
+   * This error can occur if the user mistakenly types pip install mysql-connector.
 
        > Authentication Plugin: caching-sha2_password cannot be loaded
+
+       * Ensure to instead use `pip install mysql-connector-python`
 
        * If that does not fix the problem, then locate the my.ini file which should be in the ProgramData\MySQL\MySQL Server 5.7 on your main drive. 
 
