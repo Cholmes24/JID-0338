@@ -230,15 +230,15 @@
 
      * To fix this error, you need to ensure that the following lines are consistent with their naming. 
 
-       store.ts: line 10
+       --store.ts: line 10
        
-       TournamentsScreen.tsx: line 10
+       --TournamentsScreen.tsx: line 10
        
-       PoolsScreen.tsx: line 6
+       --PoolsScreen.tsx: line 6
        
-       SystemEventsScreen.tsx: line 10
+       --SystemEventsScreen.tsx: line 10
        
-       MatchesScreen.tsx: line 11
+       --MatchesScreen.tsx: line 11
        
        
       * For instance, `import { setCurrentTournamentID } from '../reducers/CurrentIdsReducer'`
