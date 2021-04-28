@@ -262,4 +262,10 @@
       * For instance, `import { setCurrentTournamentID } from '../reducers/CurrentIdsReducer'`
        
           should be changed to: `import { setCurrentTournamentID } from '../reducers/CurrentIDsReducer'`
+          
+    * This error can occur if the user tries to use an access code that has timed out.
+    
+    > KeyError: datetime.datetime(2021, 4, 28, 18, 41, 44, 724257)
+    
+      * In this case, you may need to restart the connection handler with `python app.py` and generate a new access code.
 
