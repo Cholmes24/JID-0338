@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Keyboard, StyleSheet } from 'react-native'
+import { Keyboard, StyleSheet, Image, Linking } from 'react-native'
 import { Text, View } from '../components/Themed'
 import { Button } from 'react-native-elements'
 import UserCard from '../components/UserCard'
@@ -20,13 +20,16 @@ import authService from '../services/authService'
 import { determineIP } from '../util/utilFunctions'
 import { Icon } from 'react-native-elements'
 import { LinearGradient } from 'expo-linear-gradient'
+import useColorScheme from '../hooks/useColorScheme'
 
 export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
   const dispatch = useAppDispatch()
   const currentMatchID = useAppSelector((state) => state.currentIDs.matchID)
   const currentMatches = useAppSelector((state) => state.matches)
   const [hasRecentMatch, setHasRecentMatch] = useState(false)
-  const [connected, setConnected] = useState(false)
+  const [connected, setConnected] = useState(true)
+  const theme = useColorScheme()
+  const logoutColor = theme === 'dark' ? 'white' : '#575757'
 
   useEffect(() => {
     if (connected) {
@@ -52,7 +55,7 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
     }
   }
 
-  async function unsetIP(accessCode: string) {
+  async function unsetIP() {
     await authService.logout()
     setConnected(false)
   }
@@ -81,56 +84,40 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
     return Promise.resolve()
   }
 
-  const mostRecentMatchButton = () =>
-    connected && currentMatchID && hasRecentMatch ? (
-      <Button
-        buttonStyle={styles.entry}
-        title="Most Recent Match"
-        onPress={() => navigation.navigate('Match', { matchID: currentMatchID })}
-      />
-    ) : null
+  const mostRecentMatchButton = () => (
+    <Button
+      buttonStyle={styles.entry}
+      title="Most Recent Match"
+      onPress={() => currentMatchID && navigation.navigate('Match', { matchID: currentMatchID })}
+      // disabled={!connected || currentMatchID === undefined || !hasRecentMatch}
+      disabled={true}
+
+    />
+  )
 
   return (
     <View style={styles.container}>
       {connected ? (
         <View style={styles.userCard}>
-          {/* <View
-            style={{
-              // height: 100,
-              // width: 100,
-              marginLeft: 75,
-              alignSelf: 'flex-start',
-              position: 'absolute',
-            }}
-          > */}
-            <Button
-              icon={<Icon name="logout" reverse={true} style={{transform: [{rotateY: '180deg'}]}} />}
-              title="Logout"
-              titleStyle={{ fontSize: 20 }}
-              style={styles.logoutButton}
-              containerStyle={{borderRadius: 20 , width: '80%' } }
-              onPress={authService.logout}
-            />
-          {/* </View> */}
-        </View>
-      ) : (
-        <View style={styles.userCard}>
-          <CodeEntry codeLength={7} onSubmit={setIP} />
-        </View>
-      )}
-      <View style={styles.buttonWrapper}>
-        {connected ? (
+          <Image source={{uri:'https://images.squarespace-cdn.com/content/v1/53518dd3e4b0e85fd91edde7/1607727526945-7CEYKZQUQXE4YDVTPKBY/ke17ZwdGBToddI8pDm48kBy_Di5oPbEsU06S-w0xqIh7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USuOa6StVHPk-_t9tEvkwaC7KSzfyQI3SstOP6fm2CCy3WUfc_ZsVm9Mi1E6FasEnQ/AHFA%2BLogo%2BGrey.png?format=1500w'}} style={styles.logo}/>
+
           <Button
             buttonStyle={styles.entry}
             title="Events"
             onPress={() => navigation.navigate('Events')}
           />
-        ) : (
-          <Text style={styles.errorText}>Enter the access code to connect</Text>
-        )}
 
-        {mostRecentMatchButton()}
-      </View>
+          {mostRecentMatchButton()}
+
+          <Text style={[styles.logout, {color: logoutColor}]} onPress={unsetIP}>Logout</Text>
+          
+        </View>
+      ) : (
+        <View style={styles.userCard}>
+          <CodeEntry codeLength={7} onSubmit={setIP} />
+          <Text style={styles.errorText}>Enter the access code to connect</Text>
+        </View>
+      )}
     </View>
   )
 }
@@ -184,5 +171,18 @@ const styles = StyleSheet.create({
     width: '95%',
     borderRadius: 15,
     // margin: 20,
+  },
+  logo: {
+    width: '50%',
+    height: '50%',
+    alignSelf: 'center',
+    marginTop: 20,
+    marginBottom: 20
+  },
+  logout: {
+    fontSize: 20,
+    alignSelf: 'center',
+    marginTop: 20,
+    textDecorationLine: 'underline',
   }
 })
