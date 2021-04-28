@@ -223,17 +223,20 @@
        * To fix this error, use the following command:
          `yarn add @react-native-community/netinfo`
          
-    * This error can occur if downloading any files caused CurrentIdsReducer to be referred as CurrentIDsReducer.
+   * This error can occur if downloading any files caused CurrentIdsReducer to be referred as CurrentIDsReducer.
 
-       > Failed building JavaScript bundle.
-       > Unable to resolve module ../reducers/CurrentIDsReducer
+     > Failed building JavaScript bundle.
+     > Unable to resolve module ../reducers/CurrentIDsReducer
 
-       * To fix this error, you need to ensure that the following lines are consistent with their naming:
-         `import { setCurrentTournamentID } from '../reducers/CurrentIdsReducer'`
-         
-         store.ts: line 10
-         TournamentsScreen.tsx: line 10
-         PoolsScreen.tsx: line 6
-         SystemEventsScreen.tsx: line 10
-         MatchesScreen.tsx: line 11
-         
+     * To fix this error, you need to ensure that the following lines are consistent with their naming. For instance:
+       `import { setCurrentTournamentID } from '../reducers/CurrentIdsReducer'`
+       should be changed to:
+       `import { setCurrentTournamentID } from '../reducers/CurrentIDsReducer'`
+
+
+       store.ts: line 10
+       TournamentsScreen.tsx: line 10
+       PoolsScreen.tsx: line 6
+       SystemEventsScreen.tsx: line 10
+       MatchesScreen.tsx: line 11
+
