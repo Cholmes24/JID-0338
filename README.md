@@ -210,4 +210,11 @@
   * Errors while connecting with the mobile application 
 
     * Ensure to complete the steps to run the Python Connection Handler and start up MySQL Server before attempting to connect with the mobile application. 
+
+   * This error can occur if the is missing the correct React networking module. 
+
+       > Unable to resolve module @react-native-community/netinfo
+
+       * To fix this error, use the following command:
+         `yarn add @react-native-community/netinfo`
  
