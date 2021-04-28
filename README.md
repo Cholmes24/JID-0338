@@ -39,7 +39,7 @@
 
     * If the user assigns a point to one competitor and no points to the other competitor, the page correctly refreshes.
 
-    * Tokens are now correctly checked before allowing the user to change score. Allows system to track current users.<br/><br/> 
+    * Tokens are now correctly checked before allowing the user to change score.<br/><br/> 
 
  
 
