@@ -228,7 +228,7 @@
      > Failed building JavaScript bundle.
      > Unable to resolve module ../reducers/CurrentIDsReducer
 
-     * To fix this error, you need to ensure that the following lines are consistent with their naming. 
+     * To fix this error, ensure that the following lines are consistent with their naming. 
 
          store.ts: line 10
        
