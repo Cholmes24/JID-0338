@@ -104,7 +104,7 @@
 
     * Navigate to the JID-0338 GitHub repository and select the [Web API Server folder](https://github.com/Cholmes24/JID-0338/tree/master/Web%20API%20Server). 
 
-    * Download the interfacedbAPIv2.py file. 
+    * Download the access_management.py, app.py, and config.py files. 
 
   * Python Flask: 
 
@@ -164,9 +164,9 @@
 
     * Connect to MySQL Server and log in with your credentials. 
 
-    * Open a command prompt window and navigate to the directory where the interfacedbAPIv2.py file is located. 
+    * Open a command prompt window and navigate to the directory where the app.py file is located. 
 
-    * Run the file with the command `python interfacedbAPIv2.py` 
+    * Run the file with the command `python app.py` 
  
 
   * Desktop Application: 
