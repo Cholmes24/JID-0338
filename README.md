@@ -183,13 +183,13 @@
 
     * This will open a window in the browser that contains a QR code.  
 
-    * Scan this code with the camera on your mobile device and the app will begin in Expo Go.<br/><br/>
+    * Scan this code with the camera on your mobile device and the app will begin in Expo Go.
 
     * Once the app starts up, you will be prompted to enter a 7-digit access code.
 
     * Type in the access code that was generated and printed to the console (see Desktop Application step above).
 
-    * You should now have a live connection to the system!
+    * You should now have a live connection to the system!<br/><br/>
 
  
 
