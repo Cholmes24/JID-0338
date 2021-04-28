@@ -247,7 +247,7 @@
          `yarn add @react-native-community/netinfo`  
    
    
-   * This error can occur if downloading any files caused CurrentIdsReducer to be referred as CurrentIDsReducer.
+   * This error can occur if downloading any files caused CurrentIDsReducer to be renamed as CurrentIdsReducer.
 
      > Failed building JavaScript bundle.
      > Unable to resolve module ../reducers/CurrentIDsReducer
