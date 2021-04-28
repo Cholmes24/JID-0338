@@ -16,7 +16,10 @@
   * Removed required dependencies on Docker by converting to executable (desktop) 
  
 
-  * Database tracks changes to timer (desktop and mobile)<br/><br/> 
+  * Database tracks changes to timer (desktop and mobile)  
+
+
+  * Authorization tokens and access codes for user sessions<br/><br/> 
 
  
 
