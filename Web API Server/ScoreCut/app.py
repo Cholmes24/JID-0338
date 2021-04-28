@@ -22,13 +22,6 @@ access_codes = access.active_access_codes
 access_codes.add('testCode')
 reflection_token = secrets.token_urlsafe(64)
 
-# input_key = input("Type in the letter 'a' and press enter to generate an access code: ")
-#
-#
-# # if input_key == 'a':
-# print('key pressed!', file=sys.stderr)
-# print(access.create_new_access_code(), file=sys.stderr)
-
 
 @auth.verify_token
 def verify_token(token):
@@ -46,8 +39,7 @@ def generate_access_code():
 @app.route('/api/token', methods=['POST'])
 def get_token():
     request_data = request.get_json()
-    # access_code = request.headers.get('Authorization').strip('Bearer ')
-    access_code = request_data['accessCode']    # in body currently
+    access_code = request_data['accessCode']  
 
     if access_code in access_codes:
         access_codes.pop(access_code)
