@@ -57,7 +57,7 @@ export function SearchBar(props: SearchBarProps & DefaultView['props']) {
   const { inputContainerStyle, lightColor, darkColor, containerStyle, round, ...otherProps } = props
   const backgroundColor = useThemeColor(
     {
-      light: lightColor || '#e4e4e4',
+      light: darkColor,
       dark: darkColor,
     },
     'background'
@@ -68,7 +68,10 @@ export function SearchBar(props: SearchBarProps & DefaultView['props']) {
       inputContainerStyle={[inputContainerStyle, { backgroundColor: '#e4e4e4' }]}
       // @ts-ignore
       round={true}
-      containerStyle={[containerStyle, { backgroundColor }]}
+      containerStyle={[
+        containerStyle,
+        { backgroundColor, borderTopColor: 'transparent', borderBottomColor: 'transparent' },
+      ]}
       {...otherProps}
     />
   )

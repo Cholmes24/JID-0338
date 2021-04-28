@@ -51,6 +51,7 @@ export default function ScoreCounter({ matchID, fighterScoringKey, color }: Scor
   async function playSound(s: () => Promise<{ sound: Audio.Sound; status: AVPlaybackStatus }>) {
     const currentStatus = await activeSound?.getStatusAsync()
     if (!activeSound || (currentStatus?.isLoaded && currentStatus.positionMillis > throttleTime)) {
+      await activeSound?.unloadAsync()
       const { sound } = await s()
       setActiveSound(sound)
       await sound.setStatusAsync({

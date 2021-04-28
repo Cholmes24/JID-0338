@@ -39,18 +39,6 @@ export default function CodeEntry({ codeLength = 6, onSubmit }: CodeEntryProps) 
     }
   }
 
-  const [textColor, setTextColor] = useState<'white' | '#BEBEBE'>('white')
-  async function onPress() {
-    if (textEntered.length === codeLength || true) {
-      setTextColor('#BEBEBE')
-
-      onSubmit(textEntered)
-      setTimeout(() => {
-        setTextColor('white')
-      }, 100)
-    }
-  }
-
   const theme = useColorScheme()
 
   const borderColor = theme === 'light' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.4)'
@@ -67,16 +55,17 @@ export default function CodeEntry({ codeLength = 6, onSubmit }: CodeEntryProps) 
       ? [styles.display, { borderRightColor }, styles.noBorder]
       : [styles.display, { borderRightColor }]
 
-  const [test, setTest] = useState('')
+  const [ipGuess, setIpGuess] = useState('')
   useEffect(() => {
-    dispTest()
+    dispIpGuess()
   }, [textEntered])
-  async function dispTest() {
+
+  async function dispIpGuess() {
     if (textEntered.length === codeLength) {
       const ip = await determineIP(textEntered)
-      setTest(convertIPAddress(ip))
+      setIpGuess(convertIPAddress(ip))
     } else {
-      setTest('')
+      setIpGuess('')
     }
   }
 
@@ -124,7 +113,7 @@ export default function CodeEntry({ codeLength = 6, onSubmit }: CodeEntryProps) 
           onPress={() => onSubmit(textEntered)}
         />
       </LinearGradient>
-      <Text style={styles.ipText}>{test}</Text>
+      <Text style={styles.ipText}>{ipGuess}</Text>
     </View>
   )
 }
@@ -172,25 +161,15 @@ const styles = StyleSheet.create({
     top: -5,
     bottom: -5,
     borderWidth: 4,
-    borderColor: 'rgba(58, 151, 212, 0.36)',
-    // backgroundColor: 'transparent',
+    borderColor: 'rgba(160, 160, 160, 0.8)',
   },
-
   buttonText: {
     fontWeight: 'bold',
     fontSize: cellWidth * 0.6,
     color: '#111111',
-    // color: 'white',
-    // marginHorizontal: cellWidth,
-    // alignSelf: 'stretch',
-    // paddingVertical: 8,
   },
-
   button: {
     maxHeight: cellWidth * 1,
-    // maxWidth: cellWidth * 5,
-    // width: '100%',
-
     width: cellWidth * 5,
     flex: 1,
     marginTop: 20,
