@@ -37,7 +37,9 @@
 
     * CSV exporter no longer crashes the application. 
 
-    * If the user assigns a point to one competitor and no points to the other competitor, the page correctly refreshes.<br/><br/> 
+    * If the user assigns a point to one competitor and no points to the other competitor, the page correctly refreshes.
+
+    * Tokens are now correctly checked before allowing user to change score.<br/><br/> 
 
  
 
