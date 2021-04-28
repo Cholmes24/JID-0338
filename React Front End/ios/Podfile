@@ -1,12 +1,13 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
-pod 'RNKeychain', :path => '../node_modules/react-native-keychain'
 platform :ios, '10.0'
 
 target 'scorecut' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
+
+  pod 'react-native-network-info', :path => '../node_modules/react-native-network-info'
 
   target 'scorecutTests' do
     inherit! :complete

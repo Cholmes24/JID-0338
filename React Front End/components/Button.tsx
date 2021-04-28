@@ -20,6 +20,14 @@ export default function Button({
     raisedColor
   )
 
+  const timeOut = 100
+  const pressForColor = () => {
+    setButtonColor(pressedColor)
+    setTimeout(() => {
+      setButtonColor(raisedColor)
+    }, timeOut)
+  }
+
   const pressableStyle = () =>
     invertColor
       ? styles.button
@@ -31,9 +39,15 @@ export default function Button({
     <Pressable
       disabled={disabled}
       onPress={onPress}
-      onPressIn={() => setButtonColor(pressedColor)}
+      onPressIn={pressForColor}
       onPressOut={() => setButtonColor(raisedColor)}
-      style={pressableStyle()}
+      style={({ pressed }) => [
+        pressableStyle(),
+        !invertColor &&
+          pressed && {
+            backgroundColor: pressedColor,
+          },
+      ]}
     >
       {content(...contentStyle())}
     </Pressable>

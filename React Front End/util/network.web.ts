@@ -1,13 +1,18 @@
 type SetSecureValue = (key: string, value: string) => Promise<void>
 type GetSecureValue = (key: string) => Promise<string | false>
+type ClearSecureValue = (key: string) => Promise<void>
 
-const setSecureValue: SetSecureValue = async (key, value) => window.localStorage.setItem(key, value)
+const setSecureValue: SetSecureValue = async (key, value) => localStorage.setItem(key, value)
 
 const getSecureValue: GetSecureValue = async (key) =>
-  ((a) => (a ? a : false))(window.localStorage.getItem(key))
+  ((a) => (a ? a : false))(localStorage.getItem(key))
 
-const localStorage = {
+const clearSecureValue: ClearSecureValue = async (key) => localStorage.removeItem(key)
+
+const secureStorage = {
   setSecureValue,
   getSecureValue,
+  clearSecureValue,
 }
-export default localStorage
+
+export default secureStorage

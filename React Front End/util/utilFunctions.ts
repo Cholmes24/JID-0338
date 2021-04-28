@@ -1,5 +1,7 @@
 import { Match, Pool, RootType, SystemEvent, Tournament } from './../redux-types/storeTypes'
 import _ from 'lodash'
+import { Address4 } from 'ip-address'
+import NetInfo from '@react-native-community/netinfo'
 
 function addItemsWithOptionalCustomizer<T extends { ID: number }>(
   original: T[],
@@ -118,7 +120,38 @@ export function convertIPAddress(IP: string) {
 
   const prefix = cleaned.substring(0, 7)
   const withPrefix = prefix === 'http://' ? cleaned : 'http://' + cleaned
-  const withTrailingSlash =
-    withPrefix.charAt(withPrefix.length - 1) === '/' ? withPrefix : withPrefix + '/'
+  const portCheck = withPrefix.split(':')
+  const postfix = portCheck.length == 3 ? portCheck[2] : '5000'
+  const affixed = `${portCheck[0]}:${portCheck[1]}:${postfix}`
+  const withTrailingSlash = affixed.charAt(affixed.length - 1) === '/' ? affixed : affixed + '/'
   return withTrailingSlash
+}
+
+export async function determineIP(accessCode: string) {
+  const res = await NetInfo.fetch()
+  if (accessCode.length < 5) {
+    return 'code too short'
+  }
+  if (res.type !== 'wifi' || !res.details) {
+    return 'no wifi access'
+  }
+  const ownPrefix = res.details.ipAddress?.split('.')[0]
+  // return ownPrefix
+  if (!ownPrefix) {
+    return 'could not parse ip'
+  }
+  const ownValue = parseInt(ownPrefix) * 2 ** 24
+
+  const toParse = accessCode.substring(0, 5).split('').map(singleAlphanumToNum)
+
+  const sentSum = _.sum(toParse.map((num, index) => num * 36 ** (4 - index)))
+  const fullSum = sentSum + ownValue
+  const address = Address4.fromInteger(fullSum)
+  return address.correctForm()
+}
+
+export function ipFromUrl(url: string) {
+  const withoutHttp = url.split('://')[1]
+  const ip = withoutHttp.split(':')[0]
+  return ip
 }

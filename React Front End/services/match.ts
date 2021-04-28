@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { Match, MatchScore, Timer } from '../redux-types/storeTypes'
 import localStorage from '../util/network'
+import { ipFromUrl } from '../util/utilFunctions'
 
 const baseUrl = '/api/match'
 
@@ -78,7 +79,7 @@ async function generateConfig(): Promise<AxiosRequestConfig> {
   return {
     headers: axios.defaults.baseURL
       ? {
-          Authorization: await localStorage.getSecureValue(axios.defaults.baseURL),
+          Authorization: await localStorage.getSecureValue(ipFromUrl(axios.defaults.baseURL)),
         }
       : {},
   }

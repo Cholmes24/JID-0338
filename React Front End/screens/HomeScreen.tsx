@@ -17,6 +17,9 @@ import { setSystemEvents } from '../reducers/SystemEventsReducer'
 import CodeEntry from '../components/CodeEntry'
 import { TextInput } from 'react-native-gesture-handler'
 import authService from '../services/authService'
+import { determineIP } from '../util/utilFunctions'
+import { Icon } from 'react-native-elements'
+import { LinearGradient } from 'expo-linear-gradient'
 
 export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
   const dispatch = useAppDispatch()
@@ -24,7 +27,6 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
   const currentMatches = useAppSelector((state) => state.matches)
   const [hasRecentMatch, setHasRecentMatch] = useState(false)
   const [connected, setConnected] = useState(false)
-  const [accessCode, setAccessCode] = useState('')
 
   useEffect(() => {
     if (connected) {
@@ -41,15 +43,19 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
     }
   }, [connected])
 
-  async function setIP() {
-    const url = accessCode
-    const tokenAccepted = await authService.requestToken(accessCode, url)
+  async function setIP(accessCode: string) {
+    const ip = '10.1.10.13' //await determineIP(accessCode)
+    const tokenAccepted = await authService.requestToken(accessCode, ip)
     if (tokenAccepted) {
       setConnected(true)
+      Keyboard.dismiss()
     }
   }
 
-  const handleTextChange = (input: string) => setAccessCode(input)
+  async function unsetIP(accessCode: string) {
+    await authService.logout()
+    setConnected(false)
+  }
 
   const thunkSystemEvents = (): AppThunk<Promise<void>> => async (dispatch) => {
     const systemEvents = await systemEventsService.getAll()
@@ -86,14 +92,30 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
 
   return (
     <View style={styles.container}>
-      {connected ?  (
+      {connected ? (
         <View style={styles.userCard}>
-          <UserCard firstName={'longFirstName'} lastName={'longLastName'} />
+          {/* <View
+            style={{
+              // height: 100,
+              // width: 100,
+              marginLeft: 75,
+              alignSelf: 'flex-start',
+              position: 'absolute',
+            }}
+          > */}
+            <Button
+              icon={<Icon name="logout" reverse={true} style={{transform: [{rotateY: '180deg'}]}} />}
+              title="Logout"
+              titleStyle={{ fontSize: 20 }}
+              style={styles.logoutButton}
+              containerStyle={{borderRadius: 20 , width: '80%' } }
+              onPress={authService.logout}
+            />
+          {/* </View> */}
         </View>
-      ): (
+      ) : (
         <View style={styles.userCard}>
-          <TextInput style={styles.textInput} value={accessCode} onChangeText={handleTextChange} />
-          <Button title="Set IP" style={styles.enterButton} onPress={setIP} />
+          <CodeEntry codeLength={7} onSubmit={setIP} />
         </View>
       )}
       <View style={styles.buttonWrapper}>
@@ -115,10 +137,11 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
 
 const styles = StyleSheet.create({
   userCard: {
-    flex: 3,
-    marginTop: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 2,
+    margin: 10,
+
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   container: {
     flex: 2,
@@ -145,25 +168,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     textAlign: 'center',
   },
-  textInput: {
-    width: '95%',
-    margin: 20,
-    paddingHorizontal: 10,
-    backgroundColor: '#CECECE',
-    fontSize: 28,
-    borderRadius: 8,
-    // flex: 1,
-  },
   enterButton: {
     width: '95%',
     borderRadius: 8,
     // flex: 1,
   },
   errorText: {
+    flex: 1,
     borderRadius: 15,
     // paddingHorizontal: 5,
     textAlign: 'center',
     fontSize: 30,
-    paddingBottom: 100,
   },
+  logoutButton: {
+    width: '95%',
+    borderRadius: 15,
+    // margin: 20,
+  }
 })
