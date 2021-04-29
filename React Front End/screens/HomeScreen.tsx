@@ -47,7 +47,7 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
   }, [connected])
 
   async function setIP(accessCode: string) {
-    const ip = '10.1.10.13' //await determineIP(accessCode)
+    const ip = await determineIP(accessCode)
     const tokenAccepted = await authService.requestToken(accessCode, ip)
     if (tokenAccepted) {
       setConnected(true)
@@ -89,8 +89,7 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
       buttonStyle={styles.entry}
       title="Most Recent Match"
       onPress={() => currentMatchID && navigation.navigate('Match', { matchID: currentMatchID })}
-      // disabled={!connected || currentMatchID === undefined || !hasRecentMatch}
-      disabled={true}
+      disabled={!connected || currentMatchID === undefined || !hasRecentMatch}
 
     />
   )
@@ -113,10 +112,10 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
           
         </View>
       ) : (
-        <View style={styles.userCard}>
+        <LinearGradient style={styles.container} colors={['#376eda', '#d43737']} start={{x:0, y:0.5}} end={{x:1, y:0.5}}>
           <CodeEntry codeLength={7} onSubmit={setIP} />
-          <Text style={styles.errorText}>Enter the access code to connect</Text>
-        </View>
+        </LinearGradient>
+        
       )}
     </View>
   )
@@ -126,17 +125,12 @@ const styles = StyleSheet.create({
   userCard: {
     flex: 2,
     margin: 10,
-
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    backgroundColor: 'transparent'
   },
   container: {
     flex: 2,
-    // alignSelf: 'stretch',
     textAlign: 'center',
-    // alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 5,
   },
   buttonWrapper: {
     flex: 3,
@@ -165,7 +159,9 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     // paddingHorizontal: 5,
     textAlign: 'center',
-    fontSize: 30,
+    fontSize: 20,
+    backfaceVisibility: 'hidden',
+    color: 'white'
   },
   logoutButton: {
     width: '95%',
@@ -173,8 +169,8 @@ const styles = StyleSheet.create({
     // margin: 20,
   },
   logo: {
-    width: '50%',
-    height: '50%',
+    width: '40%',
+    height: '40%',
     alignSelf: 'center',
     marginTop: 20,
     marginBottom: 20
@@ -184,5 +180,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 20,
     textDecorationLine: 'underline',
+  },
+  connectScreen: {
+    backgroundColor: '#2c89dc',
+    flex: 2,
+    textAlign: 'center',
+    justifyContent: 'center',
   }
 })
