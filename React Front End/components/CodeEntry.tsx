@@ -53,8 +53,11 @@ export default function CodeEntry({ codeLength = 6, onSubmit }: CodeEntryProps) 
 
   const theme = useColorScheme()
 
-  const borderColor = theme === 'light' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.4)'
+  // const borderColor = theme === 'light' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.4)'
+  const borderColor = '#cccccc'
   const borderRightColor = borderColor
+  // const borderRightColor = 'black'
+
 
   const selectedIndex = characters.length < codeLength ? characters.length : codeLength - 1
 
@@ -82,6 +85,8 @@ export default function CodeEntry({ codeLength = 6, onSubmit }: CodeEntryProps) 
 
   return (
     <View style={styles.container}>
+      <Text style={styles.instructions}>Enter the access code to connect</Text>
+
       <TouchableWithoutFeedback onPress={handlePress}>
         <View style={[styles.wrap, { borderColor }]}>
           {codeTemplate.map((_, index) => {
@@ -113,17 +118,12 @@ export default function CodeEntry({ codeLength = 6, onSubmit }: CodeEntryProps) 
           />
         </View>
       </TouchableWithoutFeedback>
-      <LinearGradient
-        colors={['#376EDA', '#D43737']}
-        style={styles.button}
-        start={{ x: 0, y: 0.5 }}
-        end={{ x: 1, y: 0.5 }}
-      >
+      <View style={styles.button}>
         <Button
           content={() => <Text style={[styles.buttonText]}>Connect</Text>}
           onPress={() => onSubmit(textEntered)}
         />
-      </LinearGradient>
+      </View>
       <Text style={styles.ipText}>{test}</Text>
     </View>
   )
@@ -132,8 +132,9 @@ export default function CodeEntry({ codeLength = 6, onSubmit }: CodeEntryProps) 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'transparent'
   },
   wrap: {
     borderWidth: 2,
@@ -155,6 +156,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: cellWidth * 0.8,
     zIndex: 4,
+    color: '#474747'
   },
   input: {
     position: 'absolute',
@@ -172,26 +174,19 @@ const styles = StyleSheet.create({
     top: -5,
     bottom: -5,
     borderWidth: 4,
-    borderColor: 'rgba(58, 151, 212, 0.36)',
+    borderColor: '#a7a7a7',
+    // borderColor: 'white',
     // backgroundColor: 'transparent',
   },
 
   buttonText: {
-    fontWeight: 'bold',
-    fontSize: cellWidth * 0.6,
-    color: '#111111',
-    // color: 'white',
-    // marginHorizontal: cellWidth,
-    // alignSelf: 'stretch',
-    // paddingVertical: 8,
+    fontSize: cellWidth * 0.5,
+    color: '#474747',
   },
 
   button: {
     maxHeight: cellWidth * 1,
-    // maxWidth: cellWidth * 5,
-    // width: '100%',
-
-    width: cellWidth * 5,
+    width: cellWidth * 3,
     flex: 1,
     marginTop: 20,
     padding: 5,
@@ -199,10 +194,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
+    backgroundColor: 'transparent'
   },
   ipText: {
     height: cellWidth,
     fontSize: 15,
     margin: 5,
+  },
+  instructions: {
+    // flex: 1,
+    borderRadius: 15,
+    // paddingHorizontal: 5,
+    textAlign: 'center',
+    fontSize: 30,
+    backfaceVisibility: 'hidden',
+    color: 'white',  
+    marginBottom: 50,
+    marginTop: 100,
+    marginHorizontal: 50
   },
 })
