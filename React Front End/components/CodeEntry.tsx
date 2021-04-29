@@ -39,18 +39,6 @@ export default function CodeEntry({ codeLength = 6, onSubmit }: CodeEntryProps) 
     }
   }
 
-  const [textColor, setTextColor] = useState<'white' | '#BEBEBE'>('white')
-  async function onPress() {
-    if (textEntered.length === codeLength || true) {
-      setTextColor('#BEBEBE')
-
-      onSubmit(textEntered)
-      setTimeout(() => {
-        setTextColor('white')
-      }, 100)
-    }
-  }
-
   const theme = useColorScheme()
 
   // const borderColor = theme === 'light' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.4)'
@@ -70,16 +58,17 @@ export default function CodeEntry({ codeLength = 6, onSubmit }: CodeEntryProps) 
       ? [styles.display, { borderRightColor }, styles.noBorder]
       : [styles.display, { borderRightColor }]
 
-  const [test, setTest] = useState('')
+  const [ipGuess, setIpGuess] = useState('')
   useEffect(() => {
-    dispTest()
+    dispIpGuess()
   }, [textEntered])
-  async function dispTest() {
+
+  async function dispIpGuess() {
     if (textEntered.length === codeLength) {
       const ip = await determineIP(textEntered)
-      setTest(convertIPAddress(ip))
+      setIpGuess(convertIPAddress(ip))
     } else {
-      setTest('')
+      setIpGuess('')
     }
   }
 
@@ -123,8 +112,13 @@ export default function CodeEntry({ codeLength = 6, onSubmit }: CodeEntryProps) 
           content={() => <Text style={[styles.buttonText]}>Connect</Text>}
           onPress={() => onSubmit(textEntered)}
         />
+<<<<<<< HEAD
       </View>
       <Text style={styles.ipText}>{test}</Text>
+=======
+      </LinearGradient>
+      <Text style={styles.ipText}>{ipGuess}</Text>
+>>>>>>> d7d077519112929d57d3bed218a832aa5f189309
     </View>
   )
 }
@@ -174,19 +168,31 @@ const styles = StyleSheet.create({
     top: -5,
     bottom: -5,
     borderWidth: 4,
+<<<<<<< HEAD
     borderColor: '#a7a7a7',
     // borderColor: 'white',
     // backgroundColor: 'transparent',
+=======
+    borderColor: 'rgba(160, 160, 160, 0.8)',
+>>>>>>> d7d077519112929d57d3bed218a832aa5f189309
   },
-
   buttonText: {
+<<<<<<< HEAD
     fontSize: cellWidth * 0.5,
     color: '#474747',
+=======
+    fontWeight: 'bold',
+    fontSize: cellWidth * 0.6,
+    color: '#111111',
+>>>>>>> d7d077519112929d57d3bed218a832aa5f189309
   },
-
   button: {
     maxHeight: cellWidth * 1,
+<<<<<<< HEAD
     width: cellWidth * 3,
+=======
+    width: cellWidth * 5,
+>>>>>>> d7d077519112929d57d3bed218a832aa5f189309
     flex: 1,
     marginTop: 20,
     padding: 5,

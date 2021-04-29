@@ -29,13 +29,15 @@ export default function scoringReducer(state: Scoring, action: ScoringActionType
 function increaseScore(state: Scoring, action: IncreaseScoreAction): Scoring {
   return {
     ...state,
-    points: action.payload || state.points + 1,
+    points: action.payload !== undefined ? action.payload : state.points + 1,
   }
 }
 
 function decreaseScore(state: Scoring, action: DecreaseScoreAction): Scoring {
   const points =
-    action.payload && action.payload >= 0 ? action.payload : Math.max(state.points - 1, 0)
+    action.payload !== undefined && action.payload >= 0
+      ? action.payload
+      : Math.max(state.points - 1, 0)
   return {
     ...state,
     points,
@@ -45,14 +47,14 @@ function decreaseScore(state: Scoring, action: DecreaseScoreAction): Scoring {
 function issueWarning(state: Scoring, action: IssueWarningAction): Scoring {
   return {
     ...state,
-    numWarnings: action.payload || state.numWarnings + 1,
+    numWarnings: action.payload !== undefined ? action.payload : state.numWarnings + 1,
   }
 }
 
 function issuePenalty(state: Scoring, action: IssuePenaltyAction): Scoring {
   return {
     ...state,
-    numPenalties: action.payload || state.numPenalties + 1,
+    numPenalties: action.payload !== undefined ? action.payload : state.numPenalties + 1,
   }
 }
 
