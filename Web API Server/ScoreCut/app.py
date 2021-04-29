@@ -22,6 +22,13 @@ access_codes = access.active_access_codes
 access_codes.add('testCode')
 reflection_token = secrets.token_urlsafe(64)
 
+# input_key = input("Type in the letter 'a' and press enter to generate an access code: ")
+#
+#
+# # if input_key == 'a':
+# print('key pressed!', file=sys.stderr)
+# print(access.create_new_access_code(), file=sys.stderr)
+
 
 @auth.verify_token
 def verify_token(token):
@@ -39,7 +46,8 @@ def generate_access_code():
 @app.route('/api/token', methods=['POST'])
 def get_token():
     request_data = request.get_json()
-    access_code = request_data['accessCode']  
+    # access_code = request.headers.get('Authorization').strip('Bearer ')
+    access_code = request_data['accessCode']    # in body currently
 
     if access_code in access_codes:
         access_codes.pop(access_code)
@@ -784,52 +792,50 @@ def matches_handle_undo():
     ##########
     # calculate any changes in score that need to be undone
     current_match_state = get_specific_match(matchID, mydb)
-    if verify_token(token):
-        if current_match_state['fighter1Score'] > fighter1Score:
-            change_in_score = fighter1Score - current_match_state['fighter1Score']
-            undo_increase(matchID, fighter1ID, fighter2ID, change_in_score, mydb)
 
-        if current_match_state['fighter2Score'] > fighter2Score:
-            change_in_score = fighter2Score - current_match_state['fighter2Score']
-            undo_increase(matchID, fighter2ID, fighter1ID, change_in_score, mydb)
+    if current_match_state['fighter1Score'] > fighter1Score:
+        change_in_score = fighter1Score - current_match_state['fighter1Score']
+        undo_increase(matchID, fighter1ID, fighter2ID, change_in_score, mydb)
 
-        if current_match_state['fighter1Score'] < fighter1Score:
-            change_in_score = fighter1Score - current_match_state['fighter1Score']
-            undo_decrease(matchID, fighter1ID, fighter2ID, change_in_score, mydb)
+    if current_match_state['fighter2Score'] > fighter2Score:
+        change_in_score = fighter2Score - current_match_state['fighter2Score']
+        undo_increase(matchID, fighter2ID, fighter1ID, change_in_score, mydb)
 
-        if current_match_state['fighter2Score'] < fighter2Score:
-            change_in_score = fighter2Score - current_match_state['fighter2Score']
-            undo_decrease(matchID, fighter2ID, fighter1ID, change_in_score, mydb)
+    if current_match_state['fighter1Score'] < fighter1Score:
+        change_in_score = fighter1Score - current_match_state['fighter1Score']
+        undo_decrease(matchID, fighter1ID, fighter2ID, change_in_score, mydb)
 
-        ##########
-        # calculate if there is a discrepancies in number of penalties
-        current_fighter1_penalties = get_penalties_for_fighter(matchID, fighter1ID, mydb)
-        current_fighter2_penalties = get_penalties_for_fighter(matchID, fighter2ID, mydb)
+    if current_match_state['fighter2Score'] < fighter2Score:
+        change_in_score = fighter2Score - current_match_state['fighter2Score']
+        undo_decrease(matchID, fighter2ID, fighter1ID, change_in_score, mydb)
 
-        num_penalties_to_remove_fighter1 = len(current_fighter1_penalties) - fighter1Penalties
-        if num_penalties_to_remove_fighter1 > 0:
-            undo_penalty(num_penalties_to_remove_fighter1, matchID, fighter1ID, fighter2ID, 0, mydb)
+    ##########
+    # calculate if there is a discrepancies in number of penalties
+    current_fighter1_penalties = get_penalties_for_fighter(matchID, fighter1ID, mydb)
+    current_fighter2_penalties = get_penalties_for_fighter(matchID, fighter2ID, mydb)
 
-        num_penalties_to_remove_fighter2 = len(current_fighter2_penalties) - fighter2Penalties
-        if num_penalties_to_remove_fighter2 > 0:
-            undo_penalty(num_penalties_to_remove_fighter2, matchID, fighter2ID, fighter1ID, 0, mydb)
+    num_penalties_to_remove_fighter1 = len(current_fighter1_penalties) - fighter1Penalties
+    if num_penalties_to_remove_fighter1 > 0:
+        undo_penalty(num_penalties_to_remove_fighter1, matchID, fighter1ID, fighter2ID, 0, mydb)
 
-        ##########
-        # calculate if there is a discrepancies in number of warnings
-        current_fighter1_warnings = get_warnings_for_fighter(matchID, fighter1ID, mydb)
-        current_fighter2_warnings = get_warnings_for_fighter(matchID, fighter2ID, mydb)
+    num_penalties_to_remove_fighter2 = len(current_fighter2_penalties) - fighter2Penalties
+    if num_penalties_to_remove_fighter2 > 0:
+        undo_penalty(num_penalties_to_remove_fighter2, matchID, fighter2ID, fighter1ID, 0, mydb)
 
-        num_warnings_to_remove_fighter1 = len(current_fighter1_warnings) - fighter1Warnings
-        if num_warnings_to_remove_fighter1 > 0:
-            undo_warning(num_warnings_to_remove_fighter1, matchID, fighter1ID, fighter2ID, 0, mydb)
+    ##########
+    # calculate if there is a discrepancies in number of warnings
+    current_fighter1_warnings = get_warnings_for_fighter(matchID, fighter1ID, mydb)
+    current_fighter2_warnings = get_warnings_for_fighter(matchID, fighter2ID, mydb)
 
-        num_warnings_to_remove_fighter2 = len(current_fighter2_warnings) - fighter2Warnings
-        if num_warnings_to_remove_fighter2 > 0:
-            undo_warning(num_warnings_to_remove_fighter2, matchID, fighter2ID, fighter1ID, 0, mydb)
+    num_warnings_to_remove_fighter1 = len(current_fighter1_warnings) - fighter1Warnings
+    if num_warnings_to_remove_fighter1 > 0:
+        undo_warning(num_warnings_to_remove_fighter1, matchID, fighter1ID, fighter2ID, 0, mydb)
 
-        match = set_scores(matchID, fighter1Score, fighter2Score, mydb)
-    else:   # bad token
-        match = current_match_state
+    num_warnings_to_remove_fighter2 = len(current_fighter2_warnings) - fighter2Warnings
+    if num_warnings_to_remove_fighter2 > 0:
+        undo_warning(num_warnings_to_remove_fighter2, matchID, fighter2ID, fighter1ID, 0, mydb)
+
+    match = set_scores(matchID, fighter1Score, fighter2Score, mydb)
 
     format_match(match, matchID, mydb)
 
