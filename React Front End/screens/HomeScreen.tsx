@@ -1,142 +1,190 @@
-import React, { useEffect } from "react"
-import { StyleSheet } from 'react-native';
-import { View } from '../components/Themed';
+import React, { useEffect, useState } from 'react'
+import { Keyboard, StyleSheet, Image, Linking } from 'react-native'
+import { Text, View } from '../components/Themed'
 import { Button } from 'react-native-elements'
-import UserCard from "../components/UserCard"
-
+import UserCard from '../components/UserCard'
 import matchService from '../services/match'
 import fightersService from '../services/fighters'
 import systemEventsService from '../services/systemEvents'
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
+import { AppThunk } from '../store'
 
-import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks"
-import { AppThunk } from "../store"
+import { ScreenPropType } from '../types'
+import { Match } from '../redux-types/storeTypes'
+import { setFighters } from '../reducers/FightersReducer'
+import { setMatches } from '../reducers/MatchesReducer'
+import { setSystemEvents } from '../reducers/SystemEventsReducer'
+import CodeEntry from '../components/CodeEntry'
+import { TextInput } from 'react-native-gesture-handler'
+import authService from '../services/authService'
+import { determineIP } from '../util/utilFunctions'
+import { Icon } from 'react-native-elements'
+import { LinearGradient } from 'expo-linear-gradient'
+import useColorScheme from '../hooks/useColorScheme'
 
-import { ScreenPropType } from "../types";
-import { Match } from "../redux-types/storeTypes";
-
-export default function HomeScreen({
-  navigation
-}: ScreenPropType<"Home">) {
-
-  const currentMatchId = useAppSelector((state) => state.currentIds.matchId)
-
+export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
   const dispatch = useAppDispatch()
+  const currentMatchID = useAppSelector((state) => state.currentIDs.matchID)
+  const currentMatches = useAppSelector((state) => state.matches)
+  const [hasRecentMatch, setHasRecentMatch] = useState(false)
+  const [connected, setConnected] = useState(true)
+  const theme = useColorScheme()
+  const logoutColor = theme === 'dark' ? 'white' : '#575757'
+
   useEffect(() => {
-    dispatch(thunkSystemEvents())
-      .then(() => dispatch(thunkCurrentMatch()))
-      .then((match) => dispatch(thunkCurrentFighters(match)))
-  })
-  const thunkSystemEvents = (): AppThunk<Promise<void>> => (
-    async dispatch => {
-      const systemEvents = await systemEventsService.getAll()
-      dispatch({
-        type: "SET_SYSTEM_EVENTS",
-        payload: systemEvents
-      })
-      return Promise.resolve()
+    if (connected) {
+      setHasRecentMatch(currentMatches.find((m) => m.ID === currentMatchID) !== undefined)
     }
-  )
+  }, [currentMatchID, currentMatches, connected])
 
-  const thunkCurrentMatch = (): AppThunk<Promise<Match | undefined>> => (
-    async dispatch => {
-      if (currentMatchId !== undefined) {
-        const currentMatch = await matchService.getMatch(currentMatchId)
-        dispatch({
-          type: "SET_MATCHES",
-          payload: [currentMatch]
-        })
-        return Promise.resolve(currentMatch)
-      }
-      return Promise.resolve(undefined)
+  useEffect(() => {
+    if (connected) {
+      dispatch(thunkSystemEvents())
+        .then(() => dispatch(thunkCurrentMatch()))
+        .then((match) => dispatch(thunkCurrentFighters(match)))
+        .then(() => Keyboard.dismiss())
     }
-  )
+  }, [connected])
 
-  const thunkCurrentFighters = (match?: Match): AppThunk<Promise<void>> => (
-    async dispatch => {
-      if (match) {
-        const fighter1 = await fightersService.getById(match.fighter1Id)
-        const fighter2 = await fightersService.getById(match.fighter2Id)
-        dispatch({
-          type: "SET_FIGHTERS",
-          payload: [fighter1, fighter2]
-        })
-      }
-      return Promise.resolve()
+  async function setIP(accessCode: string) {
+    const ip = await determineIP(accessCode)
+    const tokenAccepted = await authService.requestToken(accessCode, ip)
+    if (tokenAccepted) {
+      setConnected(true)
+      Keyboard.dismiss()
     }
-  )
+  }
+
+  async function unsetIP() {
+    await authService.logout()
+    setConnected(false)
+  }
+
+  const thunkSystemEvents = (): AppThunk<Promise<void>> => async (dispatch) => {
+    const systemEvents = await systemEventsService.getAll()
+    dispatch(setSystemEvents(systemEvents))
+    return Promise.resolve()
+  }
+
+  const thunkCurrentMatch = (): AppThunk<Promise<Match | undefined>> => async (dispatch) => {
+    if (currentMatchID !== undefined && !currentMatches.find((m) => m.ID == currentMatchID)) {
+      const currentMatch = await matchService.getMatch(currentMatchID)
+      dispatch(setMatches([currentMatch]))
+      return Promise.resolve(currentMatch)
+    }
+    return Promise.resolve(undefined)
+  }
+
+  const thunkCurrentFighters = (match?: Match): AppThunk<Promise<void>> => async (dispatch) => {
+    if (match) {
+      const fighter1 = await fightersService.getByID(match.fighter1ID)
+      const fighter2 = await fightersService.getByID(match.fighter2ID)
+      dispatch(setFighters([fighter1, fighter2]))
+    }
+    return Promise.resolve()
+  }
 
   const mostRecentMatchButton = () => (
-    currentMatchId !== undefined 
-      ? <Button
-          buttonStyle={styles.entry}
-          title='Most Recent Match'
-          onPress={() => navigation.navigate("Match", { matchId: currentMatchId }) }
-        />
-      : null //<View style={styles.matchButton} > </View>
+    <Button
+      buttonStyle={styles.entry}
+      title="Most Recent Match"
+      onPress={() => currentMatchID && navigation.navigate('Match', { matchID: currentMatchID })}
+      disabled={!connected || currentMatchID === undefined || !hasRecentMatch}
+
+    />
   )
 
   return (
-    <View style={styles.container} >
+    <View style={styles.container}>
+      {connected ? (
+        <View style={styles.userCard}>
+          <Image source={{uri:'https://images.squarespace-cdn.com/content/v1/53518dd3e4b0e85fd91edde7/1607727526945-7CEYKZQUQXE4YDVTPKBY/ke17ZwdGBToddI8pDm48kBy_Di5oPbEsU06S-w0xqIh7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USuOa6StVHPk-_t9tEvkwaC7KSzfyQI3SstOP6fm2CCy3WUfc_ZsVm9Mi1E6FasEnQ/AHFA%2BLogo%2BGrey.png?format=1500w'}} style={styles.logo}/>
 
-      <View style={styles.userCard}>
-        <UserCard
-          firstName={"longFirstName"}
-          lastName={"longLastName"}
-        />
-      </View>
-      <View style={styles.buttonWrapper}>
-        <Button
-          buttonStyle={styles.entry}
-          title='Events'
-          onPress={() => navigation.navigate("Events")}
-        />
-        {mostRecentMatchButton()}
-      </View>
-      
-      {/* <View style={styles.filler}></View> */}
-      
+          <Button
+            buttonStyle={styles.entry}
+            title="Events"
+            onPress={() => navigation.navigate('Events')}
+          />
+
+          {mostRecentMatchButton()}
+
+          <Text style={[styles.logout, {color: logoutColor}]} onPress={unsetIP}>Logout</Text>
+          
+        </View>
+      ) : (
+        <LinearGradient style={styles.container} colors={['#376eda', '#d43737']} start={{x:0, y:0.5}} end={{x:1, y:0.5}}>
+          <CodeEntry codeLength={7} onSubmit={setIP} />
+        </LinearGradient>
+        
+      )}
     </View>
-
   )
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
   userCard: {
-    flex: 4,
-    paddingTop: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  filler: {
-    height: '15%'
+    flex: 2,
+    margin: 10,
+    backgroundColor: 'transparent'
   },
   container: {
     flex: 2,
-    alignSelf: "stretch",
     textAlign: 'center',
-    paddingBottom: 5
+    justifyContent: 'center',
   },
   buttonWrapper: {
+    flex: 3,
     textAlign: 'center',
-    // backgroundColor: 'white',
+    alignContent: 'center',
+    justifyContent: 'center',
     width: '100%',
   },
   entry: {
     width: '95%',
-    padding: '10%',
+    padding: '7%',
     marginTop: '5%',
     marginBottom: '5%',
     borderRadius: 15,
-    alignSelf: "center",
-    paddingHorizontal: 5
+    alignSelf: 'center',
+    paddingHorizontal: 5,
+    textAlign: 'center',
   },
+  enterButton: {
+    width: '95%',
+    borderRadius: 8,
+    // flex: 1,
+  },
+  errorText: {
+    flex: 1,
+    borderRadius: 15,
+    // paddingHorizontal: 5,
+    textAlign: 'center',
+    fontSize: 20,
+    backfaceVisibility: 'hidden',
+    color: 'white'
+  },
+  logoutButton: {
+    width: '95%',
+    borderRadius: 15,
+    // margin: 20,
+  },
+  logo: {
+    width: '40%',
+    height: '40%',
+    alignSelf: 'center',
+    marginTop: 20,
+    marginBottom: 20
+  },
+  logout: {
+    fontSize: 20,
+    alignSelf: 'center',
+    marginTop: 20,
+    textDecorationLine: 'underline',
+  },
+  connectScreen: {
+    backgroundColor: '#2c89dc',
+    flex: 2,
+    textAlign: 'center',
+    justifyContent: 'center',
+  }
 })

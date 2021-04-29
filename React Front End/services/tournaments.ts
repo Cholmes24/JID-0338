@@ -1,35 +1,34 @@
-import { Tournament } from './../redux-types/storeTypes';
+import { Tournament } from './../redux-types/storeTypes'
 import axios from 'axios'
 
-const baseUrl = "/api/system_events/tournaments"
+const baseUrl = '/api/system_events/tournaments'
 
 type TournamentInDb = {
   tournamentID: number
 }
 
-//TODO: complete/remove this function making sure relevant fields are accounted for
-function mapTournamentField(tournamentInDb: TournamentInDb, systemEventId: number): Tournament {
+function mapTournamentField(tournamentInDb: TournamentInDb, systemEventID: number): Tournament {
   return {
     name: `Tournament ${tournamentInDb.tournamentID}`,
-    id: tournamentInDb.tournamentID,
-    systemEventId,
-    fighterIds: [],
-    poolIds: [],
-    matchIds: []
+    ID: tournamentInDb.tournamentID,
+    systemEventID,
+    fighterIDs: [],
+    poolIDs: [],
+    matchIDs: [],
   }
 }
 
-function mapTournaments(fromDb: TournamentInDb[], eventId: number): Tournament[] {
-  return fromDb.map((t) => mapTournamentField(t, eventId))
+function mapTournaments(fromDb: TournamentInDb[], eventID: number): Tournament[] {
+  return fromDb.map((t) => mapTournamentField(t, eventID))
 }
 
-async function getAll(eventId: number) {
-  const response = await axios.get(`${baseUrl}?eventID=${eventId}`)
-  return mapTournaments(response.data, eventId)
+async function getAll(eventID: number) {
+  const response = await axios.get(`${baseUrl}?eventID=${eventID}`)
+  return mapTournaments(response.data, eventID)
 }
 
 const tournamentsService = {
-  getAll
+  getAll,
 }
 
 export default tournamentsService

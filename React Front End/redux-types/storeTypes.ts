@@ -1,143 +1,141 @@
-import { ColorValue } from "react-native"
+import ipAddress from 'ip-address'
+import { ColorValue } from 'react-native'
 
 export interface Fighter {
-  id: number,
-  firstName: string,
-  middleName?: string,
-  lastName: string,
+  ID: number
+  firstName: string
+  middleName?: string
+  lastName: string
 
-  color: ColorValue,
+  color: ColorValue
 
   // club: string,
   // nationality: string,
   // seed: number,
-  // schoolId: string,
+  // schoolID: string,
 }
 
 export interface Scoring {
-  points: number,
-  numWarnings: number,
+  points: number
+  numWarnings: number
   numPenalties: number
 }
 
 export interface MatchScore {
-  fighter1Scoring: Scoring,
-  fighter2Scoring: Scoring,
+  fighter1Scoring: Scoring
+  fighter2Scoring: Scoring
 }
 
 export interface Match {
-  id: number,
-  poolId: number,
-  tournamentId: number,
+  ID: number
+  poolID: number
+  tournamentID: number
   // name: string,
 
-  ringNumber: number,
+  ringNumber: number
 
-  fighter1Id: number,
-  fighter2Id: number,
-  winnerId?: number,
+  fighter1ID: number
+  fighter2ID: number
+  winnerID?: number
 
-  past: MatchScore[],
-  present: MatchScore,
-  future: MatchScore[],
+  past: MatchScore[]
+  present: MatchScore
+  future: MatchScore[]
 
   timer: Timer
 }
 
 export interface Timer {
-  maxTime: number,
-  timeRemaining: number,
-  timeRemainingAtLastStop: number,
-  timeOfLastStart: number,
+  maxTime: number
+  timeRemaining: number
+  timeRemainingAtLastStop: number
+  timeOfLastStart: number
   isRunning: boolean
 }
 
 export interface SystemEvent {
-  id: number,
-  // tournamentIds: number[],
+  ID: number
+  // tournamentIDs: number[],
   name: string
 }
 
 export interface Tournament {
-  name: string,
-  id: number,
-  systemEventId: number,
-  weaponType?: string,
+  name: string
+  ID: number
+  systemEventID: number
+  weaponType?: string
   // ruleset: MatchRuleset
-  fighterIds: number[],
-  poolIds: number[],
-  matchIds: number[]
+  fighterIDs: number[]
+  poolIDs: number[]
+  matchIDs: number[]
 }
 
 export interface Pool {
-  id: number,
-  name: string,
-  // fighterIds: number[],
-  tournamentId: number,
+  ID: number
+  name: string
+  // fighterIDs: number[],
+  tournamentID: number
 }
 
-export interface CurrentIds {
-  systemEventId?: number,
-  tournamentId?: number,
-  poolId?: number,
-  matchId?: number,
+export interface CurrentIDs {
+  systemEventID?: number
+  tournamentID?: number
+  poolID?: number
+  matchID?: number
 }
 
 export interface RootType {
-  fighters: Fighter[],
-  systemEvents: SystemEvent[],
-  tournaments: Tournament[],
-  pools: Pool[],
-  matches: Match[],
-  currentIds: CurrentIds
+  fighters: Fighter[]
+  systemEvents: SystemEvent[]
+  tournaments: Tournament[]
+  pools: Pool[]
+  matches: Match[]
+  currentIDs: CurrentIDs
 }
 
+type RoundsType = 'Finals' | true | false
 
+type RoundNumberType = 'Two' | 'BestOfThree'
 
+type VictoryConditions = 'Cap' | 'Spread' | 'HitPoints'
 
-type RoundsType = "Finals" | true | false
-
-type RoundNumberType = "Two" | "BestOfThree"
-
-type VictoryConditions = "Cap" | "Spread" | "HitPoints"
-
-type RankingConditions = "Pool" | "Total"
+type RankingConditions = 'Pool' | 'Total'
 
 interface MatchpointRules {
-  matchPointsForWin: number,
-  matchPointsForDraw: number,
-  matchPointsForLoss: number,
+  matchPointsForWin: number
+  matchPointsForDraw: number
+  matchPointsForLoss: number
 }
 
 interface ExchangePointsRules {
-  autoDoubleHit: boolean,
-  minPointsPerExchange: number,
-  middlePointsPerExchange?: number,
-  maxPointsPerExchange: number,
-  subtractPointsInExchanges: boolean,
-  useExchangeCounter: boolean,
-  numberOfExchangesAllowed?: number,
+  autoDoubleHit: boolean
+  minPointsPerExchange: number
+  middlePointsPerExchange?: number
+  maxPointsPerExchange: number
+  subtractPointsInExchanges: boolean
+  useExchangeCounter: boolean
+  numberOfExchangesAllowed?: number
 }
 
 interface MatchTimeRules {
-  matchTimeInMinutes: number,
-  eliminationMatchTimeInMinutes: number,
-  effectiveTime?: boolean,
+  matchTimeInMinutes: number
+  eliminationMatchTimeInMinutes: number
+  effectiveTime?: boolean
 }
 
 interface RulesetConditions {
-  capOrSpreadMax: number,
-  hardCap: boolean,
-  rounds: RoundsType,
-  numberOfRounds: RoundNumberType,
-  victoryConditions: VictoryConditions,
-  rankingConditions: RankingConditions,
+  capOrSpreadMax: number
+  hardCap: boolean
+  rounds: RoundsType
+  numberOfRounds: RoundNumberType
+  victoryConditions: VictoryConditions
+  rankingConditions: RankingConditions
 }
 
 export interface MatchRuleset {
-  matchpointRules: MatchpointRules,
-  matchTimeRules: MatchTimeRules,
-  exchangePointsRules: ExchangePointsRules,
+  matchpointRules: MatchpointRules
+  matchTimeRules: MatchTimeRules
+  exchangePointsRules: ExchangePointsRules
   rulesetConditions: RulesetConditions
 }
 
@@ -161,9 +159,9 @@ const Nordic: MatchRuleset = {
   rulesetConditions: {
     capOrSpreadMax: 8,
     hardCap: false,
-    rounds: "Finals",
-    numberOfRounds: "BestOfThree",
-    victoryConditions: "Cap",
-    rankingConditions: "Total",
-  }
+    rounds: 'Finals',
+    numberOfRounds: 'BestOfThree',
+    victoryConditions: 'Cap',
+    rankingConditions: 'Total',
+  },
 }

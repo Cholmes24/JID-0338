@@ -1,15 +1,25 @@
-import { ScoringActionType, IncreaseScoreAction, DecreaseScoreAction, IssueWarningAction, IssuePenaltyAction } from '../../redux-types/actionTypes'
-import { Scoring, Timer } from '../../redux-types/storeTypes'
+import { Scoring } from '../../redux-types/storeTypes'
+import {
+  IncreaseScoreAction,
+  INCREASE_SCORE,
+  DecreaseScoreAction,
+  DECREASE_SCORE,
+  IssueWarningAction,
+  ISSUE_WARNING,
+  IssuePenaltyAction,
+  ISSUE_PENALTY,
+  ScoringActionType,
+} from '../../redux-types/actionTypes'
 
 export default function scoringReducer(state: Scoring, action: ScoringActionType) {
   switch (action.type) {
-    case "INCREASE_SCORE":
+    case INCREASE_SCORE:
       return increaseScore(state, action)
-    case "DECREASE_SCORE":
+    case DECREASE_SCORE:
       return decreaseScore(state, action)
-    case "ISSUE_WARNING":
+    case ISSUE_WARNING:
       return issueWarning(state, action)
-    case "ISSUE_PENALTY":
+    case ISSUE_PENALTY:
       return issuePenalty(state, action)
     default:
       return state
@@ -19,56 +29,66 @@ export default function scoringReducer(state: Scoring, action: ScoringActionType
 function increaseScore(state: Scoring, action: IncreaseScoreAction): Scoring {
   return {
     ...state,
-    points: state.points + 1
+    points: action.payload !== undefined ? action.payload : state.points + 1,
   }
 }
 
 function decreaseScore(state: Scoring, action: DecreaseScoreAction): Scoring {
+  const points =
+    action.payload !== undefined && action.payload >= 0
+      ? action.payload
+      : Math.max(state.points - 1, 0)
   return {
     ...state,
-    points: Math.max(state.points - 1, 0)
+    points,
   }
 }
 
 function issueWarning(state: Scoring, action: IssueWarningAction): Scoring {
   return {
     ...state,
-    numWarnings: state.numWarnings + 1
+    numWarnings: action.payload !== undefined ? action.payload : state.numWarnings + 1,
   }
 }
 
 function issuePenalty(state: Scoring, action: IssuePenaltyAction): Scoring {
   return {
     ...state,
-    numPenalties: state.numPenalties + 1
+    numPenalties: action.payload !== undefined ? action.payload : state.numPenalties + 1,
   }
 }
 
-// const initialState: Scoring = {
-//   points: 0,
-//   numWarnings: 0,
-//   numPenalties: 0,
-// }
+export function createIncreaseScoreAction(newScore: number): IncreaseScoreAction {
+  return {
+    type: INCREASE_SCORE,
+    payload: newScore,
+  }
+}
 
-// export const scoringSlice = createSlice({
-//   name: "scoring",
-//   initialState,
-//   reducers: {
-//     "INCREASE_SCORE": state => {
-//       state.points += 1
-//     },
-//     decreaseScore: state => {
-//       state.points = Math.max(state.points - 1, 0)
-//     },
-//     issueWarning: state => {
-//       state.numWarnings += 1
-//     },
-//     issuePenalty: state => {
-//       state.numPenalties += 1
-//     }
-//   }
-// })
+export function createDecreaseScoreAction(newScore: number): DecreaseScoreAction {
+  return {
+    type: DECREASE_SCORE,
+    payload: newScore,
+  }
+}
 
-// export const { decreaseScore, issueWarning, issuePenalty } = scoringSlice.actions
+export function createIssueWarningAction(newNumWarnings: number): IssueWarningAction {
+  return {
+    type: ISSUE_WARNING,
+    payload: newNumWarnings,
+  }
+}
 
-// export default scoringSlice.reducer
+export function createIssuePenaltyAction(newNumPenalties: number): IssuePenaltyAction {
+  return {
+    type: ISSUE_PENALTY,
+    payload: newNumPenalties,
+  }
+}
+
+export const scoringActionCreator = {
+  createIncreaseScoreAction,
+  createDecreaseScoreAction,
+  createIssueWarningAction,
+  createIssuePenaltyAction,
+}

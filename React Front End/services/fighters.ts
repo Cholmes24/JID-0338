@@ -1,38 +1,38 @@
-import { Fighter } from './../redux-types/storeTypes';
+import { Fighter } from './../redux-types/storeTypes'
 import axios from 'axios'
 
-const baseUrl = "/api/fighters"
+const baseUrl = '/api/fighters'
 
-type FighterInDb = {
-  firstName: string,
+type FighterInDB = {
+  firstName: string
   lastName: string
+  fighterID: number
 }
 
-//TODO: complete/remove this function making sure relevant fields are accounted for
-function mapFighterFields(fighterInDb: FighterInDb, id: number): Fighter {
+//TODO: account for colors if possible
+function mapFighterFields(fighterInDB: FighterInDB): Fighter {
+  const { firstName, lastName } = fighterInDB
+  const ID = fighterInDB.fighterID
   return {
-    firstName: fighterInDb.firstName,
-    lastName: fighterInDb.lastName,
-    id,
-    color: (id % 2 === 1) ? "#376EDA" : "#D43737"
+    firstName,
+    lastName,
+    ID,
+    color: ID % 2 === 1 ? '#376EDA' : '#D43737',
   }
 }
 
-function mapFighters(fromDb: FighterInDb[]): Fighter[] {
-  return fromDb.map(mapFighterFields)
+async function getAllByPoolID(poolID: number) {
+  const response = await axios.get(`/api/system_events/tournaments/groups/fighters?groupID=${poolID}`)
+  return response.data.map(mapFighterFields)
 }
 
-// async function getAll() {
-//   const response = await axios.get(baseUrl)
-//   return mapFighters(response.data)
-// }
-
-async function getById(fighterId: number) {
-  const response = await axios.get(`${baseUrl}?fighterID=${fighterId}`)
-  return mapFighterFields(response.data, fighterId)
+async function getByID(fighterID: number) {
+  const response = await axios.get(`${baseUrl}?fighterID=${fighterID}`)
+  return mapFighterFields(response.data)
 }
 
 const fightersService = {
-  getById
+  getAllByPoolID,
+  getByID,
 }
 export default fightersService

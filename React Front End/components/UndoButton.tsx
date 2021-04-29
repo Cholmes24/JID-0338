@@ -1,65 +1,39 @@
-import React, { useState } from "react"
-import Icon from "react-native-vector-icons/EvilIcons"
-import { Pressable, StyleSheet } from "react-native"
-import { RootType } from "../redux-types/storeTypes"
-import { MatchesAction } from "../redux-types/actionTypes"
-import asMatchesAction from "../util/reduxActionWrapper"
-import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks"
-// import { Icon } from "react-native-elements"
+import React from 'react'
+import { RootType } from '../redux-types/storeTypes'
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
+import { AppThunk } from '../store'
+import matchService from '../services/match'
+import Button from './Button'
+import { Icon } from 'react-native-elements'
+import { undo } from '../reducers/MatchesReducer'
 
 export type UndoButtonProps = {
-  matchId: number
+  matchID: number
 }
 
 //TODO: Implement Remote functionality with thunks
-export default function UndoButton({matchId}: UndoButtonProps) {
+export default function UndoButton({ matchID }: UndoButtonProps) {
   const dispatch = useAppDispatch()
-  // const color = useThemeColor({ light: "black", dark: "white"}, "tabIconDefault")
   const matches = useAppSelector((state: RootType) => state.matches)
-  const match = matches.find(m => m.id === matchId)
+  const match = matches.find((m) => m.ID === matchID)
+
   if (!match) {
-    throw Error("MATCH ID INVALID")
+    throw Error('MATCH ID INVALID')
   }
-  const fontSize = 35
 
-  const undo: MatchesAction = asMatchesAction({ type: "MATCH_UNDO" }, matchId)
+  const { fighter1ID, fighter2ID } = match
 
-  const pressedColor = "#BEBEBE"
-  const [ buttonColor, setButtonColor ] = useState<"white" | typeof pressedColor>("white")
+  const thunkUndo = (): AppThunk => async (dispatch) => {
+    // TODO: need to test syncing with db
+    const lastState = match.past.length !== 0 && match.past[match.past.length - 1]
+    if (lastState) {
+      await matchService.undo(matchID, fighter1ID, fighter2ID, lastState)
+      dispatch(undo(matchID))
+    }
+  }
 
-  const styles = StyleSheet.create({
-    buttonIcon: {
-      color: "black",
-      alignSelf: "center",
-      fontSize
-    },
-    pressable: {
-      backgroundColor: buttonColor,
-      borderRadius: 15,
-      padding: 6,
-      width: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      elevation: 5,
-      flex: 1,
-      shadowRadius: 4,
-      shadowOffset: { width: 1, height: 3 },
-      shadowColor: 'black',
-      shadowOpacity: 0.4,
-    },
-  })
+  const onPress = () => dispatch(thunkUndo())
+  const content = () => <Icon name="undo" type="evilicon" size={40} color="black" />
 
-  return (
-    <Pressable style={styles.pressable}
-      onPress={() => dispatch(undo)}
-      onPressIn={() => match.past.length !== 0 ? setButtonColor("#BEBEBE") : null}
-      onPressOut={() => setButtonColor("white")}
-    >
-      <Icon
-        name="undo"
-        size={40}
-        color="black"
-      />
-    </Pressable>
-  )
+  return <Button onPress={onPress} content={content} />
 }

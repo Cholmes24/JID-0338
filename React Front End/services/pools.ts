@@ -1,33 +1,33 @@
-import { Pool } from './../redux-types/storeTypes';
+import { Pool } from './../redux-types/storeTypes'
 import axios from 'axios'
 
-const baseUrl = "/api/system_events/tournaments/groups"
+const baseUrl = '/api/system_events/tournaments/groups'
 
 type PoolInDb = {
-  groupID: number,
+  groupID: number
   groupName: string
 }
 
 //TODO: complete/remove this function making sure relevant fields are accounted for
-function mapPoolFields(poolInDb: PoolInDb, tournamentId: number): Pool {
-  return ({
-    id: poolInDb.groupID,
+function mapPoolFields(poolInDb: PoolInDb, tournamentID: number): Pool {
+  return {
+    ID: poolInDb.groupID,
     name: poolInDb.groupName,
-    tournamentId,
-  })
+    tournamentID,
+  }
 }
 
-function mapPools(fromDb: PoolInDb[], tournamentId: number): Pool[] {
-  return fromDb.map((p) => mapPoolFields(p, tournamentId))
+function mapPools(fromDb: PoolInDb[], tournamentID: number): Pool[] {
+  return fromDb.map((p) => mapPoolFields(p, tournamentID))
 }
 
-export async function getAll(tournamentId: number) {
-  const response = await axios.get(`${baseUrl}?tournamentID=${tournamentId}`)
-  return mapPools(response.data, tournamentId)
+export async function getAll(tournamentID: number) {
+  const response = await axios.get(`${baseUrl}?tournamentID=${tournamentID}`)
+  return mapPools(response.data, tournamentID)
 }
 
 const poolsService = {
-  getAll
+  getAll,
 }
 
 export default poolsService
