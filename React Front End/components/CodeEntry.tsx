@@ -112,13 +112,8 @@ export default function CodeEntry({ codeLength = 6, onSubmit }: CodeEntryProps) 
           content={() => <Text style={[styles.buttonText]}>Connect</Text>}
           onPress={() => onSubmit(textEntered)}
         />
-<<<<<<< HEAD
       </View>
-      <Text style={styles.ipText}>{test}</Text>
-=======
-      </LinearGradient>
       <Text style={styles.ipText}>{ipGuess}</Text>
->>>>>>> d7d077519112929d57d3bed218a832aa5f189309
     </View>
   )
 }
@@ -134,6 +129,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     position: 'relative',
     flexDirection: 'row',
+    backgroundColor: 'white'
   },
   display: {
     borderRightWidth: 1,
@@ -150,12 +146,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: cellWidth * 0.8,
     zIndex: 4,
-    color: '#474747'
+    color: '#474747',
   },
   input: {
     position: 'absolute',
     textAlign: 'center',
-    backgroundColor: 'transparent',
+    // backgroundColor: 'white',
     width: cellWidth,
     top: 0,
     bottom: 0,
@@ -168,31 +164,16 @@ const styles = StyleSheet.create({
     top: -5,
     bottom: -5,
     borderWidth: 4,
-<<<<<<< HEAD
     borderColor: '#a7a7a7',
-    // borderColor: 'white',
-    // backgroundColor: 'transparent',
-=======
-    borderColor: 'rgba(160, 160, 160, 0.8)',
->>>>>>> d7d077519112929d57d3bed218a832aa5f189309
+    backgroundColor: 'transparent'
   },
   buttonText: {
-<<<<<<< HEAD
     fontSize: cellWidth * 0.5,
     color: '#474747',
-=======
-    fontWeight: 'bold',
-    fontSize: cellWidth * 0.6,
-    color: '#111111',
->>>>>>> d7d077519112929d57d3bed218a832aa5f189309
   },
   button: {
     maxHeight: cellWidth * 1,
-<<<<<<< HEAD
     width: cellWidth * 3,
-=======
-    width: cellWidth * 5,
->>>>>>> d7d077519112929d57d3bed218a832aa5f189309
     flex: 1,
     marginTop: 20,
     padding: 5,

@@ -35,8 +35,6 @@ const getFighterNumber = (key: FighterScoringKey) => {
   }
 }
 
-// TODO: Need to get ringNumber
-// TODO: Incorporate existing penalty/warning values - partially addressed
 export function mapMatchFields(matchInDB: MatchInDB): Match {
   const { fighter1ID, fighter2ID, tournamentID } = matchInDB
   const timer: Timer = {
@@ -65,7 +63,6 @@ export function mapMatchFields(matchInDB: MatchInDB): Match {
     present,
     timer,
     tournamentID,
-    // ringNumber: 0           // Fix this
   } as Match
 }
 
@@ -159,7 +156,11 @@ async function undo(
     fighter2Penalties: stateAfterUndo.fighter2Scoring.numPenalties,
   }
 
-  const response = await axios.post(`${baseUrl}/undo?matchID=${matchID}`, dataToSend)
+  const response = await axios.post(
+    `${baseUrl}/undo?matchID=${matchID}`, 
+    dataToSend,
+    await generateConfig()
+    )
   return response
 }
 

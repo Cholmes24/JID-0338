@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Keyboard, StyleSheet, Image, Linking } from 'react-native'
+import { Keyboard, StyleSheet, Image } from 'react-native'
 import { Text, View } from '../components/Themed'
 import { Button } from 'react-native-elements'
-import UserCard from '../components/UserCard'
 import matchService from '../services/match'
 import fightersService from '../services/fighters'
 import systemEventsService from '../services/systemEvents'
@@ -15,10 +14,8 @@ import { setFighters } from '../reducers/FightersReducer'
 import { setMatches } from '../reducers/MatchesReducer'
 import { setSystemEvents } from '../reducers/SystemEventsReducer'
 import CodeEntry from '../components/CodeEntry'
-import { TextInput } from 'react-native-gesture-handler'
 import authService from '../services/authService'
 import { determineIP } from '../util/utilFunctions'
-import { Icon } from 'react-native-elements'
 import { LinearGradient } from 'expo-linear-gradient'
 import useColorScheme from '../hooks/useColorScheme'
 
@@ -27,7 +24,7 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
   const currentMatchID = useAppSelector((state) => state.currentIDs.matchID)
   const currentMatches = useAppSelector((state) => state.matches)
   const [hasRecentMatch, setHasRecentMatch] = useState(false)
-  const [connected, setConnected] = useState(true)
+  const [connected, setConnected] = useState(false)
   const theme = useColorScheme()
   const logoutColor = theme === 'dark' ? 'white' : '#575757'
 
@@ -98,8 +95,9 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
     <View style={styles.container}>
       {connected ? (
         <View style={styles.userCard}>
-          <Image source={{uri:'https://images.squarespace-cdn.com/content/v1/53518dd3e4b0e85fd91edde7/1607727526945-7CEYKZQUQXE4YDVTPKBY/ke17ZwdGBToddI8pDm48kBy_Di5oPbEsU06S-w0xqIh7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USuOa6StVHPk-_t9tEvkwaC7KSzfyQI3SstOP6fm2CCy3WUfc_ZsVm9Mi1E6FasEnQ/AHFA%2BLogo%2BGrey.png?format=1500w'}} style={styles.logo}/>
-
+          <View style={styles.imageContainer} >
+            <Image source={{uri:'https://images.squarespace-cdn.com/content/v1/53518dd3e4b0e85fd91edde7/1607727526945-7CEYKZQUQXE4YDVTPKBY/ke17ZwdGBToddI8pDm48kBy_Di5oPbEsU06S-w0xqIh7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1USuOa6StVHPk-_t9tEvkwaC7KSzfyQI3SstOP6fm2CCy3WUfc_ZsVm9Mi1E6FasEnQ/AHFA%2BLogo%2BGrey.png?format=1500w'}} style={styles.logo}/>
+          </View>
           <Button
             buttonStyle={styles.entry}
             title="Events"
@@ -122,6 +120,11 @@ export default function HomeScreen({ navigation }: ScreenPropType<'Home'>) {
 }
 
 const styles = StyleSheet.create({
+  imageContainer: {
+    width: '100%',
+    height: '55%',
+    marginBottom: 15,
+  },
   userCard: {
     flex: 2,
     margin: 10,
@@ -142,7 +145,6 @@ const styles = StyleSheet.create({
   entry: {
     width: '95%',
     padding: '7%',
-    marginTop: '5%',
     marginBottom: '5%',
     borderRadius: 15,
     alignSelf: 'center',
@@ -152,12 +154,10 @@ const styles = StyleSheet.create({
   enterButton: {
     width: '95%',
     borderRadius: 8,
-    // flex: 1,
   },
   errorText: {
     flex: 1,
     borderRadius: 15,
-    // paddingHorizontal: 5,
     textAlign: 'center',
     fontSize: 20,
     backfaceVisibility: 'hidden',
@@ -166,14 +166,14 @@ const styles = StyleSheet.create({
   logoutButton: {
     width: '95%',
     borderRadius: 15,
-    // margin: 20,
   },
   logo: {
-    width: '40%',
-    height: '40%',
+    zIndex: 3,
+    width: 150,
+    height: 300,
     alignSelf: 'center',
     marginTop: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   logout: {
     fontSize: 20,
