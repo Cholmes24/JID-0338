@@ -1,56 +1,36 @@
 import socket
 import secrets
-import hashlib
-from time import sleep
 from datetime import datetime
 
 
 class TimedSet(dict):
-    def __init__(self, time_limit=300):
+    def __init__(self, time_limit=10):
         super().__init__()
         self.time_limit = time_limit
 
     def add(self, item):
-        # entry = hashlib.sha256(enc(item)).digest()
-        entry = item
-
-        self[entry] = datetime.now()
+        self[item] = datetime.now()
         self.clean()
-        # sleep(1)
-        # if entry in self and (datetime.now() - self[entry]).total_seconds() >= self.time_limit:
-        #     self.pop(entry)
 
     def __contains__(self, item):
-        # entry = hashlib.sha256(enc(item)).digest()
-        entry = item
-
-        if entry in self.keys():
-            seconds_elapsed = (datetime.now() - self[entry]).total_seconds()
+        if item in self.keys():
+            seconds_elapsed = (datetime.now() - self[item]).total_seconds()
             if seconds_elapsed < self.time_limit:
                 return True
-            self.pop(entry)
+            self.pop(item)
         return False
-
-    # def contains_delete(self, item):
-    #     ret = False
-    #     # entry = hashlib.sha256(enc(item)).digest()
-    #     entry = item
-    #     if entry in self:
-    #         self.pop(entry)
-    #         ret = True
-    #     self.clean()
-    #     return ret
 
     def clean(self):
         now = datetime.now()
+        to_remove = []
         for entry in self:
             seconds_elapsed = (now - self[entry]).total_seconds()
             if seconds_elapsed >= self.time_limit:
-                self.pop(now)
+                to_remove.append(entry)
 
-
-def enc(s):
-    return str(s).encode('utf-8')
+        for elem in to_remove:
+            if elem in self:
+                self.pop(elem)
 
 
 class AccessManagement:
