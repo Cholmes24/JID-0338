@@ -185,7 +185,7 @@
 
   * Mobile Application: 
 
-    * Navigate to the downloaded JID-0338/React Front End folder in the command line and run the command `expo start`
+    * Navigate to the downloaded JID-0338/React Front End folder in the command line and run the command `expo start --no-dev` to run expo in production mode.
 
     * This will open a window in the browser that contains a QR code.  
 
